@@ -1,7 +1,8 @@
-
-
-
-# 
+---
+layout: articles
+title: tensorflow docekr 
+tags: 
+---
 
 
 运行docker
