@@ -63,6 +63,10 @@ https://github.com/IGNF/spark-iqmulus
 A library for reading and writing Lidar point cloud collections in PLY, LAS and XYZ formats from Spark SQL.
 
 
+GeoSpark(Sedona) spark的spatial组件 https://sedona.apache.org/
+
+注：谷歌直接搜的geospark网站只是一个地理信息网站的
+
 ## potree
 
 点云浏览器浏览
@@ -84,7 +88,7 @@ provides a way to load Point Cloud from PostgreSQL
 
 
 ## GREYHOUND
-
+使用Entwine
 
 
 ## Entwine 
