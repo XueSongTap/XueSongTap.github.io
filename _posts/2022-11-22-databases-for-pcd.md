@@ -3,7 +3,7 @@ layout: articles
 title: point cloud点云数据存储方案
 tags: pcd
 ---
-
+# 存储方案
 
 ## geomesa 
 
@@ -96,3 +96,37 @@ Entwine is a data organization library for massive point clouds
 
 
 ## 比较几种 geospark geotrellis geomesa geowave
+
+
+
+# 读写方案
+
+
+## geotrellis
+geotrellis可以把pdal写入hbase数据库
+https://geotrellis.readthedocs.io/en/latest/tutorials/setup.html#using-scala
+
+https://github.com/geotrellis/geotrellis-pointcloud
+
+
+只是使用了pdal 的pipeline思想？
+
+
+filters.chipper
+
+
+https://github.com/geotrellis/geotrellis-pointcloud
+
+## geowave ？
+
+
+## geoserver
+https://www.cnblogs.com/shoufengwei/p/5619419.html
+
+## tiledb
+
+https://tiledb.com/
+
+https://docs.tiledb.com/geospatial/pdal
+
+
