@@ -14,7 +14,7 @@ I've been working on c++ languages for years now;
 
 I worked as a software engineer intern for zhongxiang tech company, working mostly on the development of  Inertial measurement unit , or we may call it IMU, i complete the serial read drive of uart serial port and finish the poss estimation using complementary filter algorithm
 
-In campus, i do my research in the Research center of high acurracy location, and i mainly focus on the point clouds computing and 3d sensing。
+In campus, i do my research in center of high acurracy location, and i mainly focus on the point clouds computing and 3d sensing。
 
 i finish a High-performance server based on pdal library, which use the octree method to hierarchically index large-scale discrete point cloud data and publish it as an http file service 
 
