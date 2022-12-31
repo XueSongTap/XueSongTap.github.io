@@ -42,7 +42,11 @@ tags: interview
 ### vector 和 int[] 区别
 
 ### 智能指针 三种
+std::unique_ptr<T>
 
+std::shared_ptr<T>
+
+std::weak_ptr<T>
 
 ### 设计模式
 
@@ -52,7 +56,15 @@ tags: interview
 
 
 ### 进程间通信
+管道(pipe)
 
+命名管道(FIFO)
+
+消息队列(msg)
+
+信号量(sem)
+
+共享内存(shm)
 ### 多线程
 
 ### 多线程为什么要同步
