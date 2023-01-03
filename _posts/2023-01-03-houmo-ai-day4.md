@@ -118,18 +118,105 @@ odometry:
 ## 相机内参标定
 
 ### 相关概念
+内参:相机自身特性相关的参数、比如相机的焦距、像素大小,相机内参矩阵反应了相机自身的属性
 
-#### 内参
-相机自身特性相关的参数、比如相机的焦距、像素大小
+### 标定方法
 
-相机内参矩阵反应了相机自身的书信
+https://ww2.mathworks.cn/help/vision/ug/using-the-single-camera-calibrator-app.html
 
-#### 外参
+命令行`cameraCalibrator`
+
+### 标定流程
+
+- A. 从工具栏选择Add Images， 添加多张图片，matlab会自动筛选出能用的图片，不合格的图片会被reject。
+- B. calibrate之后，可以选择show undistorted，查看图片畸变矫正的效果从而间接测试矫正的效果。重投影误差大的图片，直接remove掉
+- C. 点击Export Camera Params  可以把标定结果导出到workspace，然后再workspace中右键另存为mat文件 
+- D. 测试标定出来的内参的验证方法：
+    1.Show Undistorted 可以验证参数的好坏，主要看图片边缘的弯曲是否被正确的矫正成直线
+    2.还可以把matlab标定出来的参数，送进python脚本测试畸变矫正效果
+### 内参验证
+
+```python
+import numpy as np
+import cv2
+import os
+from matplotlib import pyplot as plt
+
+#自带的
+#mtx =  np.array([[1996.241246, 0.000000, 953.758716],
+#                 [0.000000, 1993.372273, 500.599692],
+#                 [0.000000, 0.000000, 1.000000]])
+# zidai
+#dist = np.array([-0.571007, 0.319193, 0.000497, -0.002258, 0.000000])
+
+#mtx =  np.array([[1851.321, 0.000000, 911.641],
+#                 [0.000000, 1839.062, 581.810],
+#                 [0.000000, 0.000000, 1.000000]])
+#dist = np.array([-0.621481, 1.126058, -0.013302, 0.005903, 0.000000])
+
+
+#mtx =  np.array([[4238.685, 0.000000, 958.099],
+#                 [0.000000, 4274.294, 539.872],
+#                 [0.000000, 0.000000, 1.000000]])
+#dist = np.array([-2.595953, -5.390706, -0.033212, 0.019096, 0.000000])
+
+
+mtx =  np.array([[3113.585, 0.000000, 995.8281],
+                 [0.000000, 3140.730, 504.3034],
+                 [0.000000, 0.000000, 1.000000]])
+dist = np.array([-1.22554, 1.1119, 0, 0, 0.000000])
+
+
+
+
+
+#mtx =  np.array([[960.956, 0.000000, 1315.005],
+#                [0.000000, 967.572, 541.246],
+#                 [0.000000, 0.000000, 1.000000]])
+#dist = np.array([ -0.007988 , -0.085829 , 0.001559 , -0.024983, 0.000000])
+
+
+
+
+# Define distortion coefficients
+
+
+
+
+
+def test():
+	"""
+	read the pickle file on disk and implement undistor on image
+	show the oringal/undistort image
+	"""
+	print("Reading the sample image...")
+	#img = cv2.imread('D:\\szj_project\\apollo\\_camera_6mm_front_aj\\image_3659_288182.jpeg')
+	img = cv2.imread('D:\\szj_project\\apollo\\_camera_6mm_front_aj\\2.jpeg')
+	img_size = (img.shape[1],img.shape[0])
+	print('img_size is',img_size)
+	w = img_size[0]
+	h = img_size[1]
+	print("w is",w)
+	newcameramtx, roi = cv2.getOptimalNewCameraMatrix(mtx,dist,(w,h),1, (w,h))
+	dst = cv2.undistort(img, mtx, dist, None, newcameramtx)
+	dst = cv2.cvtColor(dst, cv2.COLOR_BGR2RGB)
+	img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+	# Visualize undistortion
+	print("Visulize the result...")
+	f, (ax1,ax2) = plt.subplots(2,1, figsize=(20,20))
+	ax1.imshow(img), ax1.set_title('Original Image', fontsize=15)
+	ax2.imshow(dst), ax2.set_title('Undistored Image', fontsize=15)
+	ax1.grid()
+	ax2.grid()
+	plt.show()
+test()
+```
 
 
 
 
 ## 激光雷达联合标定 
-
+### 标定板制作
+按下图所示，在KT板上，挖一个菱形的孔
 
 ## apollo 中传感器标定文件的存放位置    
