@@ -120,9 +120,9 @@ T is: [[ 0.90721638 -0.40836326  0.10098462]
 ```python
 $ python opencv_pnp_extrinsic.py
 success flag is: True
-vector_rotation is: [[ 1.18404617]
- [-1.2017869 ]
- [ 1.22741645]]
+    vector_rotation is: [[ 1.18404617]
+    [-1.2017869 ]
+    [ 1.22741645]]
 vector_translation is: [[-0.05572386]
  [ 0.05221822]
  [ 0.1671987 ]]
