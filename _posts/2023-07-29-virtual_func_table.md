@@ -163,7 +163,7 @@ vtable for 'Derive' @ 0x555555755d40 (subobject @ 0x7fffffffbe60):
 
 ## 总结
 
-![vtable](../assets/images/0729/vtbl.png)
+![vtable](/img/0729/vtbl.png)
 
 虚函数表说白了就是里面是一组地址的数组（就是函数指针数组）
 
