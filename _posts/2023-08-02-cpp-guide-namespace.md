@@ -127,7 +127,7 @@ for (int i = 0; i < 1000000; ++i) {
 
 如何全局变量的声明是constexpr,就是满足要求的
 
-```c++
+```cpp
 const int kNum = 10;  // allowed
 
 struct X { int n; };
