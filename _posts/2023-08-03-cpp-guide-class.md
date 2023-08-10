@@ -280,11 +280,77 @@ class Bird : public Animal {
 
 ## 多重继承相关
 
+### 只允许：最多只有一个基类是非抽象类，其他基类都是以 Interface 为后缀的纯接口类
+
+多重继承，最显著的麻烦是二义性
+
+### 对于多重继承，把stateless class 写在继承体前面，利用ECO (Empty Class Optimization) 优化内存占用
+
+```cpp
+class Empty{
+public:
+    void print() {std::cout  << "I am Empty class" << std::endl;}
+};
+
+class NotEbo{
+    int i;
+    Empty e;
+};
+
+class ebo :public{
+    int i;
+}
+
+std::cout << sizeof(notEbo) << std::endl; // 8 内存对齐
+std::cout << sizeof(ebo) << std::endl; // 4
+```
 
 ## 运算符重载相关
 
+cpp 允许用`operator` 关键字 对内建运算符进行重载定义
+
+优点：
+- 重载运算符更简单易懂
+缺点：
+- 操作符运算重载难度大
+- 运算符定义在类的外部，引入风险
+
+
+### 除了少数特定环境外，不要重载运算符，也不要创建用户定义的字面量 （operator”“）
+
+
+不要可以避免定义运算符重载
+
+更倾向于定义，== ， =, << 而不是定义 Equals(), CopyFrom(), PrintTo()
+
+也可以考虑自定义类型比较器
+
+### 不要重载& || ，"" 不要引入用户定义字面量
+
+### 仅当重载运算符的含义显而易见并且与相应的内置运算符号一致的时候，才定义重载运算符
+
+例如 将 | 用作按位或， 而不是shell央视的管道，不与内置运算符的语法违背
+
 ## 存取控制相关
 
-## 声明控制相关
+### 将所有数据成员声明为 private， 除非是static const 类型的长远
 
+不要让一个数据成员 成为 `public`，所有人都可以读写访问它，可以使用函数进行访问
+
+
+对于message难以遵循的， 可以用`mutable_xxx()` 和 `xxx()` 进行区分或者`set_xxx() ` 和`xxx()`
+
+## 声明顺序相关
+
+### 相似的声明放在仪器，public部分放在最前面，后跟 protected， 然后是private， 省略为空的部分，用空行将不同组的声明隔开
+
+习惯的约定
+
+public 通常修饰成员函数放在最前面，方便阅读
+
+protected   一般用来继承，放在中间，
+
+private 一般是保护数据成员的，一般不用数据担心
+
+### 声明的每个部分，按照：类型、常量、工厂函数、构造函数和赋值运算符、析构函数、所有其他方法、数据成员的顺序
 
