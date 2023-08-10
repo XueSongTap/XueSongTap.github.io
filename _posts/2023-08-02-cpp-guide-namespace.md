@@ -130,9 +130,6 @@ for (int i = 0; i < 1000000; ++i) {
 ```cpp
 const int kNum = 10;  // allowed
 
-struct X { int n; };
-const X kX[] = {{4}, {2}, {3}};  // allowed
-
 void foo() {
 //kArray是一个具有静态存储周期的常量 std::array<int, 3>。
 //它使用了 constexpr 修饰符，这意味着在编译时就可以计算出它的值，并且它的析构函数是平凡的。

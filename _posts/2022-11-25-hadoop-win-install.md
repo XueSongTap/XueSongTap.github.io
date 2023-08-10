@@ -1,10 +1,11 @@
 ---
 layout: articles
-title: win下配准spark java.io.IOException: Could not locate executable null\bin\winutils.exe in the Hadoop binaries 报错
+title: win下spark null\bin\winutils.exe 报错
 tags: hadoop spark
 ---
 
 
+spark java.io.IOException: Could not locate executable null\bin\winutils.exe in the Hadoop binaries 报错
 
 ## 环境
 win10 jdk1.8 scale spark2.11
