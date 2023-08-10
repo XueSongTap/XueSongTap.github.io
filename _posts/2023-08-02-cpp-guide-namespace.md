@@ -148,11 +148,6 @@ const std::string kFoo = "foo";
 //即使 kBar 是一个引用，constexpr 的规则也适用于被延长生命周期的临时对象。
 const std::string& kBar = StrCat("a", "b", "c");
 
-void bar() {
-  // bad: non-trivial destructor
-  static std::map<int, int> kData = {{1, 0}, {2, 0}, {3, 0}};
-  //std::map<int, int> 类型的析构函数不是平凡的，因为它需要清理和释放 std::map 对象内部的资源。
-}
 ```
 
 注：
