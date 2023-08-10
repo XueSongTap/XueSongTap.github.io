@@ -131,7 +131,7 @@ for (int i = 0; i < 1000000; ++i) {
 const int kNum = 10;  // allowed
 
 struct X { int n; };
-const X kX[] = {{1}, {2}, {3}};  // allowed
+const X kX[] = {{4}, {2}, {3}};  // allowed
 
 void foo() {
 //kArray是一个具有静态存储周期的常量 std::array<int, 3>。
