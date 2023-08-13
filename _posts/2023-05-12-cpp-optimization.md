@@ -41,7 +41,7 @@ tags: c++ 预测
 
 5级以上的流水线称为超流水线结构，如，Inter i7有16级，Cortex A53和A55的流水线是双发射8级流水线：
 
-![A55](/img/0512/a55.png)
+![A55](/img/230512/a55.png)
 
 
 流水线越深，性能就一定越高吗？
@@ -57,7 +57,7 @@ tags: c++ 预测
 
 如果多条指令的执行都依赖同一硬件资源，如ALU，寄存器访问等，就会发生 "硬件资源" 冲突，导致只能串行执行，称之为结构冒险。
 
-![Read_Write_Register_Conflict](/img/0512/Read_Write_Register_Conflict.png)
+![Read_Write_Register_Conflict](/img/230512/Read_Write_Register_Conflict.png)
 结构冒险的解决方法有插入空指令、编译器静态或者硬件电路动态的对寄存器进行重命名等
 
 上图为寄存器读写冲突

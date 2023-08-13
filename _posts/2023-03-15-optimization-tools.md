@@ -9,7 +9,7 @@ tags: c++ 优化
 ## perf工具
 
 ### 火焰图分析
-![fire](/img/0315/fire.png)
+![fire](/img/230315/fire.png)
 
 y轴：调用栈深度，火焰高度表示调用栈的深度。
 

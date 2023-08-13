@@ -1,7 +1,7 @@
 ---
 layout: articles
-title: memory align
-tags: c struct memory align os
+title: memory align 内存对齐机制
+tags: c struct memory  os
 ---
 
 ## 引入

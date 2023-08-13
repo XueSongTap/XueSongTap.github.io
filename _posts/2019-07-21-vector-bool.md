@@ -1,7 +1,7 @@
 ---
 layout: articles
 title: stl "vector<bool>" 特殊优化
-tags: c++ stl vector bool
+tags: c++ stl vector bool 优化 位运算
 ---
 
 

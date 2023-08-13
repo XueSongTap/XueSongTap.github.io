@@ -1,6 +1,6 @@
 ---
 layout: articles
-title: arm prefetch 和分支预测
+title: arm的prefetch和分支预测
 tags: arm prefetch
 ---
 
