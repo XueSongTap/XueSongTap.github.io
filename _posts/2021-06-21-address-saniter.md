@@ -5,7 +5,7 @@ tags:  memory Asan 内存泄漏
 ---
 
 ## 引入
-ASan是google提供的一个内存检测工具
+ASan是google提供的一个内存检测工具，(来自gpt3.5)
 
 ASan通过在编译时插入额外的代码来实现内存错误检测，并提供了相应的运行时库来捕获和报告错误。可以知道通过一下方式实现：
 
@@ -15,6 +15,10 @@ ASan通过在编译时插入额外的代码来实现内存错误检测，并提�
 
 3. 彩色标记：ASan使用彩色标记技术，将分配的内存块分为不同的颜色，并将颜色信息存储在内存块的元数据中。这样，在访问内存时，ASan可以根据元数据中的颜色信息检测出内存错误。
 
+
+## 原理理解速通 Short Version
+
+run-time 的 library 取代了free 和malloc函数，
 
 ## 插桩
 
@@ -32,3 +36,6 @@ https://github.com/google/sanitizers/wiki/AddressSanitizer
 https://github.com/google/sanitizers
 
 https://zhuanlan.zhihu.com/p/382994002
+
+
+https://github.com/google/sanitizers/wiki/AddressSanitizerAlgorithm
