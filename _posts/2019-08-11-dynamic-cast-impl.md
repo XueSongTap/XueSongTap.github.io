@@ -27,3 +27,18 @@ tags: c++ dynamic_cast
 4. 如果类型转换是合法的，`dynamic_cast` 将返回指向目标类型的指针或引用；否则，如果转换不合法，它将返回空指针（对于指针类型）或引发 `std::bad_cast` 异常（对于引用类型）。
 
 需要注意的是，`dynamic_cast` 的底层实现依赖于编译器对虚函数表和运行时类型信息的支持。不同的编译器可能有不同的实现方式，但基本原理是相似的。此外，为了使用 `dynamic_cast` 进行类型转换，需要在编译时启用 RTTI 功能。
+
+
+## 参考 
+
+http://www.selfgleam.com/rtti_layout
+
+http://www.uusystem.com/C++/C++%E4%B8%AD%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/C++%E5%9B%9B%E7%A7%8D%E5%BC%BA%E5%88%B6%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/C++%E5%9B%9B%E7%A7%8D%E5%BC%BA%E5%88%B6%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2.html
+
+https://github.com/grmaple/cpp_mianshi/blob/master/C%2B%2B/C%2B%2B%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E5%9B%9B%E7%A7%8Dcast%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2.md
+
+https://cirnoo.github.io/2019/08/12/dynamic_cast/
+
+https://zhuanlan.zhihu.com/p/580330672
+
+https://lancern.xyz/2022/11/04/dynamic-cast-benchmark/
