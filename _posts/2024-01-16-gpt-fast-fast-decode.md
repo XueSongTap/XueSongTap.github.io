@@ -30,10 +30,11 @@ shm-size 需要设置大一些，否则torch.dymno 会有 no space left 报错
 **截至2024.1.16, gpt-fast 这种必须要求pytorch-nightly** 
 ```
 docker pull pytorch/pytorch:latest
-
-
-
-docker run -it  --gpus all --ipc host --name yxc.gpt-fast.cu121 --shm-size=32G -v /data0/yxc01841111/code:/code -v /data0/yxc01841111/models:/models nvidia/cuda:12.1.0-cudnn8-devel-ubuntu20.04
+docker run -it  --gpus all --ipc host \
+                --name yxc.gpt-fast.cu121 \
+                --shm-size=32G \
+                -v /data0/yxc01841111/code:/code -v /data0/yxc01841111/models:/models \
+                nvidia/cuda:12.1.0-cudnn8-devel-ubuntu20.04
 ```
 ```
 pip install sentencepiece huggingface_hub
