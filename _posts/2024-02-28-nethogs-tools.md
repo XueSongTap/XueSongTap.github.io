@@ -1,3 +1,10 @@
+---
+layout: articles
+title: nethogs 查看进程网络带宽
+tags: nethogs linux  network
+---
+
+
 `sudo nethogs`是一个在Linux系统中使用的命令行工具，用于监控网络流量。通过这个命令，用户可以实时查看哪些进程正在使用网络带宽。这对于诊断网络问题、监控网络使用情况或者仅仅是为了了解哪些应用程序正在访问网络非常有用。
 
 ### 安装 Nethogs
