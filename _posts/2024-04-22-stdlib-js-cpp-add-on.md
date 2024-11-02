@@ -110,7 +110,7 @@ napi_create_double(env, value, &result);
 #### 2.3.2 复杂类型转换
 
 
-1. 数组转换:
+##### 2.3.2.1 数组转换:
 
 
 ```c
@@ -124,7 +124,7 @@ napi_value array;
 napi_create_typedarray(env, napi_float32_array, length, buffer, 0, &array);
 ```
 
-2. 对象转换
+##### 2.3.2.2 对象转换
 
 ```c
 // 创建 JavaScript 对象
