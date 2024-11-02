@@ -1,7 +1,7 @@
 ---
 layout: articles
 title: js 如何调用cpp 以 stdlib.js 为例
-tags: cpp node.js  javascript
+tags: cpp node.js  javascript node-api
 ---
 
 ## 0 背景介绍
