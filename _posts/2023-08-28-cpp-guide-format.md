@@ -1,7 +1,7 @@
 ---
 layout: articles
 title: c++ guide 格式相关
-tags: c++ guide fromat
+tags: c++
 ---
 
 ## 行长度相关

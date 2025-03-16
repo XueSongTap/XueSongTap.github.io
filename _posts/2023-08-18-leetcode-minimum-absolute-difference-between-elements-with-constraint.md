@@ -1,7 +1,7 @@
 ---
 layout: articles
 title: 7022. 限制条件下元素之间的最小绝对差问题
-tags: leetcode 周赛 双指针 set lower_bound()
+tags: leetcode
 ---
 
 ## 题目

@@ -1,7 +1,7 @@
 ---
 layout: articles
 title: c++ guide 命名相关
-tags: c++ guide name
+tags: c++
 ---
 
 

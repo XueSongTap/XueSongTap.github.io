@@ -1,7 +1,7 @@
 ---
 layout: articles
 title: c++ guide 其他/不好分类
-tags: c++ guide 
+tags: c++
 ---
 
 

@@ -1,7 +1,7 @@
 ---
 layout: articles
 title: c++ guide 头文件
-tags: c++ guide header
+tags: c++
 ---
 
 头文件相关的c++ guide 

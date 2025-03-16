@@ -1,7 +1,7 @@
 ---
 layout: articles
 title: 常见大模型参数统计
-tags: LLM bert chatGLM llama gpt
+tags: LLM
 ---
 
 |模型|hidden_size|num_heads|size_per_head|max_seqlen|vocab_size|num_layers|

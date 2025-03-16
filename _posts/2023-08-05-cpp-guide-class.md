@@ -1,7 +1,7 @@
 ---
 layout: articles
 title: c++ guide 类相关
-tags: c++ guide class
+tags: c++
 ---
 
 

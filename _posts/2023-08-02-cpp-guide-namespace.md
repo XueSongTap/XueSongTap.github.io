@@ -1,7 +1,7 @@
 ---
 layout: articles
 title: c++ guide 作用域相关
-tags: c++ guide namespace
+tags: c++
 ---
 
 
