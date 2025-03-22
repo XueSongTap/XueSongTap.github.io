@@ -1,6 +1,6 @@
 ---
 layout: articles
-title: 从vllm的rocm 适配来看AMD gpu的 支持情况
+title: 通过vLLM的ROCm适配揭示AMD GPU在AI推理领域的支持现状
 tags: gpu llm vllm amd rocm
 ---
 

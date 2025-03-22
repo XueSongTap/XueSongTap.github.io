@@ -1,6 +1,6 @@
 ---
 layout: articles
-title: python里的深浅拷贝
+title: Python深浅拷贝详解：内存管理机制、实现原理与常见陷阱
 tags: python
 ---
 

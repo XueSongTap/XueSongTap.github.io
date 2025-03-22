@@ -1,10 +1,8 @@
 ---
 layout: articles
-title: docker 代理防火墙设置
+title: 解决Docker容器代理访问问题：代理防火墙配置指南
 tags: docker
 ---
-
-
 
 实验室服务器上，docker一直走不了代理，proxy 也排查了，设置也走lan了，
 

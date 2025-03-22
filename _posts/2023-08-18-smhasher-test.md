@@ -1,6 +1,6 @@
 ---
 layout: articles
-title: 基于smhasher 的测哈希测试
+title: 使用SMHasher框架对mumurhash、siphash、cityhas 进行哈希性能对比
 tags: hash
 ---
 

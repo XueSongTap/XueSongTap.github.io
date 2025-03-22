@@ -1,6 +1,6 @@
 ---
 layout: articles
-title: hbase 查询status
+title: HBase集群健康监控：Status查询命令详解
 tags: hbase nosql hadoop
 ---
 hbase shell

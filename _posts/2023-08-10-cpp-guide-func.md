@@ -1,6 +1,6 @@
 ---
 layout: articles
-title: c++ guide 函数相关
+title: C++函数设计最佳实践
 tags: c++ guide function
 ---
 

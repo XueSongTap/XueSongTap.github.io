@@ -1,6 +1,6 @@
 ---
 layout: articles
-title: CUDA Cores 和 Tensor Cores 区别
+title: NVIDIA GPU架构深度解析：CUDA Cores与Tensor Cores的技术原理与性能差异比较
 tags: cuda tensor gpu nvidia
 ---
 

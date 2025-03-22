@@ -1,6 +1,6 @@
 ---
 layout: articles
-title: c++ guide 类相关
+title: C++类设计最佳实践指南
 tags: c++
 ---
 

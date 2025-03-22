@@ -1,14 +1,25 @@
 ---
 layout: articles
-title: 时间同步 ntp ptp等
+title: 时间同步技术全解析：从NTP到TSN
 tags: time sync ntp ptp
 ---
-## AVB 体系/协议框架
-### AVB 简介
-http://blog.coderhuo.tech/2020/03/22/AVB_summury/
-AVB被称为时间敏感网络，它主要解决两个问题
 
-### AVB协议族中的gPTP
+## 1. 时间同步基础概念
+### 1.1 为什么需要时间同步
+- 分布式系统协调
+- 多媒体同步播放
+- 工业控制精确timing
+- 传感器数据融合
+
+## 2. AVB 体系/协议框架
+### 2.1 AVB 简介
+http://blog.coderhuo.tech/2020/03/22/AVB_summury/
+
+AVB被称为时间敏感网络，它主要解决两个问题
+- 网络传输问题：带宽预留
+- 多媒体同步问题：时钟恢复与播放同步
+
+### 2.2 AVB协议族中的gPTP协议
 AVB域内的每一个节点都是一个时钟，由以下两个角色组成：
 - 一个主时钟（Grandmaster Clock），它是标准时间的来源；
 - 其他的都是从时钟（Slave Clock），它们必须把自己的时间和主时钟调整一致

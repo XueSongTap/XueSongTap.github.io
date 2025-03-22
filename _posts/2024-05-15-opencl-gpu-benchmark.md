@@ -1,6 +1,6 @@
 ---
 layout: articles
-title: opencl benchmark 工具
+title: OpenCL性能评测工具
 tags: opencl gpu 
 ---
 

@@ -1,7 +1,7 @@
 ---
 layout: articles
-title: c++ guide 其他/不好分类
-tags: c++
+title: C++编程最佳实践：语法规范与代码优化指南
+tags: cpp
 ---
 
 

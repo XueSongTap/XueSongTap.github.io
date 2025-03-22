@@ -1,7 +1,7 @@
 ---
 layout: articles
-title: protouf 性能优化在哪里
-tags: protobuf json 二进制 xml decode 字段标签 序列化 反序列化 编码器 解码器 压缩算法
+title: Protobuf性能优化原理解析：二进制编码与序列化效率
+tags: protobuf
 ---
 
 ### 优化方式

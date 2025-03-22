@@ -1,7 +1,7 @@
 ---
 layout: articles
-title: 终端预览大json文件方式
-tags: json preview less terminal
+title: 终端高效处理大型JSON文件：命令行工具jq与格式化功能
+tags: json
 ---
 
 ## 背景

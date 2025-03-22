@@ -1,7 +1,7 @@
 ---
 layout: articles
-title: 线程可以共享哪些资源
-tags: 线程 thread 共享 share 堆 栈
+title: 操作系统线程间资源共享详解：堆、栈、代码区与数据区
+tags: os
 ---
 
 除了线程上下文：

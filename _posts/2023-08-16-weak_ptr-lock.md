@@ -1,7 +1,7 @@
 ---
 layout: articles
-title: weak_ptr 弱引用的实现
-tags: weak_ptr 指针 弱引用 智能指针 控制块 lock() 所有权
+title: C++ weak_ptr指针内部实现原理与控制块机制详解
+tags: cpp
 ---
 
 std::weak_ptr通过内部使用一个指向控制块（control block）的指针来实现。控制块是一个包含引用计数和其他相关信息的结构体，用于跟踪std::shared_ptr共享的对象。控制块通常由一个引用计数和一个指向堆上分配的对象的指针组成。

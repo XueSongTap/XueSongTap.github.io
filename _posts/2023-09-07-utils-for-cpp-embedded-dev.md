@@ -1,7 +1,7 @@
 ---
 layout: articles
-title: 常用的命令
-tags: shell  script
+title: 实车调试常用shell 命令
+tags: shell
 ---
 
 

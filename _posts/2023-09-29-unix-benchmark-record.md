@@ -1,6 +1,6 @@
 ---
 layout: articles
-title: 手头设备的 unixbenchmark 跑分记录
+title: 手头ARM与x86设备UnixBench性能测试对比与分析
 tags: benchmark unix arm x86
 ---
 

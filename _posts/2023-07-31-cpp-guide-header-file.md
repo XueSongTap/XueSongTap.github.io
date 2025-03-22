@@ -1,7 +1,7 @@
 ---
 layout: articles
-title: c++ guide 头文件
-tags: c++
+title: C++头文件最佳实践指南：从自足性到包含顺序
+tags: cpp
 ---
 
 头文件相关的c++ guide 

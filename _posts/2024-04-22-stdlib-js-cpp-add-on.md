@@ -1,6 +1,6 @@
 ---
 layout: articles
-title: js 如何调用cpp 以 stdlib.js 为例
+title: JavaScript与C++无缝集成：以stdlib.js的Node-API为例
 tags: cpp node.js  javascript node-api
 ---
 

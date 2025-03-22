@@ -1,6 +1,6 @@
 ---
 layout: articles
-title: kallsyms 调试工具，找到内核调用函数及模块
+title: Linux内核调试实战：使用kallsyms追踪内核符号、函数调用与模块定位技术
 tags: cuda tensor gpu nvidia
 ---
 

@@ -1,6 +1,6 @@
 ---
 layout: articles
-title: c++ guide 作用域相关
+title: c++ 作用域/命名空间相关最佳实践
 tags: c++
 ---
 
