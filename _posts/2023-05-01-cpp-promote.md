@@ -1,6 +1,6 @@
 ---
 layout: articles
-title: c++ 性能提升
+title: 全面整理C++性能优化技巧，包括编译优化、代码规范、内存管理等关键实践要点
 tags: c++ 性能
 ---
 

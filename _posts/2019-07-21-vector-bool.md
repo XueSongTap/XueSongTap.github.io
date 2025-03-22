@@ -1,7 +1,7 @@
 ---
 layout: articles
-title: stl "vector<bool>" 特殊优化
-tags: c++ stl vector bool 优化 位运算
+title: C++ vector<bool>与普通vector的区别 - 特殊实现机制解析
+tags: cpp stl vector 
 ---
 
 

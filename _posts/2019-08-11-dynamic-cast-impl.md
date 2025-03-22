@@ -1,7 +1,7 @@
 ---
 layout: articles
-title: c++ dynamic_cast 底层实现
-tags: c++ dynamic_cast
+title: 深入分析dynamic_cast的工作机制、RTTI实现、性能开销及最佳实践
+tags: cpp
 ---
 
 ### 底层实现

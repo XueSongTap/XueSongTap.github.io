@@ -1,7 +1,7 @@
 ---
 layout: articles
-title: c++ stl unordered_map 的扩容机制
-tags: c++ stl unordered_map hash 哈希 哈希冲突 扩容
+title: C++ STL unordered_map的扩容原理
+tags: cpp stl unordered_map hash
 ---
 
 ## gcc的扩容机制

@@ -1,7 +1,7 @@
 ---
 layout: articles
-title: arm 性能优化内容
-tags: c++ 预测
+title: 深入解析ARM处理器性能优化原理-流水线冒险
+tags: cpp
 ---
 
 ## 背景知识

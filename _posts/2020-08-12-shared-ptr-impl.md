@@ -1,7 +1,7 @@
 ---
 layout: articles
-title: c++ shared_ptr 底层实现及线程安全相关
-tags: c++ shared_ptr thread_safe
+title: C++ shared_ptr的实现原理与线程安全性深度剖析
+tags: cpp shared_ptr
 ---
 
 `std::shared_ptr` 是 ，用于管理动态分配的对象。它提供了引用计数的机制，允许多个 `shared_ptr` 共享同一个对象，并在不再需要时自动释放对象。

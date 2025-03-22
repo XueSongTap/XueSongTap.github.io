@@ -1,6 +1,6 @@
 ---
 layout: articles
-title: 从socket的角度解释TCP的连接建立过程
+title: 深入理解TCP三次握手: 从Socket API视角分析连接建立过程
 tags: socket tcp 
 ---
 TCP连接建立过程可以分为三个阶段，分别是：建立连接阶段、数据传输阶段和关闭连接阶段。下面从socket的角度解释TCP连接建立过程：
