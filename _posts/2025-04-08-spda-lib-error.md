@@ -1,6 +1,6 @@
 ---
 layout: articles
-title:  LLaMA Factory 训练中 grad_norm 为 NaN 问题解决
+title:  LLaMA Factory 训练中 SDPA 引发 grad_norm 为 NaN 问题解决
 tags: redis
 ---
 
