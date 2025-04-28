@@ -21,6 +21,8 @@ client <---> server ---> proxy <---> [worker pool] <---> proxy <---> [worker poo
                 \ ____________________ /_________________________________/
 ```
 
+![alt text](/img/250428/prime_server_core_architecture.png)
+
 这种架构有几个关键优势：
 
 1. **请求管道化**：请求可以通过多个阶段的处理流程
@@ -28,6 +30,16 @@ client <---> server ---> proxy <---> [worker pool] <---> proxy <---> [worker poo
 3. **负载均衡**：proxy确保工作均匀分配给可用的workers
 4. **容错性**：任何阶段出现错误都可以立即返回给客户端
 5. **可扩展性**：可以独立扩展各个处理阶段的worker数量
+
+
+### 请求数据流
+![alt text](/img/250428/request_flow.png)
+
+
+### 代码结构
+
+
+![alt text](/img/250428/code_structure.png)
 
 ## 技术基础：ZeroMQ
 

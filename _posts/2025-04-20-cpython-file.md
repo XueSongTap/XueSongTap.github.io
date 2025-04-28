@@ -1,7 +1,7 @@
 ---
 layout: articles
-title:  .pyx 文件不是编译产物，是Cpython 代码 
-tags: redis
+title:  .pyx 文件
+tags: cpython
 ---
 
 
