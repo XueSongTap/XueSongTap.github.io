@@ -177,7 +177,3 @@ AOF迁移过程中的数据流如下：
 3. **处理逻辑不同**：
    - RDB: `rmtRedisRdbDataPost()` → 解析RDB文件结构 → 转换为对象
    - AOF: 直接解析命令文本 → `rmtRedisSlaveReadQueryFromMaster` → 发送命令
-
-## 结论
-
-Redis Migrate Tool为Redis数据迁移提供了强大而灵活的解决方案，特别是其AOF迁移功能，使得用户可以方便地从AOF文件恢复数据到不同类型的Redis部署中。通过多线程设计和高效的内存管理，RMT能够以最小的性能影响完成数据迁移任务。
