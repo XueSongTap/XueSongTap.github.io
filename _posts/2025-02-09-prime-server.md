@@ -33,7 +33,7 @@ client <---> server ---> proxy <---> [worker pool] <---> proxy <---> [worker poo
 
 
 ### 请求数据流
-![alt text](/img/250428/request_flow.png)
+<img src="/img/250428/request_flow.png" alt="alt text" width="500">
 
 
 ### 代码结构

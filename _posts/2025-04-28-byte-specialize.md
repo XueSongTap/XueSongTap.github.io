@@ -1,4 +1,9 @@
-# nlohmann::json 的 MessagePack 的std::byte 特化修复记录
+---
+layout: articles
+title: nlohmann::json 的 MessagePack 的std::byte 特化修复记录
+tags: cpp
+---
+
 
 ## 背景
 
