@@ -50,3 +50,8 @@ header:
       tr      : &TR       Hakkında
       # @end locale config
     url: /about.html
+
+
+  - title:      GitHub
+    url:        https://github.com/xuesongtap/
+
