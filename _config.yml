@@ -28,8 +28,7 @@ description: > # this means to ignore newlines until "Language & timezone"
 ## => Language and Timezone
 ##############################
 lang: zh # the language of your site, default as "en"
-timezone: # see https://en.wikipedia.org/wiki/List_of_tz_database_time_zones for the available values
-
+timezone: Asia/Shanghai
 
 ## => Author and Social
 ##############################
@@ -127,10 +126,10 @@ comments:
   ## Gitalk
   # please refer to https://github.com/gitalk/gitalk for more info.
   gitalk:
-    clientID    : # GitHub Application Client ID
-    clientSecret: # GitHub Application Client Secret
-    repository  : # GitHub repo
-    owner       : # GitHub repo owner
+    clientID    : Ov23liI0T1gi8Hvvnsev
+    clientSecret: 4beefdeecfdff7985fa22ae5ef66f45799d97fd3
+    repository  : XueSongTap.github.io
+    owner       : XueSongTap
     admin: # GitHub repo owner and collaborators, only these guys can initialize GitHub issues, IT IS A LIST.
       # - your GitHub Id
 
@@ -147,13 +146,13 @@ comments:
 ## => Pageview
 ##############################
 pageview:
-  provider: false # false (default), "leancloud", "custom"
+  provider: leancloud # false (default), "leancloud", "custom"
 
   ## Leancloud
   leancloud:
-    app_id    : # LeanCloud App id
-    app_key   : # LeanCloud App key
-    app_class : # LeanCloud App class
+    app_id    : ZPuDyPfLxAwRJ74FMRIRGSmW-gzGzoHsz
+    app_key   : Bjb952jp5HKVe0bp6hVYou8X
+    app_class : Counter
 
 
 ## => Search
