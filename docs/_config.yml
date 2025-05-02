@@ -156,7 +156,7 @@ pageview:
   leancloud:
     app_id    : uAG3OhdcH8H4fxSqXLyBljA7-gzGzoHsz
     app_key   : Mzf5m9skSwYVWVXhGiYMNyXs
-    app_class : TeXtDemo
+    app_class : Counter
 
 
 ## => Search

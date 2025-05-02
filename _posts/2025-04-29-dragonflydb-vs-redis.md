@@ -4,9 +4,6 @@ title: dragonflyDB 和redis的区别与定位
 tags: cpp
 ---
 
-
-
-
 **DragonflyDB 和 Redis 主要区别有这些：**
 
 | 方面 | Redis | DragonflyDB |

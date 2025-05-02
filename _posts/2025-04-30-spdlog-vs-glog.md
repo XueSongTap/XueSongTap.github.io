@@ -3,8 +3,6 @@ layout: articles
 title: spdlog 和 GLOG 的核心区别
 tags: log
 ---
-
-
 # 总结：spdlog 和 GLOG 的核心区别
 
 | 维度 | GLOG (Google Logging) | spdlog |

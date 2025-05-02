@@ -147,7 +147,6 @@ comments:
 ##############################
 pageview:
   provider: leancloud # false (default), "leancloud", "custom"
-
   ## Leancloud
   leancloud:
     app_id    : ZPuDyPfLxAwRJ74FMRIRGSmW-gzGzoHsz

@@ -3,9 +3,6 @@ layout: articles
 title: sglang 对 DeepSeek的 MLA的矩阵乘 load阶段融合的优化
 tags: sft
 ---
-
-
-
 ### 主要优化点
 **PR标题**:  
 > Fuse `q_a_proj` and `kv_a_proj` for DeepSeek models
