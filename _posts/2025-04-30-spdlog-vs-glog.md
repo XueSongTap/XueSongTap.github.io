@@ -3,7 +3,10 @@ layout: articles
 title: spdlog 和 GLOG 的核心区别
 tags: log
 ---
-# 总结：spdlog 和 GLOG 的核心区别
+
+
+
+# spdlog 和 GLOG 的核心区别
 
 | 维度 | GLOG (Google Logging) | spdlog |
 |:---|:---|:---|
@@ -26,39 +29,22 @@ tags: log
 
 总结就是：
 
-✅ **spdlog 更快**：特别是大规模高并发写日志场景（比如服务端、存储系统、分布式系统）；
-
-✅ **spdlog 更轻量**：GLOG 要拉很多库，编译很慢，出错概率高；spdlog 一个头文件就能跑；
-
-✅ **spdlog 更好用**：`{}` 格式化远比 `<<` 写代码舒服，少出 bug，代码更美观、清晰；
-
-✅ **spdlog 更灵活**：想要 file+console、多 logger、不同模块独立打日志？glog 很难，spdlog很简单。
-
-✅ **spdlog 社区活跃**：一直在适配 C++17、C++20、C++23的新特性，而 GLOG 早停滞了。
-
-✅ **spdlog 支持异步日志**（异步 sink），可以大幅降低日志打点对主线程性能的影响；GLOG 必须同步锁。
-
-✅ **更好的可控性**：spdlog 支持自定义 format，比如加上 timestamp、thread id、source file name，非常容易。
+ **spdlog 更快**：特别是大规模高并发写日志场景（比如服务端、存储系统、分布式系统）；
+ **spdlog 更轻量**：GLOG 要拉很多库，编译很慢，出错概率高；spdlog 一个头文件就能跑；
+ **spdlog 更好用**：`{}` 格式化远比 `<<` 写代码舒服，少出 bug，代码更美观、清晰；
+ **spdlog 更灵活**：想要 file+console、多 logger、不同模块独立打日志？glog 很难，spdlog很简单。
+ **spdlog 社区活跃**：一直在适配 C++17、C++20、C++23的新特性，而 GLOG 早停滞了。
+ **spdlog 支持异步日志**（异步 sink），可以大幅降低日志打点对主线程性能的影响；GLOG 必须同步锁。
+ **更好的可控性**：spdlog 支持自定义 format，比如加上 timestamp、thread id、source file name，非常容易。
 
 ---
 
 # Kvrocks 为什么要换？
 
-🔵 Kvrocks 是高性能、分布式 KV 系统：
-
+ Kvrocks 是高性能、分布式 KV 系统：
+[迁移spdlog issue](https://github.com/apache/kvrocks/issues/2889)
 - 对日志性能很敏感（特别是 replication, checkpoint 时大量同步数据）
 - 对日志格式灵活性要求高（调试同步错误，定位问题需要精确控制日志内容）
 - 需要轻量依赖，减少编译、部署、交付复杂度
 
 所以，**为了性能、简洁、现代化开发体验，换成 spdlog 是自然选择**。
-
----
-
-# 小总结一句话：
-
-> **GLOG 是老派重型卡车，spdlog 是现代高铁：更快、更轻、更顺滑。**
-
----
-
-要不要我顺便也给你补一张更直观的图？比如「spdlog 核心组件」对比「GLOG 组件」？  
-可以一秒钟看清 spdlog 是怎么比 glog 架构简洁的，要的话告诉我！🚀
