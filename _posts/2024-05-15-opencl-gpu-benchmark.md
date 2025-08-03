@@ -78,5 +78,69 @@ yxc@hua-System-Product-Name:~/code/3/OpenCL-Benchmark$ ./make.sh
 
 
 
+cpu 跑
+
+```bash
+.-----------------------------------------------------------------------------.
+|----------------.------------------------------------------------------------|
+| Device ID    0 | cpu-haswell-AMD Ryzen 5 5600G with Radeon Graphics         |
+|----------------'------------------------------------------------------------|
+|----------------.------------------------------------------------------------|
+| Device ID      | 0                                                          |
+| Device Name    | cpu-haswell-AMD Ryzen 5 5600G with Radeon Graphics         |
+| Device Vendor  | AuthenticAMD                                               |
+| Device Driver  | 5.0+debian (Linux)                                         |
+| OpenCL Version | OpenCL C 3.0                                               |
+| Compute Units  | 12 at 4465 MHz (6 cores, 0.857 TFLOPs/s)                   |
+| Memory, Cache  | 58116 MB RAM, 16384 KB global / 512 KB local               |
+| Buffer Limits  | 16384 MB global, 512 KB constant                           |
+|----------------'------------------------------------------------------------|
+| Info: OpenCL C code successfully compiled.                                  |
+| FP64  compute                                         0.030 TFLOPs/s (1/32) |
+| FP32  compute                                         0.027 TFLOPs/s (1/32) |
+| FP16  compute                                          not supported        |
+| INT64 compute                                         0.033  TIOPs/s (1/24) |
+| INT32 compute                                         0.027  TIOPs/s (1/32) |
+| INT16 compute                                         0.064  TIOPs/s (1/12) |
+| INT8  compute                                         0.030  TIOPs/s (1/32) |
+| Memory Bandwidth ( coalesced read      )                         24.39 GB/s |
+| Memory Bandwidth ( coalesced      write)                         13.29 GB/s |
+| Memory Bandwidth (misaligned read      )                         31.94 GB/s |
+| Memory Bandwidth (misaligned      write)                         14.78 GB/s |
+|-----------------------------------------------------------------------------|
+'-----------------------------------------------------------------------------'
+```
 
 
+```bash
+yxc@nas:~/OpenCL-Benchmark$ ./make.sh
+.-----------------------------------------------------------------------------.
+|----------------.------------------------------------------------------------|
+| Device ID    0 | Intel(R) HD Graphics 610                                   |
+|----------------'------------------------------------------------------------|
+|----------------.------------------------------------------------------------|
+| Device ID      | 0                                                          |
+| Device Name    | Intel(R) HD Graphics 610                                   |
+| Device Vendor  | Intel(R) Corporation                                       |
+| Device Driver  | 24.31.30508.7 (Linux)                                      |
+| OpenCL Version | OpenCL C 3.0                                               |
+| Compute Units  | 12 at 1000 MHz (96 cores, 0.192 TFLOPs/s)                  |
+| Memory, Cache  | 14397 MB RAM, 384 KB global / 64 KB local                  |
+| Buffer Limits  | 4095 MB global, 4194296 KB constant                        |
+|----------------'------------------------------------------------------------|
+| Info: OpenCL C code successfully compiled.                                  |
+| FP64  compute                                         0.044 TFLOPs/s (1/4 ) |
+| FP32  compute                                         0.171 TFLOPs/s ( 1x ) |
+| FP16  compute                                         0.315 TFLOPs/s ( 2x ) |
+| INT64 compute                                         0.006  TIOPs/s (1/32) |
+| INT32 compute                                         0.059  TIOPs/s (1/3 ) |
+| INT16 compute                                         0.342  TIOPs/s ( 2x ) |
+| INT8  compute                                         0.064  TIOPs/s (1/3 ) |
+| Memory Bandwidth ( coalesced read      )                          9.54 GB/s |
+| Memory Bandwidth ( coalesced      write)                         12.17 GB/s |
+| Memory Bandwidth (misaligned read      )                         16.33 GB/s |
+| Memory Bandwidth (misaligned      write)                         10.35 GB/s |
+|-----------------------------------------------------------------------------|
+'-----------------------------------------------------------------------------'
+yxc@nas:~/OpenCL-Benchmark$
+```
