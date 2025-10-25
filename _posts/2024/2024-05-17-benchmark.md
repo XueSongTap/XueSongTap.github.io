@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: 在线 C++ 性能测试：Quick Bench 工具
 tags: cpp benchmark assembly 
 ---

@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: sglang 对 DeepSeek的 MLA的矩阵乘 load阶段融合的优化
 tags: sft
 ---

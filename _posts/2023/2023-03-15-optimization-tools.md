@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: 性能优化工具
 tags: c++ 优化
 ---

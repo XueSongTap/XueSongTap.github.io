@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: win下spark null\bin\winutils.exe 报错
 tags: hadoop spark
 ---

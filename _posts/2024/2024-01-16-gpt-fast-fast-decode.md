@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: gpt-fast 预测性推理 speculative decode 自测
 tags: gpt LLM pytorch
 ---

@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: idea 查看源码不跳转.java .scala问题
 tags: idea java
 ---

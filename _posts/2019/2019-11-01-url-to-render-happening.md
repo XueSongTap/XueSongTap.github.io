@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: url输入网址，到渲染页面，发生了什么
 tags: web 网络 url 渲染 DNS TCP HTTP
 ---

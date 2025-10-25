@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: 当我们在启动redis的时候，我们在启动什么
 tags: redis
 ---

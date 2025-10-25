@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: 终端高效处理大型JSON文件：命令行工具jq与格式化功能
 tags: json
 ---

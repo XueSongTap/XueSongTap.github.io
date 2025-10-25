@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: 8021. 使子序列的和等于目标的最少操作次数
 tags: leetcode 周赛
 ---

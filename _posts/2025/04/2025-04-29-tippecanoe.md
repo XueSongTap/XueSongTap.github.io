@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: tippecanoe 地图网格切分工具
 tags: map
 ---

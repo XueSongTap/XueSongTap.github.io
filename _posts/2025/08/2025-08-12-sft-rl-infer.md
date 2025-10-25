@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: 为什么相比于SFT训练，RL训练更依赖推理引擎
 tags: RL
 ---

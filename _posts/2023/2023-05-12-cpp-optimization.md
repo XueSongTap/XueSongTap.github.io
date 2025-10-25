@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: 深入解析ARM处理器性能优化原理-流水线冒险
 tags: cpp
 ---

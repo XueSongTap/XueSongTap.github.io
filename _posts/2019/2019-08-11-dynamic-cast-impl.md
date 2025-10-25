@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: 深入分析dynamic_cast的工作机制、RTTI实现、性能开销及最佳实践
 tags: cpp
 ---

@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: 内存泄漏定位
 tags: memory leak location
 ---

@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: C++17 string_view性能优化利器 - 零拷贝字符串处理详解
 tags: cpp string_view
 ---

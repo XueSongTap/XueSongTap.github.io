@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: arm的prefetch和分支预测
 tags: arm prefetch
 ---

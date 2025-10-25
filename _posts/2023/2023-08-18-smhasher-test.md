@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: 使用SMHasher框架对mumurhash、siphash、cityhas 进行哈希性能对比
 tags: hash
 ---

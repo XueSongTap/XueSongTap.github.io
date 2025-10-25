@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: C++三角函数优化实践-从std::atan2到NEON加速
 tags: cpp
 ---

@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: 实车调试
 tags: 实车 调试
 ---

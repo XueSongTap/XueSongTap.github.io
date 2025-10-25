@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: 深入剖析C++虚函数机制：从vtable到动态绑定
 tags: cpp
 ---

@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: valhalla 算路引擎
 tags: map
 ---

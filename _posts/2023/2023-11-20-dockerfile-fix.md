@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: Dockerfile构建加速：使用国内apt、pip镜像源加速容器构建
 tags: docker
 ---

@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: nlohmann::json 的 MessagePack 的std::byte 特化修复记录
 tags: cpp
 ---

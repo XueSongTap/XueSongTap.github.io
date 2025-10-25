@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: lambda 与 bind ，类与模版
 tags: forward
 ---

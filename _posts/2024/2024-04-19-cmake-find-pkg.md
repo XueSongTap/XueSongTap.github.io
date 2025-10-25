@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: CMake进阶：find_package()函数完全解析与自定义模块开发指南
 tags: cpp cmake find_package
 ---

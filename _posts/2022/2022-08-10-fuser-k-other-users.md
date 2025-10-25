@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: linux板端如何查找其他用户并踢掉
 tags: linux fuser kill
 ---

@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: prime_server：基于ZeroMQ的高性能分布式服务框架
 tags: ZeroMQ
 ---

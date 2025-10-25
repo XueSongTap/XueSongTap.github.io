@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: 解决VS Code Remote-SSH连接失败：glibc版本不兼容问题的排查与修复指南
 tags: python
 ---

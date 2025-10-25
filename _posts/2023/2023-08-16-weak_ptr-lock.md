@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: C++ weak_ptr指针内部实现原理与控制块机制详解
 tags: cpp
 ---

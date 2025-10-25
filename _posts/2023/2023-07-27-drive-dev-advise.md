@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: 面向高性能C++优化-内存管理、实时性保证、CPU亲和性等深度指南
 tags: c++ guide
 ---

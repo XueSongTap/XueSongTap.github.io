@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: 云防火墙 与 WAF 产品上的区别
 tags: network
 ---

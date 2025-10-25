@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title:  .pyx 文件
 tags: cpython
 ---

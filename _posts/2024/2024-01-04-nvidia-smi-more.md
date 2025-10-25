@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: NVIDIA-SMI命令完全指南：GPU监控与管理实用技巧
 tags: nvidia-smi gpu
 ---

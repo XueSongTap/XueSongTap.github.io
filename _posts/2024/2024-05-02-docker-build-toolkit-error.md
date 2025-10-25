@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: Docker BuildKit故障排查问题分析
 tags: docker buildkit
 ---

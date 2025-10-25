@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: 利用gperftools 查找热点
 tags: 利用gperftools
 ---

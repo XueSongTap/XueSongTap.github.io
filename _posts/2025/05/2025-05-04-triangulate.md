@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: 渲染为什么需要三角化：渲染管线的最小单位
 tags: log
 ---

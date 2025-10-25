@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: ApacheBench (ab) 工具深度指南：突破单机并发限制与性能优化最佳实践
 tags: benchmark
 ---

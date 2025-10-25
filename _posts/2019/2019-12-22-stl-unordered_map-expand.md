@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: C++ STL unordered_map的扩容原理
 tags: cpp stl unordered_map hash
 ---

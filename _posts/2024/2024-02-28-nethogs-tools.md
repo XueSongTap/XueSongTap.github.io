@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: Linux网络监控实战：使用NetHogs实时追踪进程级带宽占用与分析指南
 tags: nethogs linux  network
 ---

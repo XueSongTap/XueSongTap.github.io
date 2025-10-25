@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: JavaScript与C++无缝集成：以stdlib.js的Node-API为例
 tags: cpp node.js  javascript node-api
 ---

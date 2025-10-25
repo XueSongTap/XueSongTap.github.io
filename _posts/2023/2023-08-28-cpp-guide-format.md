@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: C++最佳实践-格式format相关
 tags: c++
 ---

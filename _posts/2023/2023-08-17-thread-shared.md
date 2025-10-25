@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: 操作系统线程间资源共享详解：堆、栈、代码区与数据区
 tags: os
 ---

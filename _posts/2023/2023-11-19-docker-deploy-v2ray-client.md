@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: 基于Docker容器化部署V2Ray：网络代理配置完整指南
 tags: docker v2ray proxy
 ---

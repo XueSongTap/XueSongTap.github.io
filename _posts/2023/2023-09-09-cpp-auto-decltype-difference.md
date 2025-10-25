@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: Modern C++类型推导机制：auto与decltype的区别与实现
 tags: cpp auto decltype
 ---

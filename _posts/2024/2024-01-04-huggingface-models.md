@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: HuggingFace 模型调用
 tags: HuggingFace LLM transformer
 ---

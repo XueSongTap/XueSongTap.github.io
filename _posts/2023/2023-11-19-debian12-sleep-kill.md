@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title:  Debian系统休眠功能完全禁用指南：提升主机稳定性
 tags: debian linux
 ---

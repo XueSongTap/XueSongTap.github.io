@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: C++ vector<bool>与普通vector的区别 - 特殊实现机制解析
 tags: cpp stl vector 
 ---

@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: Protobuf性能优化原理解析：二进制编码与序列化效率
 tags: protobuf
 ---

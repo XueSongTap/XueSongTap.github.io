@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: perf和火焰图
 tags: memory leak location
 ---

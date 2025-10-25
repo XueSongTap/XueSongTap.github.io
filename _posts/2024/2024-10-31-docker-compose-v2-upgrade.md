@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: Docker Compose V2升级指南：新特性、兼容性变更与最佳实践
 tags: docker compose
 ---

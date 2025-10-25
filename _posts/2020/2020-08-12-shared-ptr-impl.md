@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: C++ shared_ptr的实现原理与线程安全性深度剖析
 tags: cpp shared_ptr
 ---

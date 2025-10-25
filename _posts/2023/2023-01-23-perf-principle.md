@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: perf 原理
 tags: memory leak location
 ---

@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: C++类设计最佳实践指南
 tags: c++
 ---

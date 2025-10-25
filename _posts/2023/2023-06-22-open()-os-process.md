@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: 打开文件 open，这时候是如何调用内核的
 tags: open() os 系统调用 内核 内核空间 文件描述符
 ---

@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: 手头ARM与x86设备UnixBench性能测试对比与分析
 tags: benchmark unix arm x86
 ---

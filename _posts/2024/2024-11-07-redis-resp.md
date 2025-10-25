@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title:  RESP协议 (Redis Serialization Protocol) 解析
 tags: Redis
 ---

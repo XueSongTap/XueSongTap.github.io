@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: C++编程最佳实践：语法规范与代码优化指南
 tags: cpp
 ---

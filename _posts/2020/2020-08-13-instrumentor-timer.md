@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: C++高性能线程安全计时器实现 - 支持Tracing可视化
 tags: cpp
 ---

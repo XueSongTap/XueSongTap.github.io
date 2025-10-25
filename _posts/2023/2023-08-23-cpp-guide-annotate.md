@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: C++最佳实践-注释相关
 tags: c++ guide annotation
 ---

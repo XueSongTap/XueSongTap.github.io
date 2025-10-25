@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: 实车调试常用shell 命令
 tags: shell
 ---

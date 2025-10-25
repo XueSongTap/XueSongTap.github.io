@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: c++ 前置声明 头文件
 tags: c++  header
 ---

@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: get post 有什么区别
 tags: get post 
 ---

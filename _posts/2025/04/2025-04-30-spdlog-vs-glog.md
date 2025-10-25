@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: spdlog 和 GLOG 的核心区别
 tags: log
 ---

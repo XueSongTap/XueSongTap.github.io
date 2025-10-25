@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: GPU MEM 训练和微调估算
 tags: gpu
 ---

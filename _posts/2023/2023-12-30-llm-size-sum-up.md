@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: 常见大模型参数统计
 tags: LLM
 ---

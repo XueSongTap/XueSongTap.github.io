@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: Redis高性能I/O架构解析：同步RIO与异步BIO
 tags: redis
 ---

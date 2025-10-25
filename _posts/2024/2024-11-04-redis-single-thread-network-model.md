@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title:  Redis的单线程网络模型解析：高性能背后的设计
 tags: Redis
 ---

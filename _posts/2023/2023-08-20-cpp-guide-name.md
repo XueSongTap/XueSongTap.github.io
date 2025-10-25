@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: C++最佳实践-命名相关
 tags: c++
 ---

@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: 详解c++17 的 std::filesystem的核心功能与最佳实践
 tags: cpp
 ---

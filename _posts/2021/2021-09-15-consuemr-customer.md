@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: 生产者消费者模型
 tags: os
 ---

@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: Redis核心架构解析：从数据结构到主从复制
 tags: Redis
 ---

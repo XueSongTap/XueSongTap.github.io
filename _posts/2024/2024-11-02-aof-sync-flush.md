@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title:  Redis AOF同步刷盘机制：性能瓶颈分析与优化
 tags: Redis
 ---

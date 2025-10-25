@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title:  基于AOF的Redis Migrate Tool
 tags: redis
 ---

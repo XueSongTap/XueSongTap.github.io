@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title:  Redis AOF重写机制详解
 tags: Redis
 ---

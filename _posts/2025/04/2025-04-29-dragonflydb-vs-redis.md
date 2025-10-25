@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: dragonflyDB 和redis的区别与定位
 tags: cpp
 ---

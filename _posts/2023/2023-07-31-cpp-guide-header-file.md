@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: C++头文件最佳实践指南：从自足性到包含顺序
 tags: cpp
 ---

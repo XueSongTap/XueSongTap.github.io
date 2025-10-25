@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: 7022. 限制条件下元素之间的最小绝对差问题
 tags: leetcode
 ---

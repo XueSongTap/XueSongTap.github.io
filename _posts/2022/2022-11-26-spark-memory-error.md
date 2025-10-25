@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: spark 报错Spark ：【error】System memory 259522560 must be at least 471859200 调整jvm
 tags: hadoop spark
 ---

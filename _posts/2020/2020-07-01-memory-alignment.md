@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: memory align 内存对齐机制
 tags: c struct memory  os
 ---

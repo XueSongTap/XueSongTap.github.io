@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: 深入理解TCP三次握手:从Socket API视角分析连接建立过程
 tags: socket tcp 
 ---

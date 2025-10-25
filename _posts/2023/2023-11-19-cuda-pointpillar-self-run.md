@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: CUDA-Pointpillar 配置
 tags: debian linux
 ---

@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: ubuntu win 双系统安装
 tags: ubuntu
 ---

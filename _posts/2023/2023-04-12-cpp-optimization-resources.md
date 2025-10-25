@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: c++ 性能优化资源
 tags: c++ 优化 资源
 ---

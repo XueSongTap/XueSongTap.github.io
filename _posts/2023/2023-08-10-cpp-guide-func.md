@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: C++函数设计最佳实践
 tags: c++ guide function
 ---

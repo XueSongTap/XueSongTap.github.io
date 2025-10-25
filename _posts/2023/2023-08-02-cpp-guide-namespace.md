@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: c++ 作用域/命名空间相关最佳实践
 tags: c++
 ---

@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: boost::bind 参数量限制与现代 C++ 替代方案
 tags: forward
 ---

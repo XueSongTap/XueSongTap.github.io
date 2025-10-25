@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: 时间同步技术全解析：从NTP到TSN
 tags: time sync ntp ptp
 ---

@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: 深入解析C++返回值优化(RVO)和具名返回值优化(NRVO)的实现机制、编译器优化策略与最佳实践
 tags: cpp
 ---

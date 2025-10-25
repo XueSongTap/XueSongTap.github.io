@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: 深入剖析AddressSanitizer实现机制，内存错误检测原理与性能开销分析
 tags:  cpp Asan
 ---

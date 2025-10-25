@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: hadoop 常用脚本
 tags: hadoop
 ---

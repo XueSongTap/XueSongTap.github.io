@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: cpp17 新特性shared_mutex 读写锁
 tags: cpp17 新特性 读写锁 shared_mutex
 ---

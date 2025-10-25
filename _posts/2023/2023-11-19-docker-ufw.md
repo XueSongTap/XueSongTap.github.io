@@ -1,5 +1,5 @@
 ---
-layout: articles
+layout: article
 title: 解决Docker容器代理访问问题：代理防火墙配置指南
 tags: docker
 ---
