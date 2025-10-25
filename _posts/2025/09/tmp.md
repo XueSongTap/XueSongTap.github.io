@@ -1,46 +1,37 @@
----
-layout: articles
-title: dp 与 ddp 数据并行
-tags: pytorch, ddp
----
-
+# DP 与 DDP 数据并行
 
 ## DP (DataParallel) 并行
 
-
 ### 使用方式
+
 PyTorch 最原始的 DP 并行实现非常简单：
 
 ```python
-
 import torch.nn as nn
 
-# 简单的DP使用
+# 简单的 DP 使用
 model = nn.DataParallel(model, device_ids=[0, 1, 2, 3])
 ```
-
 
 **参数说明：**
 - `device_ids`: 指定使用的 GPU 设备，不指定时默认使用所有可见 GPU
 - `output_device`: 默认是 `device_ids[0]`（主卡），很多关键工作发生在这张卡上
-### 原理解析
 
+### 原理解析
 
 #### Parameter Server 概念
 
 单机多卡的 DP 并行和分布式训练中的 Parameter Server 架构类似。
 
-**相关参考：**
+**相关资源：**
 - 论文：[Scaling Distributed Machine Learning with the Parameter Server](https://www.usenix.org/system/files/conference/osdi14/osdi14-paper-li_mu.pdf)
 - 李沐本人讲解：[参数服务器（Parameter Server）逐段精读](https://www.bilibili.com/video/BV1YA4y197G8)
 
 ![Parameter Server 架构](/img/2025/09/parameter_server.png)
 
-
 #### Parameter Server 工作流程
 
 从伪代码可以看到并行梯度下降的完整过程：
-
 
 **1. Task Scheduler（任务调度器）**
 - 负责加载数据并分发到各个 worker 节点
@@ -61,24 +52,18 @@ model = nn.DataParallel(model, device_ids=[0, 1, 2, 3])
 - 汇总所有 worker 的梯度
 - 更新模型参数
 
-
 #### DP 与 PS 的区别
 
 **经典 PS 架构特点：**
-
-
 - 跨机器的异步/同步参数拉取-推送框架
 - Server 与 Worker 角色解耦
 - 支持分布式训练
-
 
 **DataParallel 特点：**
 - 单机内、同一进程里用多线程实现
 - 模型复制到各 GPU
 - 在主卡聚合梯度并更新参数
 - 没有真正的"远程 Server"
-
-
 
 **可以把 DP 看作"单机上的简化版同步数据并行"：**
 1. 数据被 scatter 到各卡
@@ -115,15 +100,14 @@ model = nn.DataParallel(model, device_ids=[0, 1, 2, 3])
    - 主卡更新参数（优化器步进）
    - 效果通过共享存储/复制在下一轮前向时反映到各副本
 
-**注意：** 梯度聚合发生在反向（autograd hook）阶段，而不是在 `gather()` 这一步
-
-
+**⚠️ 注意：** 梯度聚合发生在反向（autograd hook）阶段，而不是在 `gather()` 这一步
 
 ### 源码实现
 
-#### 1 入口：DataParallel.forward
+#### 1. 入口：DataParallel.forward
+
 ```python
-#pytorch/torch/nn/parallel/data_parallel.py
+# pytorch/torch/nn/parallel/data_parallel.py
 class DataParallel(Module):
 
     def __init__(self, module, device_ids=None, output_device=None, dim=0):
@@ -135,11 +119,12 @@ class DataParallel(Module):
             self.module = module
             self.device_ids = []
             return
-                # 默认使用所有可见的 GPU
+        
+        # 默认使用所有可见的 GPU
         if device_ids is None:
             device_ids = _get_all_device_indices()
 
-                # 默认 server 是 device_ids 列表上第一个
+        # 默认 server 是 device_ids 列表上第一个
         if output_device is None:
             output_device = device_ids[0]
 
@@ -149,38 +134,33 @@ class DataParallel(Module):
         self.output_device = _get_device_index(output_device, True)
         self.src_device_obj = torch.device(device_type, self.device_ids[0])
 
-        # 检查负载是否平衡， 不平衡（指内存或者处理器 max/min > 0.75 会有警告）
+        # 检查负载是否平衡（内存或处理器 max/min > 0.75 会有警告）
         _check_balance(self.device_ids)
 
-        # 单卡
+        # 单卡情况
         if len(self.device_ids) == 1:
             self.module.to(self.src_device_obj)
 
     def forward(self, *inputs, **kwargs):
-
         # 没 GPU 可用
         if not self.device_ids:
             return self.module(*inputs, **kwargs)
 
-        # 运行前 GPU device_ids[0] （即我们的 server ）上必须有 parallelized module 的parameters 和 buffers
-        # 因为 DP 保证 GPU device_ids[0] 和 base parallelized module 共享存储
-        # 所以在device[0] 上的 in-place 更新也会被保留下来，其他的则不会
-
+        # 确保 parallelized module 的 parameters 和 buffers 在 device[0] 上
         for t in chain(self.module.parameters(), self.module.buffers()):
             if t.device != self.src_device_obj:
                 raise RuntimeError("module must have its parameters and buffers "
                                    "on device {} (device_ids[0]) but found one of "
                                    "them on device: {}".format(self.src_device_obj, t.device))
 
-        # nice 现在 device[0] 上已经有了 module 和 input， 接下来我们就要开始 PS 算法了
-        # 可以开始看正文了
-
+        # 核心并行流程
         inputs, kwargs = self.scatter(inputs, kwargs, self.device_ids)
 
-        # 如果仅有单卡可用，直接单卡计算，不用并行
+        # 单卡情况直接计算
         if len(self.device_ids) == 1:
             return self.module(*inputs[0], **kwargs[0])
 
+        # 多卡并行流程
         replicas = self.replicate(self.module, self.device_ids[:len(inputs)])
         outputs = self.parallel_apply(replicas, inputs, kwargs)
         return self.gather(outputs, self.output_device)
@@ -204,12 +184,13 @@ class DataParallel(Module):
 - `parallel_apply`: 在多个线程里并行执行副本的前向
 - `gather`: 把输出收集回主卡，以便在主卡上算损失
 
-#### 2 scatter_kwargs 和 scatter 实现
+#### 2. scatter_kwargs 和 scatter 实现
+
 ```python
 # pytorch/torch/nn/parallel/scatter_gather.py
 def scatter_kwargs(inputs, kwargs, target_gpus, dim=0):
     inputs = scatter(inputs, target_gpus, dim) if inputs else []
-    kwargs  = scatter(kwargs,  target_gpus, dim) if kwargs else []
+    kwargs = scatter(kwargs, target_gpus, dim) if kwargs else []
     # 对齐长度后返回 tuple
     ...
 
@@ -224,10 +205,6 @@ class Scatter(Function):
         ...
         return outputs
 ```
-comm.scatter 最终通过pybind 调用的是底层 C++ 的python_comm.cpp 负责把大张量沿 dim 切成“大致均匀”的块并分发。
-
-对非 Tensor对象（比如 list/dict/namedtuple），scatter 会按结构“展开+重组”，确保每张卡拿到一致结构的“子样本”。
-
 
 **底层 C++ 实现：**
 
@@ -244,48 +221,46 @@ comm.scatter 最终通过pybind 调用的是底层 C++ 的python_comm.cpp 负责
       c10::optional<std::vector<c10::optional<at::cuda::CUDAStream>>> streams;
       if (py_streams) {
         py::handle handle = *py_streams;
-        // Python 侧的 stream 列表转成 C++ CUDAStream 向量
         streams = THPUtils_PySequence_to_CUDAStreamList(handle.ptr());
       }
 
-      // 注：到这里为止我们一直持有 GIL
-      AutoNoGIL no_gil;  
-      // 释放 GIL，进入真正的 C++ scatter
+      AutoNoGIL no_gil;  // 释放 GIL，进入真正的 C++ scatter
       return scatter(tensor, devices, chunk_sizes, dim, streams);
     }
 )
 ```
+
 **Gloo 后端的分布式 scatter 实现：**
 
 ```cpp
 // pytorch/torch/csrc/distributed/c10d/ProcessGroupGloo.cpp
-// 多进程/多机下的 Gloo 后端 scatter：root 提供每个 rank 的输入切片，
-// 各个 rank 接收自己的那一份到 outputs[0]。
 void scatter(
-    std::vector<at::Tensor>& outputs,                 // 各 rank 提供一个接收张量（这里用 outputs[0]）
-    std::vector<std::vector<at::Tensor>>& inputs) {   // 仅 root 使用：inputs[0][r] 是发给 rank r 的张量
-  const auto scalarType = outputs[0].scalar_type();   // 记录 dtype，后面做模板展开
-  gloo::ScatterOptions opts(context_);                // 绑定进程组上下文
-  opts.setRoot(root);                                 // 指定 root rank
-  opts.setTag(tag);                                   // 通信标签（避免不同 collective 混线）
-  opts.setTimeout(timeout_);                          // 超时控制
+    std::vector<at::Tensor>& outputs,
+    std::vector<std::vector<at::Tensor>>& inputs) {
+  const auto scalarType = outputs[0].scalar_type();
+  gloo::ScatterOptions opts(context_);
+  opts.setRoot(root);
+  opts.setTag(tag);
+  opts.setTimeout(timeout_);
 
-  // 只有 root 进程需要设置“输入向量”：每个 rank 一份
+  // 只有 root 进程设置输入向量
   if (context_->rank == root) {
-    // GENERATE_ALL_TYPES 会按 scalarType 展开到对应模板版本
-    // setInputs(opts, inputs[0]) 的语义：将 inputs[0][r] 这 N 份注册到 Gloo 的 scatter inputs
     GENERATE_ALL_TYPES(scalarType, setInputs, opts, inputs[0]);
   }
 
-  // 所有进程（包括 root）都要设置各自的“输出缓冲区” outputs[0]
-  // setOutput(opts, outputs[0]) 告诉 Gloo 在本进程把数据接到 outputs[0]
+  // 所有进程设置输出缓冲区
   GENERATE_ALL_TYPES(scalarType, setOutput, opts, outputs[0]);
 
-  // 执行 Gloo scatter：root 发送、其他 rank 接收；root 自己的那份会直接本地拷贝
+  // 执行 Gloo scatter
   gloo::scatter(opts);
 }
 ```
+
 **核心工作流程：**
+
+```
+scatter_kwargs → scatter → Scatter.forward → comm.scatter → C++ python_comm.cpp
+```
 
 **主要工作：**
 - 将输入的 batch 数据按照指定维度（通常是 batch 维度）切分成多个子 batch
@@ -293,105 +268,91 @@ void scatter(
 - 对于复杂数据结构（list/dict/tuple），递归地进行结构化切分
 - 使用独立的 CUDA stream 进行异步 CPU→GPU 拷贝，减少阻塞
 
-**重要特性：**
+**⚠️ 重要特性：**
 - Tensor 被 split 时只改变 strides 和 sizes，实现零拷贝！
 - Tensor 是按总大小（total size）切分，而非沿某个特定维度
 - 需要对齐不同输入 tensor 的总大小，而非特定维度
 
 **结果：** 原本的一个大 batch 变成了 N 个小 batch，分别发送到 N 张 GPU 上
 
-#### 3 replicate 实现
+#### 3. replicate 实现
 
-```py
-#  DP forward 里的代码
-    replicas = self.replicate(self.module, self.device_ids[:len(inputs)])
+```python
+# DP forward 里的代码
+replicas = self.replicate(self.module, self.device_ids[:len(inputs)])
 
-    # 实现
-    def replicate(network, devices, detach=False):
+# 实现
+def replicate(network, devices, detach=False):
+    if not _replicatable_module(network):
+        raise RuntimeError("Cannot replicate network where python modules are "
+                           "childrens of ScriptModule")
 
-        if not _replicatable_module(network):
-            raise RuntimeError("Cannot replicate network where python modules are "
-                               "childrens of ScriptModule")
+    devices = [_get_device_index(x, True) for x in devices]
+    num_replicas = len(devices)
 
+    # 复制 parameters
+    params = list(network.parameters())
+    param_indices = {param: idx for idx, param in enumerate(params)}
+    param_copies = _broadcast_coalesced_reshape(params, devices, detach)
 
-        # 需要复制到哪些 GPU， 复制多少份
-        devices = [_get_device_index(x, True) for x in devices]
-        num_replicas = len(devices)
+    # 复制 buffers
+    buffers = list(network.buffers())
+    buffers_rg = []  # 需要梯度的 buffer
+    buffers_not_rg = []  # 不需要梯度的 buffer
+    for buf in buffers:
+        if buf.requires_grad and not detach:
+            buffers_rg.append(buf)
+        else:
+            buffers_not_rg.append(buf)
 
-        # 复制 parameters
-        params = list(network.parameters())
-        param_indices = {param: idx for idx, param in enumerate(params)}
-        param_copies = _broadcast_coalesced_reshape(params, devices, detach)
+    # 记录 buffer 索引
+    buffer_indices_rg = {buf: idx for idx, buf in enumerate(buffers_rg)}
+    buffer_indices_not_rg = {buf: idx for idx, buf in enumerate(buffers_not_rg)}
 
-        # 复制 buffers
-        buffers = list(network.buffers())
-        buffers_rg = []
-        buffers_not_rg = []
-        for buf in buffers:
-            if buf.requires_grad and not detach:
-                buffers_rg.append(buf)
-            else:
-                buffers_not_rg.append(buf)
+    # 分别拷贝
+    buffer_copies_rg = _broadcast_coalesced_reshape(buffers_rg, devices, detach=detach)
+    buffer_copies_not_rg = _broadcast_coalesced_reshape(buffers_not_rg, devices, detach=True)
 
-        # 记录需要和不需要求导的 buffer 的 index
-        buffer_indices_rg = {buf: idx for idx, buf in enumerate(buffers_rg)}
-        buffer_indices_not_rg = {buf: idx for idx, buf in enumerate(buffers_not_rg)}
+    # 复制网络模块
+    modules = list(network.modules())
+    module_copies = [[] for device in devices]
+    module_indices = {}
 
-        # 分别拷贝
-        buffer_copies_rg = _broadcast_coalesced_reshape(buffers_rg, devices, detach=detach)
-        buffer_copies_not_rg = _broadcast_coalesced_reshape(buffers_not_rg, devices, detach=True)
+    for i, module in enumerate(modules):
+        module_indices[module] = i
+        for j in range(num_replicas):
+            replica = module._replicate_for_data_parallel()
+            replica._former_parameters = OrderedDict()  # DDP 需要访问的临时修复
+            module_copies[j].append(replica)
 
-        # 现在开始拷贝网络
-        # 准备过程：将 network.modules() 变成list
-        # 然后再为之后复制的模型准备好空的 list 和 indices
+    # 分别复制 module，param，buffer
+    # ...
 
-        modules = list(network.modules())
-        module_copies = [[] for device in devices]
-        module_indices = {}
-        scriptmodule_skip_attr = {"_parameters", "_buffers", "_modules", "forward", "_c"}
+    return [module_copies[j][0] for j in range(num_replicas)]
+```
 
-        for i, module in enumerate(modules):
-            module_indices[module] = i
-            for j in range(num_replicas):
-                replica = module._replicate_for_data_parallel()
-                # This is a temporary fix for DDP. DDP needs to access the
-                # replicated model parameters. It used to do so through
-                # `mode.parameters()`. The fix added in #33907 for DP stops the
-                # `parameters()` API from exposing the replicated parameters.
-                # Hence, we add a `_former_parameters` dict here to support DDP.
-                replica._former_parameters = OrderedDict()
+**广播实现：**
 
-                module_copies[j].append(replica)
+```python
+def _broadcast_coalesced_reshape(tensors, devices, detach=False):
+    from ._functions import Broadcast
 
-        # 接下来分别复制 module，param，buffer
-        # ... 
-
-        return [module_copies[j][0] for j in range(num_replicas)]
+    if detach:
+        return comm.broadcast_coalesced(tensors, devices)
+    else:
+        # 使用 autograd 函数进行广播
+        if len(tensors) > 0:
+            tensor_copies = Broadcast.apply(devices, *tensors)
+            return [tensor_copies[i:i + len(tensors)]
+                    for i in range(0, len(tensor_copies), len(tensors))]
+        else:
+            return []
 ```
 
 **Broadcast 类实现：**
-```py
 
-    # ！！！从replicate来看这里
-    def _broadcast_coalesced_reshape(tensors, devices, detach=False):
-
-      from ._functions import Broadcast
-
-      # 先看 else 的 comment，因为不 detach 也会用到同样的函数
-      if detach:
-          return comm.broadcast_coalesced(tensors, devices)
-      else:
-          # Use the autograd function to broadcast if not detach
-          if len(tensors) > 0:
-              tensor_copies = Broadcast.apply(devices, *tensors)
-              return [tensor_copies[i:i + len(tensors)]
-                      for i in range(0, len(tensor_copies), len(tensors))]
-          else:
-              return []
-
-   #  Broadcast.apply
-   class Broadcast(Function):
-
+```python
+class Broadcast(Function):
     @staticmethod
     def forward(ctx, target_gpus, *inputs):
         assert all(i.device.type != 'cpu' for i in inputs), (
@@ -402,18 +363,15 @@ void scatter(
         if len(inputs) == 0:
             return tuple()
         ctx.num_inputs = len(inputs)
-        # input 放在 device[0]
         ctx.input_device = inputs[0].get_device()
 
-        # 和 detach 的情况一样
+        # 核心广播操作
         outputs = comm.broadcast_coalesced(inputs, ctx.target_gpus)
 
-        # comm.broadcast_coalesced 的代码
-        # tensors 必须在同一个设备，CPU 或者 GPU； devices 即是要拷贝到的设备；buffer_size 则是最大的buffer
-        # 这里用到 buffer 将小张量合并到缓冲区以减少同步次数
+        # comm.broadcast_coalesced 实现
         # def broadcast_coalesced(tensors, devices, buffer_size=10485760):
-        #    devices = [_get_device_index(d) for d in devices]
-        #       return torch._C._broadcast_coalesced(tensors, devices, buffer_size)
+        #     devices = [_get_device_index(d) for d in devices]
+        #     return torch._C._broadcast_coalesced(tensors, devices, buffer_size)
 
         non_differentiables = []
         for idx, input_requires_grad in enumerate(ctx.needs_input_grad[1:]):
@@ -427,7 +385,6 @@ void scatter(
     def backward(ctx, *grad_outputs):
         return (None,) + ReduceAddCoalesced.apply(ctx.input_device, ctx.num_inputs, *grad_outputs)
 ```
-
 
 **核心流程：**
 
@@ -444,8 +401,7 @@ replicate → _broadcast_coalesced_reshape → Broadcast.apply → comm.broadcas
 
 **结果：** 每张 GPU 上都有一个完整的模型副本，但内存地址不同
 
-
-#### 4 parallel_apply 实现
+#### 4. parallel_apply 实现
 
 **DP 和 DDP 共用的并行执行函数：**
 
@@ -453,15 +409,13 @@ replicate → _broadcast_coalesced_reshape → Broadcast.apply → comm.broadcas
 # DP 代码
 outputs = self.parallel_apply(replicas, inputs, kwargs)
 
-# threading 实现，用前面准备好的 replica 和输入数据
+# threading 实现
 def parallel_apply(modules, inputs, kwargs_tup=None, devices=None):
-
-        # 每个 GPU 都有模型和输入
+    # 每个 GPU 都有模型和输入
     assert len(modules) == len(inputs)
 
-    # 确保每个 GPU 都有相应的数据，如没有就空白补全
+    # 确保每个 GPU 都有相应的数据
     if kwargs_tup is not None:
-        # scatter 阶段已经补全
         assert len(modules) == len(kwargs_tup)
     else:
         kwargs_tup = ({},) * len(modules)
@@ -485,12 +439,10 @@ def parallel_apply(modules, inputs, kwargs_tup=None, devices=None):
             device = get_a_var(input).get_device()
         try:
             with torch.cuda.device(device), autocast(enabled=autocast_enabled):
-                # this also avoids accidental slicing of `input` if it is a Tensor
                 if not isinstance(input, (list, tuple)):
                     input = (input,)
                 output = module(*input, **kwargs)
             with lock:
-              # 并行计算得到输出
                 results[i] = output
         except Exception:
             with lock:
@@ -498,8 +450,7 @@ def parallel_apply(modules, inputs, kwargs_tup=None, devices=None):
                     where="in replica {} on device {}".format(i, device))
 
     if len(modules) > 1:
-
-        # 如有一个进程控制多个 GPU ，起多个线程
+        # 多 GPU 多线程
         threads = [threading.Thread(target=_worker,
                                     args=(i, module, input, kwargs, device))
                    for i, (module, input, kwargs, device) in
@@ -510,18 +461,16 @@ def parallel_apply(modules, inputs, kwargs_tup=None, devices=None):
         for thread in threads:
             thread.join()
     else:
-        # 一个 GPU 一个进程 （ DDP 推荐操作）
+        # 单 GPU 单进程（DDP 推荐）
         _worker(0, modules[0], inputs[0], kwargs_tup[0], devices[0])
 
     outputs = []
     for i in range(len(inputs)):
         output = results[i]
-
-        # error handle
         if isinstance(output, ExceptionWrapper):
             output.reraise()
         outputs.append(output)
-    # 输出 n 个计算结果
+    
     return outputs
 ```
 
@@ -538,22 +487,19 @@ parallel_apply → 创建多个 worker 线程 → 每个线程执行 _worker 函
 - **结果收集**：使用 lock 机制安全地收集各线程的计算结果
 - **异常处理**：捕获并传播各线程中的异常
 
-**结果：** 得到 N 个前向计算的输出结果，对应 N 个数据子集, 接下来我们要将结果收集到 device[0]
+**结果：** 得到 N 个前向计算的输出结果，对应 N 个数据子集
 
-
-#### 5 gather 实现
-
+#### 5. gather 实现
 
 ```python
 # DP 代码
 return self.gather(outputs, self.output_device)
-# 收集到 devices[0]
 
 # 源码
 def gather(outputs, target_device, dim=0):
     r"""
     Gathers tensors from different GPUs on a specified device
-      (-1 means the CPU).
+    (-1 means the CPU).
     """
     def gather_map(outputs):
         out = outputs[0]
@@ -568,17 +514,17 @@ def gather(outputs, target_device, dim=0):
                               for k in out))
         return type(out)(map(gather_map, zip(*outputs)))
 
-    # Recursive function calls like this create reference cycles.
-    # Setting the function to None clears the refcycle.
     try:
         res = gather_map(outputs)
     finally:
         gather_map = None
     return res
+```
 
-# Gather 源码
+**Gather 类实现：**
+
+```python
 class Gather(Function):
-
     @staticmethod
     def forward(ctx, target_device, dim, *inputs):
         assert all(i.device.type != 'cpu' for i in inputs), (
@@ -586,9 +532,7 @@ class Gather(Function):
         )
 
         target_device = _get_device_index(target_device, True)
-
         ctx.target_device = target_device
-
         ctx.dim = dim
         ctx.input_gpus = tuple(i.get_device() for i in inputs)
 
@@ -600,6 +544,7 @@ class Gather(Function):
             ctx.unsqueezed_scalar = True
         else:
             ctx.unsqueezed_scalar = False
+        
         ctx.input_sizes = tuple(i.size(ctx.dim) for i in inputs)
         return comm.gather(inputs, ctx.dim, ctx.target_device)
 
@@ -609,8 +554,11 @@ class Gather(Function):
         if ctx.unsqueezed_scalar:
             scattered_grads = tuple(g[0] for g in scattered_grads)
         return (None, None) + scattered_grads
+```
 
-# comm.gather 涉及到 C++
+**comm.gather C++ 实现：**
+
+```python
 # Gathers tensors from multiple GPU devices.   
 def gather(tensors, dim=0, destination=None, *, out=None):
     tensors = [_handle_complex(t) for t in tensors]
@@ -644,6 +592,7 @@ gather → gather_map → Gather.apply → comm.gather → C++ 实现
 **结果：** 原本分散在 N 张 GPU 上的 N 个输出，合并成一个完整的输出张量
 
 #### 整体数据流示意图
+
 ```
 原始输入 batch
     ↓ scatter
@@ -656,37 +605,31 @@ gather → gather_map → Gather.apply → comm.gather → C++ 实现
 合并后的完整输出
 ```
 
-
-
-**关键点：**
+**关键点总结：**
 - `scatter` 和 `gather` 主要处理数据的分发和收集
 - `replicate` 确保每张卡都有模型副本
 - `parallel_apply` 是真正的并行计算执行
 - 整个过程中，只有数据被切分，模型是完整复制的
 
-
-
-
 ### DP 的优缺点分析
 
 #### 优点
-- 使用简单，只需一行代码包装模型
-- 支持非 2 的次幂卡数，例如 3 张卡做 DP 并行
+✅ **使用简单**：只需一行代码包装模型  
+✅ **灵活配置**：支持非 2 的次幂卡数，例如 3 张卡做 DP 并行
 
 #### 缺点
+❌ **只适合单机多卡**：无法扩展到多机分布式训练  
+❌ **显存占用无法降低**：每张卡都会拷贝一份完整的模型权重  
+   - 例如：一个模型在单卡 20G 放不下，DP 多卡并行也放不下（甚至显存更紧张，因为主 GPU 有通信压力）
 
-- **只适合单机多卡**：无法扩展到多机分布式训练
-- **显存占用无法降低**：每张卡都会拷贝一份完整的模型权重，
-    * 例如一个模型在单卡 20G 放不下，DP 多卡并行也放不下（甚至显存更紧张，因为主 GPU 有通信压力）
-- **负载不均衡**：`device[0]` 的负载明显大于其他卡  
-- **通信开销大**：频繁的数据传输和聚合操作  
-- **单进程 GIL 锁性能瓶颈**：多线程受到 Python GIL 限制
-
+❌ **负载不均衡**：`device[0]` 的负载明显大于其他卡  
+❌ **通信开销大**：频繁的数据传输和聚合操作  
+❌ **单进程 GIL 锁性能瓶颈**：多线程受到 Python GIL 限制
 
 > **官方文档说明：**  
 > The difference between DistributedDataParallel and DataParallel is: DistributedDataParallel uses multiprocessing where a process is created for each GPU, while DataParallel uses multithreading. By using multiprocessing, each GPU has its dedicated process, this avoids the performance overhead caused by GIL of Python interpreter.
 
-**参考：**
+**参考资源：**
 - [DataParallel 官方文档](https://docs.pytorch.org/docs/stable/generated/torch.nn.DataParallel.html)
 - [Data Parallelism 教程](https://docs.pytorch.org/tutorials/beginner/blitz/data_parallel_tutorial.html)
 - [PyTorch DataParallel 实现详解](https://erickguan.me/2019/pytorch-parallel-model)
@@ -694,12 +637,11 @@ gather → gather_map → Gather.apply → comm.gather → C++ 实现
 
 ---
 
-
 ## DDP (DistributedDataParallel) 并行
 
 ### 使用方式
 
-```py
+```python
 import argparse
 import torch
 from torch.nn.parallel import DistributedDataParallel as DDP
@@ -711,46 +653,44 @@ parser.add_argument("--world_size", default=1)
 args = parser.parse_args()
 
 # 初始化后端
-
 # world_size 指的是总的并行进程数目
-# 比如16张卡单卡单进程 就是 16
-# 但是如果是8卡单进程 就是 1
-# 等到连接的进程数等于world_size，程序才会继续运行
-torch.distributed.init_process_group(backend='nccl',
-                                         world_size=ws,
-                                         init_method='env://')
+# 比如 16 张卡单卡单进程就是 16
+# 但是如果是 8 卡单进程就是 1
+# 等到连接的进程数等于 world_size，程序才会继续运行
+torch.distributed.init_process_group(
+    backend='nccl',
+    world_size=args.world_size,
+    init_method='env://'
+)
 
 torch.cuda.set_device(args.local_rank)
-
 device = torch.device(f'cuda:{args.local_rank}')
 
-model = nn.Linear(2,3).to(device)
+model = nn.Linear(2, 3).to(device)
 
-# train dataset
-# train_sampler
-# train_loader
+# 初始化 DDP
+# 这里通过规定 device_id 使用单卡单进程
+# 实际上 DDP 也支持一个进程控制多个线程利用多卡
+model = DDP(
+    model,
+    device_ids=[args.local_rank],
+    output_device=args.local_rank
+).to(device)
 
-# 初始化 DDP，这里我们通过规定 device_id 用了单卡单进程
-# 实际根据前面DP和DDP共用的 parallel_apply 的解读，DDP 也支持一个进程控制多个线程利用多卡
-model = DDP(model,
-            device_ids=[args.local_rank],
-            output_device=args.local_rank).to(device)
-
-
-# 保存模型 
+# 保存模型（只在 rank 0 保存）
 if torch.distributed.get_rank() == 0:
-  torch.save(model.module.state_dict(),
-             'results/%s/model.pth' % args.save_dir)
+    torch.save(
+        model.module.state_dict(),
+        f'results/{args.save_dir}/model.pth'
+    )
 ```
 
-**参考：**
+**参考资源：**
 - [DDP 官方教程](https://docs.pytorch.org/tutorials/intermediate/ddp_tutorial.html)
 
 ### 原理解析
 
-
 DDP 通过以下三个关键机制实现高效的分布式训练：
-
 
 #### 1. 缓解 GIL 限制
 - **多进程架构**：启动 N 个进程，每个进程在一张卡上加载一个模型
@@ -764,7 +704,6 @@ DDP 通过以下三个关键机制实现高效的分布式训练：
 - **参数更新**：各个进程用平均后的梯度更新自己的参数
 - **一致性保证**：因为各个进程的初始参数、更新梯度是一致的，所以更新后的参数也是完全相同的
 
-
 ### Ring-AllReduce 详解
 
 #### 算法概述
@@ -777,11 +716,7 @@ DDP 通过以下三个关键机制实现高效的分布式训练：
 
 #### 示例：3 张卡，长度为 6 的向量加和
 
-model weights 广播同步操作 经常有这种操作
-
 **初始状态（各 GPU 的模型梯度）：**
-
-- input (each gpu model gradients) 3个 GPU分别持有3个长度为6的向量:
 
 ```
 GPU0: [a0, a1 | a2, a3 | a4, a5] = [A0 | A1 | A2]
@@ -791,27 +726,25 @@ GPU2: [c0, c1 | c2, c3 | c4, c5] = [C0 | C1 | C2]
 
 **目标（汇集所有卡上数据）：**
 
-所有 GPU 最终都得到：
-
 ```
+所有 GPU 最终都得到：
 [a0+b0+c0, a1+b1+c1, a2+b2+c2, a3+b3+c3, a4+b4+c4, a5+b5+c5]
 ```
 
 #### Phase 1: Scatter-Reduce（分块归约）
 
-
 **数据分块：**
 - 3 张卡，将向量分成 3 份（chunks）
 - 每个 chunk 包含 2 个元素
 
-
 **Step 1：环形传递**
 
 ```
- GPU0 -> (A2)GPU1 -> (B0) GPU2 -> (C1) GPU0
-```
+GPU0 → GPU1: 发送 A2
+GPU1 → GPU2: 发送 B0
+GPU2 → GPU0: 发送 C1
+
 结果：
-```
 GPU0: [A0, A1+C1, A2]
 GPU1: [B0, B1, A2+B2]
 GPU2: [C0+B0, C1, C2]
@@ -819,21 +752,18 @@ GPU2: [C0+B0, C1, C2]
 
 **Step 2：继续归约**
 
-
 ```
-    GPU0 -> (A1 +C1) GPU1 -> (B2 + A2) GPU2 -> (C0 + B0) GPU0
-```
+GPU0 → GPU1: 发送 A1+C1
+GPU1 → GPU2: 发送 B2+A2
+GPU2 → GPU0: 发送 C0+B0
 
 结果：
-
-```
 GPU0: [A0+B0+C0, A1+C1, A2]       # 维护 chunk0 的完整数据
 GPU1: [B0, A1+B1+C1, A2+B2]       # 维护 chunk1 的完整数据
 GPU2: [B0+C0, C1, A2+B2+C2]       # 维护 chunk2 的完整数据
 ```
 
 #### Phase 2: All-Gather（全收集）
-
 
 **定义简写：**
 ```
@@ -842,30 +772,27 @@ S1 = A1+B1+C1  # chunk1 的归约结果
 S2 = A2+B2+C2  # chunk2 的归约结果
 ```
 
-
 **Step 1：环形传递**
 
 ```
-GPU0 -> (S0)GPU1 -> (S1)GPU2 -> (S2)GPU0
-```    
-结果:
+GPU0 → GPU1: 发送 S0
+GPU1 → GPU2: 发送 S1
+GPU2 → GPU0: 发送 S2
 
-```
+结果：
 GPU0: [S0, A1+C1, S2]
 GPU1: [S0, S1, A2+B2]
 GPU2: [B0+C0, S1, S2]
 ```
 
-
 **Step 2：完成收集**
 
-
 ```
-    GPU0 -> (S2)GPU1 -> (S0)GPU2 -> (S1)GPU0
-```
+GPU0 → GPU1: 发送 S2
+GPU1 → GPU2: 发送 S0
+GPU2 → GPU0: 发送 S1
 
 最终结果：
-```
 GPU0: [S0, S1, S2]
 GPU1: [S0, S1, S2]
 GPU2: [S0, S1, S2]
@@ -873,9 +800,7 @@ GPU2: [S0, S1, S2]
 
 #### Ring-AllReduce 优势分析
 
-
-![alt text](/img/2025/09/ring-allreduce.png)
-
+![Ring-AllReduce 示意图](/img/2025/09/ring-allreduce.png)
 
 **1. 带宽利用率高**
 
@@ -900,8 +825,24 @@ GPU2: [S0, S1, S2]
 - 延迟随着 N 线性增加
 - 可以方便大型系统 scale up
 
-
 **参考资源：**
 - [Ring-AllReduce Jupyter Notebook](https://github.com/chunhuizhang/pytorch_distribute_tutorials/blob/main/tutorials/3D-parallel/ring-allreduce.ipynb)
 
+---
 
+## 总结对比
+
+| 特性 | DataParallel (DP) | DistributedDataParallel (DDP) |
+|------|-------------------|-------------------------------|
+| **实现方式** | 单进程多线程 | 多进程 |
+| **GIL 影响** | 受 GIL 限制 | 避免 GIL 限制 |
+| **通信方式** | 简单的 scatter-gather | Ring-AllReduce |
+| **负载均衡** | 主卡压力大 | 负载均衡 |
+| **扩展性** | 仅单机多卡 | 支持多机多卡 |
+| **显存占用** | 主卡显存压力大 | 各卡显存均衡 |
+| **使用难度** | 简单（一行代码） | 需要多进程配置 |
+| **性能** | 较低 | 较高 |
+
+**推荐使用场景：**
+- **DP**：快速原型验证、单机多卡、简单场景
+- **DDP**：生产环境、大规模训练、多机多卡、追求性能
