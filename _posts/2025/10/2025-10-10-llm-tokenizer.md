@@ -1,7 +1,7 @@
 ---
 layout: article
 title: LLM的tokenizer
-tags: tokenizer, ddp
+tags: tokenizer
 ---
 
 tokenizer 有多种计算token，进行转换的方式
