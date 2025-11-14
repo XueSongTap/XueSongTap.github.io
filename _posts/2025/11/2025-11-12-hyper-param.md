@@ -1,7 +1,6 @@
 ---
 layout: article
-title: Transformer 超参数的取舍与经验法则
-tags: Transformer
+title: Transformer 超参数的取舍
 ---
 
 从 small model 到万亿 token 级的大模型，表现和效率往往被少量关键超参数左右：hidden size、前馈层扩张倍数、注意力头数与 head dim、词表大小、正则化策略以及深宽比例（aspect ratio）。随着参数预算与训练数据呈指数级增长，工程团队反而更依赖这些“旋钮”来稳定收益——一次错误的配置可能让数百万美元的训练算力付诸流水。本文把我在课程里的零散记录整理成一篇可查的博客，并加入实践中反复被问到的背景解释，方便之后设计或复现 Transformer。
