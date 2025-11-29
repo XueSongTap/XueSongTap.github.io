@@ -8,7 +8,7 @@ Megatron 的 `Float16Module` 只会把**位置参数**转换成半精度（bf16/
 
 ## 1 相关代码
 
-代码位置：`megatron/core/transformer/module.py#L404`
+代码位置：`megatron/core/transformer/module.py#L404` https://github.com/NVIDIA/Megatron-LM/blob/main/megatron/core/transformer/module.py#L404
 
 ```py
     def forward(self, *inputs, fp32_output=True, **kwargs):
