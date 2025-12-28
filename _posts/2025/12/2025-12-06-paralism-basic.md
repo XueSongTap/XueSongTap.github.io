@@ -1,8 +1,8 @@
-
+---
 layout: article
 title: 大模型并行的数学推导
 tags: LLM Parallelism
-
+---
 
 
 

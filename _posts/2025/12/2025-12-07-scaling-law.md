@@ -1,8 +1,8 @@
-
+---
 layout: article
 title: Scaling Laws：从幂律到 Chinchilla（以及训练配方）
 tags: LLM ScalingLaw
-
+---
 
 旧方法：在大模型上直接调参（极度昂贵且缓慢）。  
 新方法（Scaling Laws）：在小模型上调参，总结规律，然后外推（extrapolate）到大模型。
