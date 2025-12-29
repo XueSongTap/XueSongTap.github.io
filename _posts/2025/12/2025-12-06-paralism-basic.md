@@ -279,7 +279,7 @@ $$
 
 ## 8. Batch size scaling：为什么小 batch 更偏向 MP，大 batch 更偏向 FSDP
 
-课程 Slide 48 的图本质在讲：不同并行策略的“通信项”到底随不随 $B$ 变化。
+这个图本质在讲：不同并行策略的“通信项”到底随不随 $B$ 变化。
 
 ![Batch-size scaling](/img/2025/12/image.png)
 

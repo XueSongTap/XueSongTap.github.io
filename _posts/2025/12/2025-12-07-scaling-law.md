@@ -8,12 +8,6 @@ tags: LLM ScalingLaw
 新方法（Scaling Laws）：在小模型上调参，总结规律，然后外推（extrapolate）到大模型。
 
 
-**TL;DR**
-- 大模型的很多宏观规律在 `log-log` 图上近似直线：`Loss ≈ A · x^{-α}`。
-- 数据“质量/构成”主要影响 **截距（offset）**，规模带来的收益速率（斜率 slope）往往更稳定。
-- 数据会“用完”：重复数据（多 epoch）会带来收益递减，需要用“有效数据量”修正。
-- 规模（scale）通常压倒形状（shape）：不少结构超参在很宽范围内影响很小。
-- 对固定算力预算，最关键的问题不是“能不能训大”，而是“模型大小 N 与数据量 D 怎么配”；Kaplan 的建议后来被 Chinchilla 修正为更接近 `N:D ≈ 1:1` 的增长策略。
 
 
 
@@ -366,14 +360,3 @@ Hoffman et al. 2022（Chinchilla）指出 Kaplan 的最优配比偏向“模型�
 课堂总结口径：
 - Kaplan 的偏差不是数学形式错了，而是实验设置里对 LR schedule 与训练时长的匹配不够严格。
 - Chinchilla 修正后，得到了更“数据友好”的 compute-optimal 配比，从而推动了后续更重视“多读书（tokens）”的训练策略（也影响了 LLaMA 系列等）。
-
-
-
-## 17. 一页实践清单：用 scaling laws 指导训练决策
-
-1. **先确认你在哪个瓶颈上：** compute-limited / data-limited / model-limited（不要只盯单变量）。
-2. **把数据当成两件事：** `quantity` 决定能走多远，`quality/composition` 主要决定起跑线（offset）与泛化稳健性。
-3. **数据会用完：** 一旦开始大量重复，要用“有效数据量”视角重新评估，并考虑“模型更大一点、训练更少 tokens”的转移。
-4. **形状超参别过度纠结：** 在合理范围内，scale 往往更重要；把精力放在 N/D/compute 的配比与数据工程上。
-5. **batch 要随训练进度变：** 目标 loss 越低，critical batch 越大；用 batch ramp-up 提升整体效率。
-6. **LR/超参迁移要有方法：** muP 的思想是让“小模型找超参”更可复用；同时避免 schedule 与训练步数不匹配导致的错误结论。
