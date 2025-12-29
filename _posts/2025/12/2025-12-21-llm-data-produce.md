@@ -1,6 +1,6 @@
 ---
 layout: article
-title: LLM 数据的声场
+title: LLM 数据的生产
 tags: LLM
 ---
 
