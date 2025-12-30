@@ -154,9 +154,10 @@ Chen, Tianqi, et al. "Training deep nets with sublinear memory cost." arXiv prep
 
 
 
-### 2.5 更进一步优化
+### 2.5 更进一步优化 vpp/pp chunk/interleaved pp
 ![pp chunk & stage ](/img/2025/10/pp_chunk_stage.png)
 
+主要是通过vpp/interleaved pp，在PP分stage 的基础上，在每个stage 里再进行切分，不增加rank
 
 #### 2.5.1 chunking 模型层
 
@@ -167,6 +168,7 @@ Chen, Tianqi, et al. "Training deep nets with sublinear memory cost." arXiv prep
 * **更好的负载均衡**： 当模型层计算量不均匀时，通过切块可以将工作更均匀地分配给不同的设备，从而减少**瓶颈（bottleneck）**阶段，提高整体吞吐量。
 
 * **更小的管道气泡**： 较小的块意味着前向和后向传播的操作单元更小，有助于减少管道气泡（Pipeline Bubble）或空闲时间
+
 
 #### 2.5.2 阶段交错（Interleaving Stages）
 
@@ -259,8 +261,6 @@ class GPipeSchedule(Schedule):
 
 PyTorch 提供原生 API：
 `torch.distributed.pipelining`
-#### 2.7.1 两个阶段
-
 #### 2.7.1 两个阶段
 
 1. **构建阶段（PipelineStage）**
