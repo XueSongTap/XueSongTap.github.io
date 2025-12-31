@@ -29,7 +29,7 @@ Y = XW = [XW_1, XW_2] = [Y_1, Y_2]
 $$
 
 #### 1.1.1 Forward
-![alt text](image-3.png)
+![alt text](/img/2025/12/30/col-linear-forward.png)
 为了方便理解，我们同样假设有 **2 块 GPU**：
 
 ##### 中间计算
@@ -47,7 +47,7 @@ $$
     $$
 
 #### 1.1.2 Backward
-![alt text](image-4.png)
+![alt text](/img/2025/12/30/col-linear-backward.png)
 
 
 在列并行里，每块 GPU 只负责输出维度的一段：
