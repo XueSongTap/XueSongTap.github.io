@@ -78,7 +78,7 @@ $$
 
 #### 1.2.1 Forward
 
-![alt text](image.png)
+![alt text](/img/2025/12/30/row-linear-forward.png)
 
 ##### 算子 $f$
 *   **动作：** **切分 (Split)**
@@ -106,7 +106,7 @@ $$
 
 反向传播的方向是：**$\frac{\partial L}{\partial Y} \rightarrow g \rightarrow \text{求导} \rightarrow f \rightarrow \frac{\partial L}{\partial X}$**
 
-![alt text](image-2.png)
+![alt text](/img/2025/12/30/row-linear-backward.png)
 
 
 
@@ -139,13 +139,13 @@ $$
 
 
 ### 2.1 TP切分
-![alt text](image-5.png)
+![alt text](/img/2025/12/30/mlp-cal.png)
 
 其中GELU 是激活函数，AB分别表示2个线性层
 
 Transformer 里，一般 h' = 4h
 
-![alt text](image-6.png)
+![alt text](/img/2025/12/30/mlp-tp.png)
 
 
 在MLP层中，对A采用"列切割"，对B采用"行切割"。
@@ -161,7 +161,7 @@ Transformer 里，一般 h' = 4h
 
 
 为什么我们对A采用列切割，对B采用行切割呢？这样设计的原因是，我们尽量保证各GPU上的计算相互独立，减少通讯量。对A来说，需要做一次GELU的计算，而GELU函数是非线性的，它的性质如下：
-![alt text](image-7.png)
+![alt text](/img/2025/12/30/gelu-cal.png)
 
 也就意味着，如果对A采用行切割，我们必须在做GELU前，做一次AllReduce，这样就会产生额外通讯量。但是如果对A采用列切割，那每块GPU就可以继续独立计算了。一旦确认好A做列切割，那么也就相应定好B需要做行切割了
 
@@ -190,7 +190,7 @@ AllReduce的过程分为两个阶段，Reduce-Scatter和All-Gather，每个阶�
 
 #### head=1
 
-![alt text](image-8.png)
+![alt text](/img/2025/12/30/single-head-mha.png)
 - seq_len，d_model即序列长度和每个token的向量维度
 - $W^Q, W^K, W^V$ 即attention层需要做训练的三块权重。
 - k_dim，v_dim满足：
@@ -200,16 +200,78 @@ AllReduce的过程分为两个阶段，Reduce-Scatter和All-Gather，每个阶�
 
 #### 多头
 理清了单头，我们来看多头的情况，下图展示了当num_heads = 2时attention层的计算方法。即对每一块权重，我们都沿着列方向（k_dim）维度切割一刀。此时每个head上的 $W^Q, W^K, W^V$ 的维度都变成(d_model, k_dim//2)。每个head上单独做矩阵计算，最后将计算结果concat起来即可。整个流程如下：
-![alt text](image-9.png)
+![alt text](/img/2025/12/30/multi-head-mha.png)
 
 可以发现，attention的多头计算简直是为张量模型并行量身定做的，因为每个头上都可以独立计算，最后再将结果concat起来。也就是说，可以把每个头的参数放到一块GPU上。则整个过程可以画成：
 
 
-![alt text](image-10.png)
+![alt text](/img/2025/12/30/mha-tp.png)
+
+
+**左半部分：$Y = \text{Self-Attention}(X)$ (列并行)**
+*   **权重切分：** 用于生成 Query ($Q$), Key ($K$), Value ($V$) 的线性层的权重矩阵被按**列**切分。
+    *   $Q$ 被切分为 $[Q_1, Q_2]$，分别放在 GPU 1 和 GPU 2 上。$K$ 和 $V$ 同理。
+    *   这意味着每个 GPU 负责处理一部分注意力头（Heads）。图中 GPU 1 处理 Head 1，GPU 2 处理 Head 2。
+*   **计算过程：** 每个 GPU 独立计算自己负责的那部分注意力的输出（$Y_1$ 和 $Y_2$）。
+*   **通信状态 ($f$)：** 在**前向传播**中，$f$ 是 **Identity（恒等算子）**。这意味着输入的 $X$ 在每个 GPU 上都是完整的副本，GPU 之间不需要交换数据即可开始计算各自的头。
+
+**右半部分：$Z = \text{Dropout}(YB)$ (行并行)**
+*   **权重切分：** 注意力机制最后的输出投影层（Output Projection）权重 $B$ 被按**行**切分，即 $B = \begin{bmatrix} B_1 \\ B_2 \end{bmatrix}$。
+*   **计算过程：** 
+    *   GPU 1 计算 $Z_1 = Y_1 B_1$。
+    *   GPU 2 计算 $Z_2 = Y_2 B_2$。
+    *   根据矩阵乘法原理：$Z = YB = [Y_1, Y_2] \begin{bmatrix} B_1 \\ B_2 \end{bmatrix} = Y_1 B_1 + Y_2 B_2 = Z_1 + Z_2$。
+*   **通信状态 ($g$)：** 为了得到最终的输出 $Z$，必须将两个 GPU 上的部分结果 $Z_1$ 和 $Z_2$ 相加。因此，在**前向传播**中，$g$ 是 **All-Reduce（全归约）** 算子。执行完 $g$ 后，每个 GPU 都拥有了完整的、求和后的 $Z$。
+
+
+
+$f$ 和 $g$ 的共轭关系（通信逻辑:
+
+底部文字是理解 TP 通信的关键。在深度学习框架中，为了保证梯度计算正确，前向和后向的通信算子是“共轭”的：
+
+*   **对于 $g$ (在输出端)：**
+    *   **前向传播：All-Reduce。** 求和汇总所有 GPU 的结果。
+    *   **后向传播：Identity。** 梯度直接传回各自的路径，不需要额外通信。
+*   **对于 $f$ (在输入端)：**
+    *   **前向传播：Identity。** 输入 $X$ 直接进入计算。
+    *   **后向传播：All-Reduce。** 因为在前向传播中，$X$ 被分发到了两个并行的分支，在反向传播时，来自这两个分支的关于 $X$ 的梯度需要通过 All-Reduce 进行累加汇总，以更新前一层。
+
+
+优点：
+1.  **减少通信次数：** 在整个 MHA 块中，**只需要在最后进行一次 All-Reduce 通信 ($g$)**。中间计算 $Q, K, V$ 以及注意力权重时，GPU 之间是完全独立的。
+2.  **显存优化：** 所有的权重矩阵（$W_Q, W_K, W_V, W_{out}$）都分摊到了不同 GPU 上，极大降低了单个 GPU 的显存压力。
+3.  **负载均衡：** 每个 GPU 负责相同数量的注意力头，计算量分布均匀。
+
+
 
 
 对三个参数矩阵Q，K，V，按照“列切割”，每个头放到一块GPU上，做并行计算。对线性层B，按照“行切割”。切割的方式和MLP层基本一致，其forward与backward原理也一致
-![alt text](image-11.png)
+![alt text](/img/2025/12/30/mha-tp-data-flow.png)
+
+
+这张图，更直接描述TP下的数据流转
+
+
+**1. 完全独立的局部计算（紫色与蓝色区域）**
+从输入端开始，**相同的输入张量 $X$** 被复制到两个 GPU 中。
+*   **空间隔离：** GPU1（紫色）和 GPU2（蓝色）分别负责不同的注意力头（Attention Heads）。
+*   **零通信开销：** 在生成 $Q, K, V$ 以及后续的 Softmax、Dropout 过程中，两个 GPU 之间没有任何数据交换。这意味着注意力机制中最耗时的“头计算”部分是完全并行的，计算效率随 GPU 数量线性增加。
+
+**2. 巧妙的线性投影切分（$Y_i B_i$ 阶段）**
+在 Self-Attention 输出后，紧接着是输出投影层（Output Projection）。
+*   **行切分（Row Parallel）：** 注意力输出 $Y_1$ 和 $Y_2$ 并不需要先合并，而是直接与本地切分好的权重 $B_1$、$B_2$ 进行矩阵乘法。
+*   **得到部分和：** 此时 GPU1 得到的是结果的一个“分量” $Z_1$，GPU2 得到的是 $Z_2$。
+
+**3. 唯一的同步关口：AllReduce 菱形算子**
+这是整张图的核心动线节点：
+*   **同步汇总：** 为了得到最终正确的输出，图中央的 **AllReduce** 算子将 $Z_1$ 和 $Z_2$ 进行相加汇总。
+*   **状态还原：** 经过这一次通信后，两个 GPU 重新获得了**完全一致且完整**的输出 $Z$。
+*   **极简设计：** 这种设计保证了在整个复杂的 Attention 层计算中，**跨 GPU 的通信仅发生这一次**，极大地压低了分布式训练中的网络延迟。
+
+**总结：数据流的“沙漏型”特征**
+这张图揭示了 TP 并行的典型数据流特征：**输入时完全一致（宽） $\rightarrow$ 计算过程中各算各的（分流） $\rightarrow$ 投影结束后通过 AllReduce 汇聚（窄） $\rightarrow$ 输出时再次回到一致状态（宽）**。这种“分-合”结构正是 Megatron-LM 实现大规模模型高效并行的精髓所在。
+
+
 
 最后，在实际应用中，并不一定按照一个head占用一块GPU来切割权重，我们也可以一个多个head占用一块GPU，这依然不会改变单块GPU上独立计算的目的。所以实际设计时，我们尽量保证head总数能被GPU个数整除。
 
@@ -232,7 +294,7 @@ positional embedding：维度(max_s, h)，其中max_s表示模型允许的最大
 
 对positional embedding来说，max_s本身不会太长，因此每个GPU上都拷贝一份，对显存的压力也不会太大。但是对word embedding来说，词表的大小就很客观了，因此需要把word embedding拆分到各个GPU上，具体的做法如下：
 
-![alt text](image-13.png)
+![alt text](/img/2025/12/30/embedding-input-tp.png)
 
 对于输入X，过word embedding的过程，就是等于用token的序号去word embedding中查找对应词向量的过程。例如，输入数据为[0, 212, 7, 9]，数据中的每一个元素代表词序号，我们要做的就是去word embedding中的0，212，7，9行去把相应的词向量找出来。
 
@@ -246,7 +308,7 @@ positional embedding：维度(max_s, h)，其中max_s表示模型允许的最大
 输出层中，同样有一个word embedding，把输入再映射回词表里，得到每一个位置的词。一般来说，输入层和输出层共用一个word embeding。其计算过程如下：
 
 
-![alt text](image-14.png)
+![alt text](/img/2025/12/30/embedding-output-tp.png)
 
 
 需要注意的是，我们必须时刻保证输入层和输出层共用一套word embedding。而在backward的过程中，我们在输出层时会对word embedding计算一次梯度，在输入层中还会对word embedding计算一次梯度。在用梯度做word embedding权重更新时，我们必须保证用两次梯度的总和进行更新。
@@ -263,15 +325,33 @@ positional embedding：维度(max_s, h)，其中max_s表示模型允许的最大
 ## 5 cross-entroy层
 输出层过完embedding：
 
-![alt text](image-15.png)
 
 
-正常来说，我们需要对Y1和Y2做一次All-Gather，把它们concat起来形成Y，然后对Y的每一行做softmax，就可得到对于当前位置来说，每个词出现的概率。接着，再用此概率和真值组做cross-entropy即可。
-但是All-Gather会产生额外的通讯量 b *s *v,
+### 5.1 原始逻辑 (All Gather) 方案
+![All-Gather 方案](/img/2025/12/30/native-cross-entry-tp.png)
 
-词表v很大的时候，通讯开销不乐观
 
-![alt text](image-16.png)
+首先，我们看最容易想到的方案。由于词表权重被按列切分到了 $N$ 个 GPU 上，每个 GPU 只能算出自己负责的那一部分词的得分（Partial Logits），其维度为 $(b, s, v/N)$。
+
+
+*   **数据流向**：为了计算完整的 Softmax，我们需要拿到所有词的得分。于是，系统调用一次 **All-Gather** 通信，将各显卡上的局部 Logits 拼接成一个完整的、维度为 $(b, s, v)$ 的全局张量 $Y$。
+*   **计算逻辑**：拼接完成后，每个 GPU 都在本地执行标准的 Softmax 和 Cross Entropy 计算。
+*   **致命缺陷：显存瓶颈（OOM）**。
+    这种方案虽然逻辑简单，但在大模型面前几乎不可行。假设 Batch Size 为 4，序列长度为 2048，词表大小为 128,000，在使用 FP16 精度时，仅这一个 Logits 张量 $Y$ 就会占用约 **2GB** 的显存。在并行训练中，每个 GPU 都要存储一份这样的完整张量，会造成极大的显存浪费，甚至直接导致显存溢出。
+
+
+
+### 5.2 优化实现（Parallel Cross Entropy 方案）**
+
+为了解决显存瓶颈，我们引入了更加巧妙的 Parallel Cross Entropy）方案。它的核心哲学是：**“如果我只需要全局的统计量，又何必传输整个大张量呢？”**
+
+![Parallel Cross Entropy 优化方案](/img/2025/12/30/cross-entry-tp.png)
+
+*   **衔接逻辑**：我们观察到，Softmax 的分母本质上是所有词得分指数值的累加和。既然是求和，我们不需要把所有的词聚齐，可以先在本地算局部和，再同步这个“和”。
+*   **数据流向三步走**：
+    1.  **局部降维（局部求和）**：每个 GPU 计算局部 Logits 的指数和（以及最大值用于数值稳定），得到维度仅为 $(b, s)$ 的小张量 $e_i$。
+    2.  **极简通信（All-Reduce）**：对这些小张量进行一次 **All-Reduce**。由于维度不含词表大小 $v$，通信量瞬间降低了几个数量级。此时，每个 GPU 虽没有完整的词表得分，却都拥有了计算 Softmax 所需的**全局分母**。
+    3.  **分布式损失计算**：每个 GPU 结合手中的全局分母和本地的局部得分，计算出属于自己那部分词的 Loss。最后再进行一次标量聚合。
 
 
 - 每块GPU上，我们可以先按行求和，得到各自GPU上的GPU_sum(e)
@@ -286,8 +366,56 @@ positional embedding：维度(max_s, h)，其中max_s表示模型允许的最大
 
 
 
+对比这两张图，我们可以看到从“图一”到“图二”的质变：
+*   **显存减负**：图二方案彻底抛弃了存储全局大张量 $(b, s, v)$ 的需求，将显存占用从 $O(V)$ 降到了 $O(1)$（相对于词表大小）。
+*   **通信提速**：虽然通信次数多了一次，但通信的数据体量从“整车装运”变成了“传个纸条”，极大地缓解了网络带宽的压力。
+
+**这种“先降维、再同步、后局部计算”的技巧，正是 Megatron-LM 等分布式框架能够训练万亿参数模型的底层黑科技之一。**
+
+
+
 
 ## 6 总共的通讯开销
-![alt text](image-17.png)
+![alt text](/img/2025/12/30/total-tp.png)
 
 在张量模型并行中，我们设每次通讯量为 $\Phi_{TP}$，从上面分析中我们知道每层做4次AllReduce，其通讯总量为 $8\Phi_{TP}$。其中，$\Phi_{TP} = b * s * h$，则通讯总量为 $8 * b * s * h$。
+
+你的描述已经抓住了核心逻辑，但在博客写作中，可以进一步强化**“结构对称性”**和**“通信开销的量化推导”**。
+
+以下是为你润色后的版本，包含要点解析和更严谨的开销总结：
+
+---
+
+## 6. 张量并行的总通信开销：全局视角
+
+通过前面的分析，我们可以将这些组件“拼装”起来，得到一个完整的 **并行 Transformer 层（Parallel Transformer Layer）** 实现。如下图所示，Megatron-LM 巧妙地在 Self-Attention 块和 MLP 块中应用了对称的并行逻辑。
+![alt text](/img/2025/12/30/total-tp.png)
+### 6.1 图片要点解析**
+
+
+1.  **两段式结构**：一个完整的 Transformer 层由 **Self-Attention** 和 **MLP** 两个大的并行块组成。
+2.  **通信算子的位置**：
+    *   在每个块的**前向传播**中，通信发生在 **行并行（Row Parallel）线性层之后**。由于行并行的输出是各卡分量的“部分和”，必须通过一次 **All-Reduce** 才能恢复出完整的张量，供给后续的 Add & Norm 使用。
+    *   根据前文提到的“共轭关系”，在前向传播中进行 All-Reduce 的位置，其对应的**反向传播**输入端也必然需要一次 All-Reduce 来同步梯度。
+3.  **计算与通信的解耦**：LayerNorm 和 Dropout 依然是在每个 GPU 上对同步后的完整数据进行本地计算。
+
+### 6.2 **TP 通信开销定量分析**
+
+为了量化开销，我们设单次通信张量的大小为 $\Phi_{TP}$。在标准 Transformer 结构中，隐藏层维度为 $h$，序列长度为 $s$，批大小为 $b$，则：
+$$\Phi_{TP} = b \times s \times h$$
+
+根据图片展示的逻辑，我们可以推导出单层 Transformer 在一次完整的训练迭代（前向+后向）中的总通信开销：
+
+*   **Self-Attention 块**：前向 1 次 All-Reduce，后向 1 次 All-Reduce，共计 **2 次**。
+*   **MLP 块**：前向 1 次 All-Reduce，后向 1 次 All-Reduce，共计 **2 次**。
+*   **单层总计**：每层 Transformer 总共执行 **4 次 All-Reduce**。
+
+#### 6.4 **关于通讯总量的计算：**
+在分布式计算中，一次 All-Reduce 操作的通信量通常按其传输的数据大小来衡量。若以单次 All-Reduce 涉及的数据量 $b \times s \times h$ 为基准：
+*   **算子调用次数**：4 次（前向 2 次 + 后向 2 次）。
+*   **通信数据总量**：
+    考虑到 All-Reduce 在标准环形（Ring）算法下的通信量约为 $2 \times \frac{N-1}{N} \times \Phi_{TP}$，在 $N$ 很大时近似为 $2\Phi_{TP}$。因此，**单层训练的总通信数据量可量化为：**
+    $$Total\_Comm = 4 \times (2 \times b \times s \times h) = 8 \times b \times s \times h$$
+
+**总结：** 张量并行的通信频率非常高（每层 4 次同步），且通信量与隐藏层大小 $h$ 成正比。这意味着 TP 对 GPU 节点间的**互联带宽（如 NVLink）**有着极高的要求，这正是 TP 通常只在机内（Intra-node）使用的原因。
+
