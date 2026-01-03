@@ -21,12 +21,10 @@ tags: LLM Parallelism
 很多只看 1)，但长序列/深层模型的 2) 往往更致命：哪怕 ZeRO-3 把模型状态切到很省，激活仍可能把你 OOM。
 
 
-## 2. 统一记号：先把变量写清楚
-
+## 2. 统一记号公式
 为了让后面的推导能直接对齐公式，这里固定一套符号：
 
 | 符号 | 含义 |
-| : | : |
 | $s$ | sequence length（序列长度） |
 | $b$ | micro-batch size（单卡微批大小，注意不是全局 batch） |
 | $B$ | global batch size（全局 batch） |
@@ -268,7 +266,6 @@ $$
 ### 7.5 一张表总结：每种技术到底把哪一项除掉
 
 | Configuration | Activations Memory Per Transformer Layer |
-| : | : |
 | **no parallelism** | $sbh (34 + 5 \frac{as}{h})$ |
 | **tensor parallel (baseline)** | $sbh (10 + \frac{24}{t} + 5 \frac{as}{ht})$ |
 | **tensor + sequence parallel** | $sbh (\frac{34}{t} + 5 \frac{as}{ht})$ |
@@ -298,7 +295,6 @@ $$
 并行策略的计算/通信模型（课程表格）：
 
 | Strategy | Compute per layer <br><small>(ignoring gating einsum)</small> | Comms per layer <br><small>(bytes, forward + backward pass)</small> |
-| : | : | : |
 | **DP** | $\frac{4BDF}{X} + \frac{8BDF}{X}$ | $0 + 8DF$ |
 | **FSDP** | $\frac{4BDF}{X} + \frac{8BDF}{X}$ | $4DF + 8DF$ |
 | **MP** | $\frac{4BDF}{Y} + \frac{8BDF}{Y}$ | $4BD + 4BD$ |
