@@ -86,6 +86,7 @@ https://github.com/NVIDIA/Megatron-LM/blob/core_v0.15.0/megatron/core/tensor_par
 
 ### 1.2 行并行（Row parallelism）
 
+按照输入维度进行切分
 
 #### 1.2.1 Forward
 
@@ -161,6 +162,16 @@ https://github.com/NVIDIA/Megatron-LM/blob/core_v0.15.0/megatron/core/tensor_par
 
 
 如果每一层矩阵乘法都做一次 All-Reduce，通信开销将淹没计算。Megatron-LM 提出了一种巧妙的组合方式，**将两个线性层串联，把通信合并。**
+
+
+简单理解：
+
+
+行切分需要切输入，列切分需要切输出
+
+列切分会把输出维度切开，这时候不做all reduce ，把前面的切好的列切分的输出当成行切分的输入
+
+省去2层之间的通信
 
 
 ## 2. MLP 层的TP切分
