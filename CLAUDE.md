@@ -60,3 +60,15 @@ tags: 标签
 - 在需求不明确时，默认把任务理解为“文档相关任务”。
 - 优先修改 Markdown 文章和补充图片引用，而不是改模板或构建链路。
 - 如果一个请求存在歧义，在动 `_posts` 以外的渲染或构建文件前，先确认是否真的需要修改那些内容。
+
+## 文章 URL 规则
+
+Jekyll 生成的博客文章 URL 遵循以下规则：
+
+```
+_posts/YYYY/MM/YYYY-MM-DD-slug.md  →  https://xuesongtap.github.io/YYYY/MM/DD/slug.html
+```
+
+例如：
+- `_posts/2025/12/2025-12-29-comm.md` → `https://xuesongtap.github.io/2025/12/29/comm.html`
+- `_posts/2025/12/2025-12-30-tensor-parallel-comm.md` → `https://xuesongtap.github.io/2025/12/30/tensor-parallel-comm.html`
