@@ -46,6 +46,8 @@ tags: distribute
 
 ### 2.2 NCCL 通信原语 (Primitives)
 
+> 通信原语详解（含 Ring 实现与通信量分析）：[NCCL 通信原语](https://xuesongtap.github.io/2025/12/29/comm.html)
+
 #### 2.2.1 Broadcast
 从 **root rank** 广播数据到所有设备。
 

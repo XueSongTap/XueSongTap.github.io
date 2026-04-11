@@ -16,6 +16,8 @@ tags: LLM
 
 ## 1. 权重的切分（通信算子的引入）
 
+> 本文涉及的 AllReduce / AllGather / ReduceScatter 通信原语基础：[NCCL 通信原语](https://xuesongtap.github.io/2025/12/29/comm.html)
+
 张量并行的核心是将线性层 $Y = XW$ 进行切分。根据切分方向的不同，引入了不同的通信算子。
 
 ### 1.1 列并行 (Column Parallelism)
