@@ -1,10 +1,11 @@
 ---
 layout: article
-title: Mac 上 SSH 提示 Connection closed by remote host，最后发现是 TUN 代理的问题
+title: SSH 提示 Connection closed by remote host
 tags: SSH macOS 网络
 ---
 
-今天排查了一个很绕的 SSH 问题，现象看起来像服务端有问题，实际上是本机代理软件的 TUN 模式把 SSH 流量接管了。
+排查一个 SSH 问题，现象看起来像服务端有问题，实际上是本机代理软件的 TUN 模式把 SSH 流量接管了
+
 
 ## 现象
 
@@ -107,7 +108,7 @@ utun4: ...
 - `ssh` 却被立刻断开
 - 报错是 `Connection closed by remote host`
 
-很容易让人去查安全组、`authorized_keys`、`sshd_config`。但只要另一台机器能走到 `Permission denied`，就说明服务端没问题，应该反过来查本机链路。
+很容易让人去查安全组、`authorized_keys`、`sshd_config`。但只要另一台机器能走到 `Permission denied`，就说明服务端没问题，应该反过来查本机链路
 
 ## 深入分析：Clash Verge TUN 模式为什么能影响 SSH
 
