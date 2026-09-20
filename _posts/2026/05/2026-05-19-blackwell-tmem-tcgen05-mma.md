@@ -10,7 +10,7 @@ Blackwell 数据中心 GPU（B200、GB200，SM100/SM103）围绕第五代 Tensor
 
 ## 核心逻辑
 
-每个 SM 配备 256 KB TMEM，与寄存器文件大小相同。TMEM 主要服务 `tcgen05.mma`，即 Blackwell 这一代新的 Tensor Core MMA 指令族（PTX ISA 86，支持 SM_100a/f、SM_103a/f）。
+每个 SM 配备 256 KB TMEM，与寄存器文件大小相同。TMEM 主要服务 `tcgen05.mma`，即 Blackwell 这一代新的 Tensor Core MMA 指令族（PTX ISA 8.6，支持 SM_100a/f、SM_103a/f）。
 
 GEMM 的核心计算是：
 
@@ -24,24 +24,17 @@ MMA 指令把这个矩阵乘加以固定 tile shape 交给 Tensor Core 执行。
 
 ## 为什么需要 TMEM：accumulator 越来越大
 
-随着 Tensor Core 吞吐逐代提升，为了喂饱它，每个 warpgroup 需要维护的 accumulator tile 也越来越大。Hopper 上 accumulator 放在线程寄存器里，一个 warpgroup（128 线程）的 D tile 可能占掉几百个寄存器。寄存器是线程私有的，128 个线程加起来占用极大，导致：
+矩阵乘法沿 K 分块计算时，输入 tile 可以不断更换，输出 tile 的部分和却要一直保留。Hopper 的 WGMMA 把这份 accumulator 放在线程寄存器中；输出 tile 越大，需要长期占用的寄存器也越多。
 
-- **occupancy 下降**：SM 上能同时跑的 warp 减少，hiding latency 的能力变弱
-- **register spilling**：寄存器不够时溢出到 local memory（本质是 global memory），直接打爆带宽
+以一个 $128\times128$ 的 FP32 累加块为例，仅数据本身就需要：
 
-因果链：
+$$
+128\times128\times4\ \text{bytes}=64\ \text{KiB}
+$$
 
-```text
-Tensor Core 吞吐逐代提升
-  → 需要更大的 tile 才能喂饱它
-    → accumulator 越来越大
-      → 占用大量线程寄存器
-        → occupancy 下降，成了新瓶颈
-          → 把 accumulator 单独拎出来放 TMEM
-            → 寄存器压力解除，Tensor Core 直连 TMEM 读写更高效
-```
+如果均摊到 128 个线程，相当于每线程 128 个 32-bit 寄存器，还没算地址、循环变量和其他临时值。这是用于理解容量压力的手算，不代表某个具体 kernel 的线程布局。寄存器占用较高会限制并发驻留；分配不下时，还可能出现 spill。
 
-TMEM 的核心动机不只是带宽，更直接的是**把越来越胖的 accumulator 从线程寄存器里解放出来**，让寄存器文件腾出空间，同时给 Tensor Core 一块专属的、硬件直连的存储。
+TMEM 将累加器从通用寄存器文件中独立出来，让 Tensor Core 直接更新这块片上存储。真正执行乘加的是 Tensor Core，TMEM 提供的是配套的存储与访问路径。它帮助缓解寄存器压力，但整个 kernel 的性能还取决于输入搬运、流水线和 epilogue。[NVIDIA 编程指南](https://docs.nvidia.com/cutlass/latest/media/docs/pythonDSL/guides/mma/tcgen05_programming.html)明确将释放寄存器资源列为这一设计的特点。
 
 ## 架构演进
 
@@ -61,7 +54,7 @@ Blackwell 上 `tcgen05.mma` 是 Hopper `wgmma.mma_async` 的替代者。`wgmma.m
 tcgen05.mma.cta_group.kind [d_tmem], a_desc, b_desc, idesc, ...
 ```
 
-操作数来源：
+下面以 A/B 均来自 SMEM 的路径为例（A 也有来自 TMEM 的指令变体）：
 
 | 操作数 | 来源 |
 |--------|------|
@@ -74,6 +67,53 @@ Blackwell 的 MMA 累加器不再占用普通寄存器，而是放进 TMEM，从
 `tcgen05.mma` 由单个线程发射（issued by a single thread），而非 warp 集体发射，这是与 Hopper `wgmma.mma_async`（warpgroup 集体发射）的重要区别。
 
 计算完成后，结果不能直接在 TMEM 里做普通 CUDA 运算。需要用 `tcgen05.ld` 把 accumulator 从 TMEM load 回寄存器，然后 epilogue 再做 scale、bias、activation、store 等后处理。
+
+![Blackwell SM100 矩阵乘加与存储路径：SMEM 中的 A/B 更新 TMEM 累加器，结果读回寄存器做后处理并写入显存](/img/2026/05/19/tmem-mma-dataflow.png)
+
+### 上排反复累加，下排接续最终结果
+
+先固定一个输出 tile。图中 A 的形状是 $m\times k$，B 是 $k\times n$，因此每次矩阵乘法贡献一个 $m\times n$ 的结果。沿完整归约维度 K 一共处理 T 个分块，图里的 t 是分块编号，不是训练步数：
+
+$$
+D^{(0)}=0,\qquad
+D^{(t+1)}=A_tB_t+D^{(t)},\qquad t=0,\ldots,T-1.
+$$
+
+这意味着上排会重复 T 次：换入下一组 A、B，再更新原来的 D。上排的“更新前”和“更新后”画的是同一块 TMEM 在两个时刻的状态，并没有分配两个累加器。这里 $D^{(0)}=0$ 是数学上的初始条件；实际指令可以在第一次 MMA 时关闭旧累加值的使用，不必先单独写入一整块零。
+
+紫色跨行箭头连接的是最后一次更新。当 $t=T-1$ 时，上排右侧的 $D^{(t+1)}$ 就成为下排左侧的 $D^{(T)}$。两排之间没有数据复制，也不是上排每算一次就走一次下排。所有 K 分块完成后，才进入这张图的输出阶段。
+
+此时先等待异步 MMA 完成，再通过 `tcgen05.ld` 把 TMEM 中的结果读到各线程的寄存器；读取完成后执行 scale、bias、activation 等 epilogue，最后写回 GMEM。图中 R 是这些寄存器片段合起来的逻辑矩阵，并非某一个线程拥有整块 R。实际 kernel 可以对不同输出 tile 做流水线重叠，图里只追踪一块 D 的生命周期。
+
+### D 是激活值，还是另一种中间结果
+
+D 最准确的名字是“矩阵乘法累加器”：计算中是部分和，完成后是这个输出 tile 的乘法结果。以线性层为例：
+
+$$
+Y=\operatorname{GeLU}(XW+b).
+$$
+
+前向时，可以把 D 理解为正在形成的 $XW$ 中间激活；加上 b、做完 GeLU 后才得到 Y。反向时，同样的矩阵乘法硬件又可能计算输入梯度或权重梯度，这时 D 承载的是梯度的部分和。
+
+因此，“激活”描述数据在模型里的含义，“累加器”描述它在运算里的角色。TMEM 面向的是 Tensor Core 的矩阵计算，不能泛化为所有反复更新的激活值都会自动放进来的缓存。某些 MMA 变体也允许操作数 A 位于 TMEM；本图只展示 A/B 均位于 SMEM 的路径。
+
+### 为什么不把这块面积用来加寄存器
+
+增加通用寄存器当然也能缓解容量不足，但容量只是存储设计的一部分。寄存器文件还要为普通线程指令供给操作数，处理不同的读写请求，并连接各类执行单元。只增加存储容量，不代表供数带宽也增加；同时扩展带宽，又会带来读写通路、布线、功耗和时序上的成本。
+
+回看上排，D 的使用方式相当集中：矩阵乘加反复读写同一块累加结果，直到 K 方向计算完毕。为这类访问单独提供 TMEM，可以让矩阵累加和普通线程工作分别使用各自的资源。寄存器仍然重要，下排的后处理就要用它，只是不必在整个 MMA 主循环期间都替 D 保管那一大块数据。
+
+这是从工作负载和接口约束出发理解架构取舍，不代表公开资料给出了“TMEM 比等容量寄存器节省多少面积”的数字。也不能把收益解释成“原来每次累加都写显存，现在不用了”：上一代 Tensor Core 同样可以将累加结果保留在片上寄存器中。
+
+### “受限制的访问”具体限制在哪里
+
+最直接的区别是指令接口。上排通过 `tcgen05.mma` 更新 D，下排通过 `tcgen05.ld` 把它读出；反向写入使用 `tcgen05.st`，SMEM 到 TMEM 的复制可使用 `tcgen05.cp`。普通 CUDA 算术指令不能直接拿 TMEM 地址当操作数，所以图里的通用后处理安排在读回寄存器之后。这些是本文用到的主要路径，不是整个指令族的完整清单。
+
+其次，`tcgen05.ld/st` 是 warp 协作的块读写。参与线程使用同一基地址，选择指令支持的搬运形状，由规定的布局把数据分配到线程寄存器；不能像普通全局内存读写那样，让每个线程自由提交一套互不相关的地址。例如 `.32x32b` 描述的是 32 条数据通路上各 32 bit 的搬运形状，不是任意大小的逻辑矩阵。
+
+对图中 SM100 的路径，warpgroup 内的四个 warp 通过 `tcgen05.ld/st` 分别访问 TMEM 的 0–31、32–63、64–95、96–127 行，各自可以访问这些行中的所有列。这些是物理 TMEM 行，并不自动等于图中逻辑 D 的矩阵行；内核还要建立相应的布局映射。具体规则见 [PTX 的 Access restrictions](https://docs.nvidia.com/cuda/parallel-thread-execution/#tcgen05-tensor-memory-ld-st-access-restrictions)。
+
+最后还要处理完成顺序。单线程发射 MMA，不代表结果立即可读；warp 协作发出 load，也不代表异步读取已经结束。图中两排的连接处和下排读回后，都有需要满足的同步条件。TMEM 的专用性，既体现在硬件的数据路径上，也体现在编程时必须遵守这些访问与同步约束。
 
 ## MMA shape 与 tiling
 
@@ -141,18 +181,18 @@ CUTLASS GEMM kernel
 | 指令 | 功能 |
 |------|------|
 | `tcgen05.alloc` | 分配 TMEM |
-| `tcgen05.mma` | Tensor Core MMA（A/B 来自 SMEM，D 在 TMEM） |
+| `tcgen05.mma` | Tensor Core MMA（本图 A/B 来自 SMEM，D 在 TMEM；A 另有 TMEM 变体） |
 | `tcgen05.ld` | TMEM → register |
 | `tcgen05.st` | register → TMEM |
 | `tcgen05.cp` | SMEM → TMEM |
 | `tcgen05.dealloc` | 释放 TMEM |
-| `tcgen05.commit` | 提交异步 MMA 操作 |
+| `tcgen05.commit` | 将先前异步操作的完成通知关联到 mbarrier |
 
 ## tcgen05.mma 特点总结
 
 1. CTA 级，不再是传统 thread/warp 级语义
 2. 由单个线程发射（非 warpgroup 集体发射）
-3. A 来自 SMEM（通过 SMEM descriptor）
+3. 本图 A 来自 SMEM（通过 SMEM descriptor）；另有来自 TMEM 的变体
 4. B 来自 SMEM（通过 SMEM descriptor）
 5. accumulator/D 必须在 TMEM
 6. 结果后处理前，需要用 `tcgen05.ld` 从 TMEM 读回寄存器
@@ -162,9 +202,12 @@ CUTLASS GEMM kernel
 
 - SIMT GEMM 可能 compute-bound
 - 换成 Tensor Core MMA 后，计算吞吐大幅提升，瓶颈经常转移到数据搬运和布局上
-- 关键路径包括 GMEM → SMEM（TMA）、SMEM → TMEM、TMEM → register（epilogue）
+- 本图的输入路径是 GMEM → SMEM，Tensor Core 读取输入并在 TMEM 更新 D；输出路径是 TMEM → register → GMEM。A/B 不必先整体复制到 TMEM 才能计算。
 
 ## 参考资料
+
+- [NVIDIA tcgen05 MMA Programming Guide：数据流、累加器与结果读取](https://docs.nvidia.com/cutlass/latest/media/docs/pythonDSL/guides/mma/tcgen05_programming.html)
+- [NVIDIA PTX ISA：Tensor Memory 与 tcgen05 指令](https://docs.nvidia.com/cuda/parallel-thread-execution/#tensor-memory)（本文访问限制以 SM100 路径为例；核对日期 2026-09-20）
 
 - [NVIDIA CUTLASS Blackwell SM100 GEMM 文档](https://docs.nvidia.com/cutlass/latest/media/docs/cpp/blackwell_functionality.html)
 - [libcu++ tcgen05.mma PTX wrapper](https://nvidia.github.io/cccl/libcudacxx/ptx/instructions/tcgen05_mma.html)
