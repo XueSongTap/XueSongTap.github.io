@@ -1,0 +1,41 @@
+\documentclass[tikz,border=12pt]{standalone}
+\usepackage[UTF8,fontset=fandol]{ctex}
+\usepackage{amsmath,amssymb}
+\usetikzlibrary{arrows.meta}
+\definecolor{teal}{HTML}{4F8FA5}
+\definecolor{orange}{HTML}{EE995B}
+\definecolor{coral}{HTML}{C95B5B}
+\definecolor{violet}{HTML}{8A74B5}
+\begin{document}
+\begin{tikzpicture}[x=1cm,y=1cm,>=Latex, every node/.style={font=\small},flow/.style={->,thick,black!55}]
+
+\node[font=\large] at (7,1.2) {$S_{ij}=Q_iK_j^{\mathsf T}/\sqrt{d_h},\qquad O_i=\operatorname{softmax}_{\mathrm{all\ keys}}([S_{i0}|\cdots|S_{i,P-1}])\,V$};
+\node[font=\small\bfseries,text=black!60] at (7,.2) {固定一张卡、一个 head：$Q_i$ 留在本地，每轮处理一个 KV 块};
+\filldraw[fill=teal!60,draw=black!60] (0,-2.8) rectangle ++(1.8,1.2);\node at (0.9,-3.25) {$Q_i$};\node[font=\scriptsize,text=black!60] at (0.9,-3.75) {$n\times d_h$};
+\filldraw[fill=orange!60,draw=black!60] (3,-2.8) rectangle ++(1.2,1.8);\node at (3.6,-3.25) {$K_j^{\mathsf T}$};\node[font=\scriptsize,text=black!60] at (3.6,-3.75) {$d_h\times n$};
+\filldraw[fill=coral!60,draw=black!60] (5.4,-2.8) rectangle ++(1.2,1.2);\node at (6.0,-3.25) {$S_{ij}$};\node[font=\scriptsize,text=black!60] at (6.0,-3.75) {$n\times n$};
+\filldraw[fill=violet!60,draw=black!60] (8,-2.8) rectangle ++(1.8,1.2);\node at (8.9,-3.25) {$V_j$};\node[font=\scriptsize,text=black!60] at (8.9,-3.75) {$n\times d_h$};
+
+\node[font=\Large] at (2.4,-2.2) {$\times$};
+\draw[flow] (4.45,-2.2) -- (5.1,-2.2);
+
+\node[draw=black!50,align=center,minimum width=2.8cm,minimum height=1.2cm] (merge) at (12.1,-2.2) {Online softmax\\更新 $(m_i,\ell_i,A_i)$};
+\draw[flow] (6,-1.3) -- (6,-.65) -- (12.1,-.65) -- (merge.north);
+\draw[flow] (10.1,-2.2) -- (merge.west);
+\draw[thick,black!55] (merge.south) -- (12.1,-5.5);
+\node[draw=black!50,align=center,minimum width=3cm,minimum height=.8cm] (next) at (7,-5.5) {下一轮：$j\leftarrow(j-1)\bmod P$};
+\draw[flow] (12.1,-5.5) -- (next.east);
+\node[fill=white,font=\scriptsize] at (10.45,-5.5) {未遍历完};
+\draw[flow] (next.west) -- (3.6,-5.5) -- (3.6,-4.2);
+\node[align=center,text=black!60] at (2,-5.4) {邻卡传入\\新的 K、V};
+\draw[flow] (12.1,-5.5) -- (12.1,-7);
+\node[fill=white,font=\scriptsize] at (12.1,-6.4) {处理完 $P$ 块};
+\node at (12.1,-7.45) {$O_i=A_i/\ell_i$};
+\node[font=\scriptsize,text=black!60] at (12.1,-7.95) {$n\times d_h$（按行归一化）};
+\node[align=left,anchor=west,text width=8cm] at (0,-7.1) {例如 $P=4$，Rank 0 的 KV 顺序：\\[5pt] $\mathrm{KV}_0\ \to\ \mathrm{KV}_3\ \to\ \mathrm{KV}_2\ \to\ \mathrm{KV}_1$\\[5pt]本地块先算，随后 3 次接收；$Q_0$ 始终不动。};
+\node[fill=black!4,anchor=north west,text width=13.6cm,inner sep=10pt,align=left] at (-.2,-8.7) {
+\textbf{维度}\quad $n=L/P$：本地 token 数；$d_h$：head 维度。图中省略 batch 与 head 轴。\\[5pt]
+\textbf{对象}\quad $S_{ij}$ 是分数；$m_i,\ell_i$ 是逐行最大值、指数和；$A_i$ 是未归一化加权和。\\[5pt]
+\textbf{机制}\quad 每轮重标定旧状态，再合并新块；不是把各块 softmax 的输出直接相加。图示无 mask。};
+\end{tikzpicture}
+\end{document}

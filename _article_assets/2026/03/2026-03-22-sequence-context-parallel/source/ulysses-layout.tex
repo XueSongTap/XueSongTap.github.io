@@ -1,0 +1,45 @@
+\documentclass[tikz,border=12pt]{standalone}
+\usepackage[UTF8,fontset=fandol]{ctex}
+\usepackage{amsmath,amssymb}
+\usetikzlibrary{arrows.meta}
+\definecolor{teal}{HTML}{4F8FA5}
+\definecolor{orange}{HTML}{EE995B}
+\definecolor{coral}{HTML}{C95B5B}
+\definecolor{violet}{HTML}{8A74B5}
+\begin{document}
+\begin{tikzpicture}[x=1cm,y=1cm,>=Latex, every node/.style={font=\small},flow/.style={->,thick,black!55}]
+
+\node[font=\large] at (7,1.9) {$X_{i,j}=X[\mathcal T_i,\mathcal H_j,:]\quad\xrightarrow{\text{All-to-All}}\quad X^{(j)}=\operatorname{concat}_{i,\,\mathrm{seq}}X_{i,j}$};
+\node[font=\small\bfseries,text=black!60] at (2,0.8) {通信前：每卡一段序列，全部 heads};
+\node[font=\small\bfseries,text=black!60] at (12,0.8) {通信后：每卡全部序列，一组 heads};
+\filldraw[fill=teal!65,draw=black!60] (0,-1.5) rectangle ++(2,1.6);
+\node at (1,-0.7) {$X_{0,0}$};
+\filldraw[fill=orange!65,draw=black!60] (2,-1.5) rectangle ++(2,1.6);
+\node at (3,-0.7) {$X_{0,1}$};
+\node at (2,-1.95) {Rank 0: $X_0$};\node[text=black!60,font=\scriptsize] at (2,-2.45) {$(L/2)\times(hd_h)$};
+\filldraw[fill=teal!65,draw=black!60] (0,-5.0) rectangle ++(2,1.6);
+\node at (1,-4.2) {$X_{1,0}$};
+\filldraw[fill=orange!65,draw=black!60] (2,-5.0) rectangle ++(2,1.6);
+\node at (3,-4.2) {$X_{1,1}$};
+\node at (2,-5.45) {Rank 1: $X_1$};\node[text=black!60,font=\scriptsize] at (2,-5.95) {$(L/2)\times(hd_h)$};
+\filldraw[fill=teal!65,draw=black!60] (9,-2.1999999999999997) rectangle ++(2,1.6);\node at (10,-1.3999999999999997) {$X_{0,0}$};
+\filldraw[fill=teal!65,draw=black!60] (9,-3.8) rectangle ++(2,1.6);\node at (10,-3.0) {$X_{1,0}$};
+\node at (10,-4.25) {Rank 0: $X^{(0)}$};\node[text=black!60,font=\scriptsize] at (10,-4.75) {$L\times[(h/2)d_h]$};
+\filldraw[fill=orange!65,draw=black!60] (12.5,-2.1999999999999997) rectangle ++(2,1.6);\node at (13.5,-1.3999999999999997) {$X_{0,1}$};
+\filldraw[fill=orange!65,draw=black!60] (12.5,-3.8) rectangle ++(2,1.6);\node at (13.5,-3.0) {$X_{1,1}$};
+\node at (13.5,-4.25) {Rank 1: $X^{(1)}$};\node[text=black!60,font=\scriptsize] at (13.5,-4.75) {$L\times[(h/2)d_h]$};
+
+\draw[flow] (4.6,-2.1) -- (8.3,-2.1);
+\node[align=center] at (6.45,-1.15) {按 head 切开\\按序列拼接};
+\node[align=center,text=black!60] at (6.45,-3.25) {$P=2$\\每种颜色发给同一张卡};
+\node[draw=black!40,rounded corners,minimum width=5.5cm,minimum height=.7cm] (attn) at (11.75,-6.6) {本地 Attention：每个 head 看到完整 $L$};
+\draw[flow] (11.75,-5.2) -- (attn.north);
+\draw[flow] (attn.west) -- (2,-6.6) -- (2,-7.0);
+\node[fill=white] at (6,-6.6) {输出经逆向 All-to-All};
+\node at (2,-7.5) {$O_i:\ (L/2)\times(hd_h)$};
+\node[fill=black!4,anchor=north west,text width=14.1cm,inner sep=10pt,align=left] at (-.2,-8.3) {
+\textbf{维度}\quad $L$：序列长度；$h$：head 数；$d_h$：每个 head 的通道数，$d=hd_h$。\\[5pt]
+\textbf{对象}\quad $X$ 表示 Q、K 或 V 中任一个实值张量；颜色标记目标 head 组。\\[5pt]
+\textbf{机制}\quad 图示 MHA、$P=2$，省略 batch；合并末两轴画矩阵面。交换数据归属，不改变每卡元素数。};
+\end{tikzpicture}
+\end{document}
