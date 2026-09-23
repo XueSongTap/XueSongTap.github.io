@@ -1,0 +1,71 @@
+\documentclass[tikz,border=12pt]{standalone}
+\usepackage[UTF8,fontset=fandol]{ctex}
+\usepackage{amsmath}
+\usetikzlibrary{arrows.meta,calc}
+\definecolor{acol}{HTML}{4F8FA5}
+\definecolor{bcol}{HTML}{EE995B}
+\definecolor{ccol}{HTML}{8A74B5}
+\definecolor{ink}{HTML}{454B53}
+\begin{document}
+\begin{tikzpicture}[x=1cm,y=1cm,font=\small,text=ink,
+ move/.style={-{Stealth[length=2.2mm]},dashed,draw=acol,line width=.9pt},
+ calc/.style={-{Stealth[length=2.2mm]},draw=ink,line width=.9pt},
+ carry/.style={-{Stealth[length=2.2mm]},draw=ccol,line width=1pt}]
+\node[font=\large] at (9.3,2.15) {$C_{ij}=\displaystyle\sum_{p=0}^{2}A_{i,p}B_{p,j},\qquad S^{(0)}=0,\quad S^{(p+1)}=S^{(p)}+A_{i,p}B_{p,j}$};
+\draw[move] (1,1.3)--(1.9,1.3); \node[anchor=west] at (2,1.3) {数据搬运（选块 / 写回）};
+\draw[calc] (6.1,1.3)--(7,1.3); \node[anchor=west] at (7.1,1.3) {参与乘加计算};
+\draw[carry] (12,1.3)--(12.9,1.3); \node[anchor=west] at (13,1.3) {同一累加状态的延续};
+\foreach \p in {0,1,2} {
+ \begin{scope}[shift={(6.5*\p,0)}]
+ \node[font=\small\bfseries] at (2.8,.5) {phase $p=\p$：选取第 $\p$ 段 $K$};
+ % Global matrices: N = 3T on both axes. One cell is one tile.
+ \foreach \x/\role in {1.3/acol,4.3/bcol} {
+  \foreach \r in {0,1,2} {\foreach \c in {0,1,2} {
+   \fill[black!6,rounded corners=.6pt] (\x-.9+.6*\c,-.6-.6*\r) rectangle ++(.57,-.57);
+  }}
+  \draw[black!55,line width=.4pt] (\x-.93,-.57) rectangle (\x+.9,-2.4);
+ }
+ \foreach \c in {0,1,2} {
+  \fill[acol!25,rounded corners=.6pt] (.4+.6*\c,-1.2) rectangle ++(.57,-.57);
+  \fill[bcol!25,rounded corners=.6pt] (4,-.6-.6*\c) rectangle ++(.57,-.57);
+ }
+ \fill[acol!80,rounded corners=.6pt] (.4+.6*\p,-1.2) rectangle ++(.57,-.57);
+ \fill[bcol!80,rounded corners=.6pt] (4,-.6-.6*\p) rectangle ++(.57,-.57);
+ \node[text=white,font=\scriptsize] at (.685+.6*\p,-1.485) {$\p$};
+ \node[font=\scriptsize] at (4.285,-.885-.6*\p) {$\p$};
+ \draw[calc] (.4,-.3)--(2.2,-.3) node[midway,above,font=\scriptsize] {$K$};
+ \draw[calc] (3.05,-.6)--(3.05,-2.4) ;
+ \node[font=\scriptsize] at (3.05,-.3) {$K$};
+ \node at (1.3,-2.75) {$A$（固定块行 $i$）};
+ \node at (4.3,-2.75) {$B$（固定块列 $j$）};
+ \node[font=\scriptsize] at (1.3,-3.12) {$N\times N$，global};
+ \node[font=\scriptsize] at (4.3,-3.12) {$N\times N$，global};
+ % Short dashed connectors link the selected parent tile to its shared copy.
+ \draw[move] (2.2,-1.485) -- (2.6,-1.485) -- (2.6,-3.65) -- (1.3,-3.65) -- (1.3,-4.05);
+ \draw[move] (5.2,-.885-.6*\p) -- (5.9,-.885-.6*\p) -- (5.9,-3.65) -- (4.3,-3.65) -- (4.3,-4.05);
+ \filldraw[fill=acol!65,draw=black!55] (1,-4.05) rectangle ++(.6,-.6);
+ \filldraw[fill=bcol!65,draw=black!55] (4,-4.05) rectangle ++(.6,-.6);
+ \node[font=\Large] at (2.8,-4.35) {$\times$};
+ \node at (1.3,-5) {$A_s=A_{i,\p}$}; \node at (4.3,-5) {$B_s=B_{\p,j}$};
+ \node[font=\scriptsize] at (1.3,-5.36) {$T\times T$，shared};
+ \node[font=\scriptsize] at (4.3,-5.36) {$T\times T$，shared};
+ \draw[calc] (2.8,-4.72)--(2.8,-6.6) node[pos=.73,right,font=\scriptsize,align=left] {就绪同步后\\乘加到 $S$};
+ \filldraw[fill=ccol!55,draw=black!55] (2.5,-6.6) rectangle ++(.6,-.6);
+ \node at (2.8,-7.57) {$S^{(\number\numexpr\p+1\relax)}$};
+ \node[font=\scriptsize] at (2.8,-7.94) {$T\times T$，寄存器累加};
+ \end{scope}
+}
+\draw[carry] (.2,-6.9)--(2.5,-6.9) node[midway,above] {$S^{(0)}=0$};
+\draw[carry] (3.1,-6.9)--(9,-6.9) node[midway,above,font=\scriptsize] {保留 $S$；同步后加载下一对 tile};
+\draw[carry] (9.6,-6.9)--(15.5,-6.9) node[midway,above,font=\scriptsize] {保留 $S$；同步后加载下一对 tile};
+\draw[move] (16.1,-6.9)--(18.35,-6.9) node[midway,above,font=\scriptsize] {循环结束写回};
+\filldraw[fill=ccol!75,draw=black!55] (18.35,-6.6) rectangle ++(.6,-.6);
+\node at (18.65,-7.57) {$C_{ij}$};
+\node[font=\scriptsize] at (18.65,-7.94) {$T\times T$，global};
+\node[anchor=north west,fill=black!3,inner sep=10pt,text width=18.5cm,align=left] at (0,-8.65) {
+\textbf{维度}\quad 示例 $N=3T$，$T=\texttt{TILE\_WIDTH}$；$K=N$ 是求和轴。每个小格代表一个 $T\times T$ tile。\\[5pt]
+\textbf{对象}\quad $i,j$ 是固定输出块的行、列索引，$p$ 是沿 $K$ 推进的块索引；$S$ 始终累加同一块 $C_{ij}$。\\[5pt]
+\textbf{机制}\quad 每轮复用同一组 $A_s,B_s$ 缓冲区；图示逻辑形状，$S$ 的元素由 block 内各线程分别持有。
+};
+\end{tikzpicture}
+\end{document}

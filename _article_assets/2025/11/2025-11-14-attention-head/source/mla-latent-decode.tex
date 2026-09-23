@@ -1,0 +1,68 @@
+\documentclass[tikz,border=12pt]{standalone}
+\usepackage[UTF8,fontset=fandol]{ctex}
+\usepackage{amsmath,amssymb}
+\usetikzlibrary{arrows.meta,backgrounds}
+\definecolor{query}{HTML}{4F8FA5}
+\definecolor{cache}{HTML}{EE995B}
+\definecolor{rope}{HTML}{8A74B5}
+\definecolor{weight}{HTML}{85898F}
+\begin{document}
+\begin{tikzpicture}[x=1cm,y=1cm,font=\small,>=Stealth]
+\node[font=\large] at (11.1,3.5) {$\widetilde q_{t,h}=q^C_{t,h}(U^K_h)^{\mathsf T},\qquad p_{t,h}=\operatorname{softmax}_{j}\!\left(\frac{\widetilde q_{t,h}C^{\mathsf T}+q^R_{t,h}(K^R)^{\mathsf T}}{\sqrt{d_c+d_R}}\right)$};
+\node[font=\large] at (11.1,2.35) {$z_{t,h}=p_{t,h}C,\qquad o_{t,h}=z_{t,h}U^V_h$};
+\node[font=\small\bfseries,text=black!65] at (11.1,1.35) {1\quad 内容与位置分数相加，再沿历史位置归一化};
+\filldraw[fill=query!65,draw=black!55,line width=.6pt] (0.5,-0.12) rectangle (2.1,0.12);
+\node at (1.3,-1.35) {$\widetilde q_{t,h}$};
+\node[font=\scriptsize,text=black!60] at (1.3,-1.85) {$1\times r$};
+\node[font=\Large] at (2.75,0) {$\times$};
+\filldraw[fill=cache!65,draw=black!55,line width=.6pt] (3.3999999999999995,-0.8) rectangle (5.8,0.8);
+\node at (4.6,-1.35) {$C^{\mathsf T}$};
+\node[font=\scriptsize,text=black!60] at (4.6,-1.85) {$r\times T$};
+\node[font=\Large] at (6.65,0) {$+$};
+\filldraw[fill=query!65,draw=black!55,line width=.6pt] (7.800000000000001,-0.12) rectangle (8.5,0.12);
+\node at (8.15,-1.35) {$q^R_{t,h}$};
+\node[font=\scriptsize,text=black!60] at (8.15,-1.85) {$1\times d_R$};
+\node[font=\Large] at (9.3,0) {$\times$};
+\filldraw[fill=rope!65,draw=black!55,line width=.6pt] (10.0,-0.35) rectangle (12.399999999999999,0.35);
+\node at (11.2,-1.35) {$(K^R)^{\mathsf T}$};
+\node[font=\scriptsize,text=black!60] at (11.2,-1.85) {$d_R\times T$};
+\draw[->,black!55] (12.95,0) -- (14.0,0);
+\node[draw=black!45,rounded corners=1pt,inner sep=9pt,align=center] at (16.0,0) {除以 $\sqrt{d_c+d_R}$\\[5pt]$\operatorname{softmax}_j$};
+\draw[->,black!55] (18.0,0) -- (19.05,0);
+\filldraw[fill=query!65,draw=black!55,line width=.6pt] (19.400000000000002,-0.12) rectangle (21.8,0.12);
+\node at (20.6,-1.35) {$p_{t,h}$};
+\node[font=\scriptsize,text=black!60] at (20.6,-1.85) {$1\times T$};
+\begin{pgfonlayer}{background}
+\draw[->,black!50] (21.8,0) -- (22.6,0) -- (22.6,-3.05) -- (-.45,-3.05) -- (-.45,-5.6) -- (.6,-5.6);
+\end{pgfonlayer}
+\node[fill=white,inner sep=5pt,text=black!65] at (11.1,-3.05) {同一概率 $p_{t,h}$ 继续用于下排的加权求和};
+\node[font=\small\bfseries,text=black!65] at (11.1,-3.85) {2\quad 复用同一份 latent 缓存，先聚合再做 Value 投影};
+\filldraw[fill=query!65,draw=black!55,line width=.6pt] (0.6000000000000001,-5.72) rectangle (3.0,-5.4799999999999995);
+\node at (1.8,-7.25) {$p_{t,h}$};
+\node[font=\scriptsize,text=black!60] at (1.8,-7.75) {$1\times T$};
+\node[font=\Large] at (3.75,-5.6) {$\times$};
+\filldraw[fill=cache!65,draw=black!55,line width=.6pt] (4.6000000000000005,-6.8) rectangle (6.2,-4.3999999999999995);
+\node at (5.4,-7.25) {$C$};
+\node[font=\scriptsize,text=black!60] at (5.4,-7.75) {$T\times r$};
+\node[font=\Large] at (7.15,-5.6) {$\longrightarrow$};
+\filldraw[fill=query!65,draw=black!55,line width=.6pt] (8.2,-5.72) rectangle (9.8,-5.4799999999999995);
+\node at (9,-7.25) {$z_{t,h}$};
+\node[font=\scriptsize,text=black!60] at (9,-7.75) {$1\times r$};
+\node[font=\Large] at (10.8,-5.6) {$\times$};
+\filldraw[fill=weight!65,draw=black!55,line width=.6pt] (12.0,-6.3999999999999995) rectangle (13.0,-4.8);
+\node at (12.5,-7.25) {$U^V_h$};
+\node[font=\scriptsize,text=black!60] at (12.5,-7.75) {$r\times d_v$};
+\node[font=\Large] at (14.25,-5.6) {$\longrightarrow$};
+\filldraw[fill=query!65,draw=black!55,line width=.6pt] (15.5,-5.72) rectangle (16.5,-5.4799999999999995);
+\node at (16,-7.25) {$o_{t,h}$};
+\node[font=\scriptsize,text=black!60] at (16,-7.75) {$1\times d_v$};
+\draw[->,black!55] (17.1,-5.6) -- (18.3,-5.6);
+\node[align=center,text=black!65] at (20.4,-5.6) {各头输出 concat\\[5pt]再乘 $W^O$};
+\node[fill=black!3,inner sep=10pt,anchor=north,text width=22.1cm,align=left] at (11.1,-8.75) {
+\begin{tabular}{@{}p{1.1cm}p{20.3cm}@{}}
+\textbf{维度} & 单个 batch、当前 token $t$、单个头 $h$；$T$ 为截至当前的有效缓存长度，$r$ 为 latent 宽度，$d_c/d_R/d_v$ 为内容 key、RoPE、value 维度。\\[5pt]
+\textbf{对象} & 橙色 $C$ 与紫色 $K^R$ 是跨头共享的浮点缓存；蓝色是当前 query、中间量或输出，$p$ 是概率；灰色是学习到的投影权重。\\[5pt]
+\textbf{机制} & $C$ 与 $C^{\mathsf T}$ 为同一缓存的不同视图，转置交换图面高宽；两份缓存每 token 合计 $r+d_R$ 个元素。图示边长编码轴身份，不代表实际维度比例。
+\end{tabular}};
+\end{tikzpicture}
+\end{document}

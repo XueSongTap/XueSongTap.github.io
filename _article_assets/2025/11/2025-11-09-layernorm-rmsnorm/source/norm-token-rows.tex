@@ -1,0 +1,67 @@
+\documentclass[tikz,border=12pt]{standalone}
+\usepackage[UTF8,fontset=fandol]{ctex}
+\usepackage{amsmath,amssymb}
+\usetikzlibrary{arrows.meta,calc}
+\definecolor{teal}{HTML}{4F8FA5}
+\definecolor{orange}{HTML}{EE995B}
+\definecolor{violet}{HTML}{8A74B5}
+\definecolor{muted}{HTML}{626970}
+\tikzset{arr/.style={-{Latex[length=2mm]},draw=muted,line width=.7pt},bc/.style={arr,dashed},lab/.style={font=\small,text=muted,align=center}}
+% All matrix faces: N=BT has 4 illustrative rows, D has 6 columns.
+% The axis-unit is .32 cm everywhere, including singleton statistics.
+\newcommand{\mat}[5]{% x y columns color symbol
+\begin{scope}[shift={(#1,#2)}]
+\foreach \r in {0,...,3}{\foreach \c in {1,...,#3}{
+\pgfmathtruncatemacro{\tone}{35+mod(\r*\r+\c*\c+\r*\c+2*\c,5)*11}
+\fill[#4!\tone,rounded corners=.5pt] ({(\c-1)*.32},{-\r*.32}) rectangle ++(.29,-.29);
+}}
+\draw[black!55,line width=.45pt] (-.04,.04) rectangle ({#3*.32},-1.28);
+\node[font=\small,anchor=north] at ({(#3*.32-.03)/2},-1.48) {$#5$};
+\end{scope}}
+\begin{document}
+\begin{tikzpicture}[x=1cm,y=1cm]
+\node[font=\large] at (5,1.65) {$Y_{n,d}=\dfrac{X_{n,d}-\mu_n}{\sqrt{v_n+\epsilon}}\gamma_d+\beta_d$};
+\node[font=\large] at (16,1.65) {$Y_{n,d}=\dfrac{X_{n,d}}{\sqrt{q_n+\epsilon}}\gamma_d$};
+\node[lab] at (5,.65) {$\mu_n=\frac1D\sum_d X_{n,d},\quad v_n=\frac1D\sum_d(X_{n,d}-\mu_n)^2$};
+\node[lab] at (16,.65) {$q_n=\frac1D\sum_d X_{n,d}^{\,2}$};
+\foreach \o/\name in {0/LayerNorm,11/RMSNorm}{
+\node[font=\small\bfseries,text=muted] at ({\o+5},-.25) {\name：沿 $D$ 归约，每个 token 独立};
+\mat{\o+.7}{-1.1}{6}{teal}{X}
+\node[lab,font=\scriptsize] at ({\o+1.65},-3.05) {$N\times D$};
+\draw[arr] ({\o+3},-1.72) -- ({\o+5.4},-1.72);
+\node[lab] at ({\o+4.15},-1.22) {沿 $D$ 求统计量};
+\mat{\o+.7}{-5.5}{6}{teal}{X}
+\node[lab,font=\scriptsize] at ({\o+1.65},-7.45) {$N\times D$};
+\draw[arr] ({\o+1.65},-3.5) -- ({\o+1.65},-5.15);
+\node[lab,fill=white,inner sep=5pt] at ({\o+1.65},-4.25) {复用 $X$};
+\mat{\o+8.1}{-5.5}{6}{violet}{Y}
+\node[lab,font=\scriptsize] at ({\o+9.05},-7.45) {$N\times D$};
+\draw[arr] ({\o+2.95},-6.15) -- ({\o+3.65},-6.15);
+\draw[arr] ({\o+6.95},-6.15) -- ({\o+7.75},-6.15);
+}
+\draw[arr] (5.4,-1.72) -- (5.96,-1.72);
+\draw[arr] (5.45,-1.72) -- (5.45,-.75) -- (8.25,-.75) -- (8.25,-1.06);
+\draw[arr] (16.4,-1.72) -- (18.06,-1.72);
+\mat{6}{-1.1}{1}{orange}{\mu}
+\mat{8.1}{-1.1}{1}{orange}{v}
+\node[lab,font=\scriptsize] at (6.15,-3.05) {$N\times1$};
+\node[lab,font=\scriptsize] at (8.25,-3.05) {$N\times1$};
+\mat{18.1}{-1.1}{1}{orange}{q}
+\node[lab,font=\scriptsize] at (18.25,-3.05) {$N\times1$};
+\node[draw=black!55,rounded corners=2pt,minimum width=3cm,minimum height=1.25cm,align=center,font=\small] (ln) at (5.3,-6.15) {减均值，再缩放\\[4pt]$\displaystyle (X-\mu)\,(v+\epsilon)^{-1/2}$};
+\node[draw=black!55,rounded corners=2pt,minimum width=3cm,minimum height=1.25cm,align=center,font=\small] (rms) at (16.3,-6.15) {不减均值，仅缩放\\[4pt]$\displaystyle X\,(q+\epsilon)^{-1/2}$};
+\node[lab,font=\scriptsize] at (5.3,-7.25) {再逐元素 $\times\gamma+\beta$};
+\node[lab,font=\scriptsize] at (16.3,-7.25) {再逐元素 $\times\gamma$};
+\draw[bc] (6.15,-3.45) -- (6.15,-4.15) -| (4.55,-5.52);
+\draw[bc] (8.25,-3.45) -- (8.25,-4.55) -| (6.1,-5.52);
+\node[lab,fill=white,inner sep=4pt] at (6.3,-4.55) {沿 $D$ 广播\\$N\times1\ \to\ N\times D$};
+\draw[bc] (18.25,-3.45) -- (18.25,-4.3) -| (16.3,-5.52);
+\node[lab,fill=white,inner sep=4pt] at (16.3,-4.25) {沿 $D$ 广播\\$N\times1\ \to\ N\times D$};
+\fill[black!3,rounded corners=2pt] (.15,-8.05) rectangle (21.4,-10.35);
+\node[anchor=north west,font=\small,align=left,text width=20.3cm] at (.5,-8.3) {
+\textbf{维度}\quad $B$：批大小；$T$：序列长度；$D$：特征维。将 $B\times T\times D$ 展开为 $N\times D$，$N=BT$；每行对应一个 $(b,t)$。\\[7pt]
+\textbf{对象}\quad $X,Y$ 为实数张量；橙色列是每行一个标量的统计量。$\gamma,\beta\in\mathbb R^D$ 在所有 token 行间共享。\\[7pt]
+\textbf{机制}\quad 实线表示计算依赖或输入复用，虚线表示本行统计量沿 $D$ 广播；输出恢复为 $B\times T\times D$。格子仅示意轴结构。
+};
+\end{tikzpicture}
+\end{document}

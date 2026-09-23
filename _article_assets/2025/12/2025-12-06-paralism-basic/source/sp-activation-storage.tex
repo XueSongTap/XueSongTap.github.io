@@ -1,0 +1,92 @@
+\documentclass[tikz,border=10pt]{standalone}
+\usepackage[UTF8,fontset=fandol]{ctex}
+\usepackage{amsmath,amssymb}
+\usetikzlibrary{arrows.meta,backgrounds}
+\definecolor{rep}{HTML}{4F8FA5}
+\definecolor{hid}{HTML}{EE995B}
+\definecolor{att}{HTML}{8A74B5}
+\definecolor{muted}{HTML}{626870}
+\tikzset{
+  every node/.style={font=\small,inner sep=0},
+  flow/.style={-{Stealth[length=2mm]},draw=muted,line width=.65pt},
+  compare/.style={flow,dashed},
+  op/.style={draw=black!55,fill=white,line width=.55pt,
+    minimum width=2.6cm,minimum height=1.1cm,align=center,inner sep=4pt}
+}
+% Geometry ledger in cm, shared with the preceding TP figure:
+% h = 2.4, s = 1.2, s/t = .6 (t=2). Batch b is an omitted leading axis.
+% Two sequence shards tile a full face exactly; no hidden-axis partition here.
+% Layout: baseline/save/temporary columns; GPU 0 and GPU 1 are parallel lanes.
+% Dashed arrows compare alternatives, solid arrows carry data through one AG.
+\newcommand{\full}[3]{%
+  \fill[rep!75] (#1-1.2,#2) rectangle (#1+1.2,#2+.6);
+  \fill[rep!40] (#1-1.2,#2-.6) rectangle (#1+1.2,#2);
+  \draw[black!60,line width=.5pt,#3] (#1-1.2,#2-.6) rectangle (#1+1.2,#2+.6);
+}
+\newcommand{\shard}[3]{%
+  \filldraw[fill=rep!#3,draw=black!60,line width=.5pt]
+    (#1-1.2,#2-.3) rectangle (#1+1.2,#2+.3);
+}
+\newcommand{\labels}[4]{%
+  \node at (#1,#2-.95) {$#3$};
+  \node[font=\scriptsize,text=muted] at (#1,#2-1.4) {$#4$};
+}
+\begin{document}
+\begin{tikzpicture}[x=1cm,y=1cm]
+\node[font=\large] at (8.5,2.05)
+  {$M_{\mathrm{TP}}=\textcolor{rep}{10sbh}
+    +\textcolor{hid}{\dfrac{24sbh}{t}}
+    +\textcolor{att}{\dfrac{5bas^2}{t}}$};
+\node[font=\large] at (8.5,.9)
+  {$M_{\mathrm{TP+SP}}=\textcolor{rep}{\dfrac{10sbh}{t}}
+    +\textcolor{hid}{\dfrac{24sbh}{t}}
+    +\textcolor{att}{\dfrac{5bas^2}{t}}
+    \quad\text{（bytes / 卡 / 层）}$};
+
+\node[font=\small\bfseries,text=muted] at (1.8,-.35) {TP：保留完整副本};
+\node[font=\small\bfseries,text=rep] at (7.5,-.35) {TP+SP：只保留序列分片};
+\node[font=\small\bfseries,text=muted] at (15.2,-.35) {GEMM：临时恢复完整输入};
+
+\foreach \y/\rank in {-2.4/0,-5.9/1}{
+  \foreach \x in {1.8,7.5,15.2}{
+    \node[font=\scriptsize,text=muted] at (\x,\y+1.05) {GPU \rank};
+  }
+  \full{1.8}{\y}{}
+  \labels{1.8}{\y}{X}{b\times s\times h}
+  \full{15.2}{\y}{dashed}
+  \labels{15.2}{\y}{X}{b\times s\times h}
+}
+\shard{7.5}{-2.4}{75}
+\labels{7.5}{-2.4}{X_0}{b\times(s/t)\times h}
+\shard{7.5}{-5.9}{40}
+\labels{7.5}{-5.9}{X_1}{b\times(s/t)\times h}
+
+\node[font=\scriptsize,text=muted] at (4.65,-1.7) {改保存方式};
+\node[font=\scriptsize,text=muted] at (4.65,-5.2) {改保存方式};
+\node[op] (ag) at (11.4,-4.15) {All-Gather\\[4pt]\scriptsize 沿 $s$ 拼接并分发};
+\node[font=\scriptsize,text=muted,align=center] at (11.4,-6.65)
+  {前向聚合一次\\[4pt]反向需用时再聚合};
+\begin{scope}[on background layer]
+  \foreach \y in {-2.4,-5.9}{
+    \draw[compare] (3,\y) -- (6.3,\y);
+  }
+  \draw[flow] (8.7,-2.4) -- (9.5,-2.4) -- (9.5,-3.9) -- (10.1,-3.9);
+  \draw[flow] (8.7,-5.9) -- (9.5,-5.9) -- (9.5,-4.4) -- (10.1,-4.4);
+  \draw[draw=muted,line width=.65pt] (ag.east) -- (13.1,-4.15);
+  \draw[flow] (13.1,-4.15) -- (13.1,-2.4) -- (14,-2.4);
+  \draw[flow] (13.1,-4.15) -- (13.1,-5.9) -- (14,-5.9);
+\end{scope}
+
+\node[text=rep] at (7.5,-8.15)
+  {$X_r=X[:,\mathcal I_r,:],\qquad X=\operatorname{concat}_{s}(X_0,X_1)$};
+\node[text=muted,font=\scriptsize] at (15.2,-8.15) {虚线框：用完即可释放};
+
+\node[anchor=north west,fill=black!3,inner sep=10pt] at (-.1,-9.05) {%
+  \begin{tabular}{@{}p{.95cm}@{\hspace{.2cm}}p{15.4cm}@{}}
+  \textbf{维度} & $b$：micro-batch；$s$：序列长度；$h$：hidden；$a$：头数；$t$：TP 度。图取 $t=2$，省略 $b$。\\[6pt]
+  \textbf{对象} & $X$ 是 LayerNorm 后的浮点输入，$X_r$ 保留完整 $h$；$\mathcal I_r$ 是第 $r$ 卡的序列区间，彼此不重叠且覆盖全序列。\\[6pt]
+  \textbf{机制} & 虚线箭头比较保存方式，实线表示通信；两行是同一组内的两张卡。$M$ 汇总为反向保留的多份激活与 mask，不含临时缓冲峰值；图形表示逻辑形状。
+  \end{tabular}
+};
+\end{tikzpicture}
+\end{document}

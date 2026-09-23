@@ -1,0 +1,83 @@
+\documentclass[tikz,border=10pt]{standalone}
+\usepackage[UTF8,fontset=fandol]{ctex}
+\usepackage{amsmath,amssymb}
+\usetikzlibrary{arrows.meta,backgrounds}
+\definecolor{teal}{HTML}{4F8FA5}
+\definecolor{orange}{HTML}{EE995B}
+\definecolor{violet}{HTML}{8A74B5}
+\definecolor{neutral}{HTML}{85898F}
+% Geometry: one cell = 0.4 cm; T=3 cells, d=4 cells, f=6 cells.
+% Matrix faces use the last two axes. Two outline sheets indicate batch B.
+% Arguments: x,y,rows,cols,role,texture-seed,reserved,batch-stack,ReLU-support.
+\newcommand{\tensor}[9]{%
+\begin{scope}[shift={(#1,#2)}]
+\pgfmathsetmacro{\w}{#4*.4}\pgfmathsetmacro{\h}{#3*.4}
+\ifnum#8=1
+  \foreach \off in {.28,.14} {\draw[black!35,fill=white,line width=.45pt] (-\w/2+\off,-\h/2+\off) rectangle (\w/2+\off,\h/2+\off);}
+\fi
+\fill[white] (-\w/2,-\h/2) rectangle (\w/2,\h/2);
+\pgfmathsetseed{#6}
+\foreach \r in {1,...,#3} {\foreach \c in {1,...,#4} {
+ \pgfmathrandominteger{\level}{0}{2}
+ \pgfmathtruncatemacro{\shade}{35+25*\level}
+ \pgfmathtruncatemacro{\zero}{(#9==1) && ((\r==1 && \c==2) || (\r==2 && \c==4) || (\r==2 && \c==5) || (\r==3 && \c==1) || (\r==3 && \c==6))}
+ \ifnum\zero=0
+ \fill[#5!\shade,rounded corners=.7pt] ({-\w/2+(\c-1)*.4+.025},{\h/2-\r*.4+.025}) rectangle ++(.35,.35);
+ \fi
+}}
+\draw[black!60,line width=.55pt] (-\w/2,-\h/2) rectangle (\w/2,\h/2);
+\end{scope}
+}
+\newcommand{\labels}[4]{\node at (#1,#2) {$#3$};\node[font=\scriptsize,text=black!65] at (#1,#2-.47) {$#4$};}
+\begin{document}
+\begin{tikzpicture}[x=1cm,y=1cm,font=\small,>=Stealth]
+\tikzset{stage/.style={font=\small\bfseries,text=black!60},flow/.style={->,draw=black!60,line width=.7pt,rounded corners=4pt}}
+\node[font=\large] at (11,3.1) {$Y=\bigl(\operatorname{ReLU}(XW_1)\odot(XV)\bigr)W_2$};
+\node[stage] at (11,2.05) {1. 同一个输入 $X$，生成两路同形状的中间结果};
+\node[text=black!65] at (4.5,1.28) {线性投影后做 ReLU};
+\node[text=black!65] at (16.5,1.28) {线性分支，不做 sigmoid};
+\tensor{1}{0}{3}{4}{teal}{39}{}{1}{0}
+\tensor{4}{0}{4}{6}{orange}{40}{}{0}{0}
+\tensor{8}{0}{3}{6}{orange}{41}{}{1}{1}
+\tensor{13}{0}{3}{4}{teal}{39}{}{1}{0}
+\tensor{16}{0}{4}{6}{violet}{42}{}{0}{0}
+\tensor{20}{0}{3}{6}{violet}{43}{}{1}{0}
+\node[font=\Large] at (2.4,0) {$\times$};
+\draw[flow] (5.65,0) -- node[above=5pt,font=\small] {ReLU} (6.45,0);
+\node[font=\Large] at (14.4,0) {$\times$};
+\node[font=\Large] at (18.3,0) {$=$};
+\labels{1}{-1.25}{X}{B\times T\times d}
+\labels{4}{-1.25}{W_1}{d\times f}
+\labels{8}{-1.25}{A}{B\times T\times f}
+\labels{13}{-1.25}{X}{B\times T\times d}
+\labels{16}{-1.25}{V}{d\times f}
+\labels{20}{-1.25}{G}{B\times T\times f}
+\begin{scope}[on background layer]
+\draw[flow] (9.48,0) -- (10.6,0) -- (10.6,-2.65) -- (1,-2.65) -- (1,-4.92);
+\draw[flow] (21.48,0) -- (22.4,0) -- (22.4,-3.5) -- (6,-3.5) -- (6,-4.92);
+\end{scope}
+\node[fill=white,inner sep=4pt,text=black!65] at (4.3,-2.65) {$A$ 接续到下排（同一张量）};
+\node[fill=white,inner sep=4pt,text=black!65] at (15.3,-3.5) {$G$ 接续到下排（同一张量）};
+\node[stage] at (13,-4.05) {2. 对应元素相乘，再投影回 $d$ 维};
+\tensor{1}{-5.8}{3}{6}{orange}{41}{}{1}{1}
+\tensor{6}{-5.8}{3}{6}{violet}{43}{}{1}{0}
+\tensor{11}{-5.8}{3}{6}{orange}{44}{}{1}{1}
+\tensor{16}{-5.8}{6}{4}{neutral}{45}{}{0}{0}
+\tensor{20}{-5.8}{3}{4}{teal}{46}{}{1}{0}
+\node[font=\Large] at (3.5,-5.8) {$\odot$};
+\node[font=\Large] at (8.5,-5.8) {$=$};
+\node[font=\Large] at (13.6,-5.8) {$\times$};
+\node[font=\Large] at (18,-5.8) {$=$};
+\labels{1}{-7.45}{A}{B\times T\times f}
+\labels{6}{-7.45}{G}{B\times T\times f}
+\labels{11}{-7.45}{H=A\odot G}{B\times T\times f}
+\labels{16}{-7.45}{W_2}{f\times d}
+\labels{20}{-7.45}{Y}{B\times T\times d}
+\node[anchor=north west,fill=black!3,inner sep=10pt,text width=22cm,align=left] at (-.5,-8.6) {%
+\begin{tabular}{@{}p{.9cm}@{\hspace{.2cm}}p{20.6cm}@{}}
+\textbf{维度} & $B$：batch；$T$：序列长度；$d$：输入/输出维度；$f$：中间维度。矩阵正面是最后两轴，叠片表示 $B$。\\[5pt]
+\textbf{数值} & $A\geq0$，白格为 ReLU 产生的零；$G\in\mathbb R$，不是概率。色块示意结构，不表示实测数值或字面维度。\\[5pt]
+\textbf{计算} & $H_{btj}=A_{btj}G_{btj}$；$Y_{btk}=\sum_{j=1}^{f}H_{btj}(W_2)_{jk}$。$\odot$ 逐元素乘，$\times$ 矩阵乘；省略偏置。
+\end{tabular}};
+\end{tikzpicture}
+\end{document}

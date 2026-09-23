@@ -1,0 +1,127 @@
+\documentclass[tikz,border=12pt]{standalone}
+\usepackage[UTF8,fontset=fandol]{ctex}
+\usepackage{amsmath,amssymb}
+\usetikzlibrary{arrows.meta,calc,backgrounds}
+\definecolor{qcol}{HTML}{4F8FA5}
+\definecolor{kcol}{HTML}{EE995B}
+\definecolor{vcol}{HTML}{8A74B5}
+\begin{document}
+\begin{tikzpicture}[x=1cm,y=1cm,>=Stealth,font=\small,
+ sym/.style={font=\small}, shp/.style={font=\scriptsize,text=black!60},
+ conn/.style={draw=black!45,line width=.6pt}]
+\node[font=\large] at (11.6,1.5) {$O_h=\operatorname{softmax}\!\left(Q_hK_{g(h)}^{\mathsf T}/\sqrt{d}+M\right)V_{g(h)}$};
+\node[font=\large] at (11.6,.65) {$g(h)=\left\lfloor h/(H_q/H_{kv})\right\rfloor,\qquad C_{KV}=2B\,T_{kv}\,H_{kv}\,d\,s$};
+\node[font=\small\bfseries,text=black!65] at (3.6,-0.45) {MHA\quad $H_q=4,\ H_{kv}=4$};
+\node[sym] at (3.6,-1.03) {每个 Q 头使用独立的 K/V};
+\filldraw[fill=qcol!65,draw=black!55,rounded corners=.7pt] (0.65,-1.65) rectangle (1.15,-2.2);
+\node[sym] at (0.9,-2.55) {$Q_0$};
+\node[shp] at (0.9,-2.95) {$T_q\times d$};
+\filldraw[fill=qcol!65,draw=black!55,rounded corners=.7pt] (2.45,-1.65) rectangle (2.95,-2.2);
+\node[sym] at (2.7,-2.55) {$Q_1$};
+\node[shp] at (2.7,-2.95) {$T_q\times d$};
+\filldraw[fill=qcol!65,draw=black!55,rounded corners=.7pt] (4.25,-1.65) rectangle (4.75,-2.2);
+\node[sym] at (4.5,-2.55) {$Q_2$};
+\node[shp] at (4.5,-2.95) {$T_q\times d$};
+\filldraw[fill=qcol!65,draw=black!55,rounded corners=.7pt] (6.050000000000001,-1.65) rectangle (6.550000000000001,-2.2);
+\node[sym] at (6.300000000000001,-2.55) {$Q_3$};
+\node[shp] at (6.300000000000001,-2.95) {$T_q\times d$};
+\draw[conn] (0.17000000000000004,-4.05) -- (0.17000000000000004,-3.85) -- (1.63,-3.85) -- (1.63,-4.05);
+\draw[conn,->] (0.9,-3.25) -- (0.9,-3.5) -- (0.9,-3.5) -- (0.9,-3.85);
+\filldraw[fill=kcol!65,draw=black!55,rounded corners=.7pt] (0.17000000000000004,-4.3) rectangle (0.67,-5.4);
+\node[sym] at (0.42000000000000004,-5.75) {$K_0$};
+\filldraw[fill=vcol!65,draw=black!55,rounded corners=.7pt] (1.13,-4.3) rectangle (1.63,-5.4);
+\node[sym] at (1.38,-5.75) {$V_0$};
+\node[shp] at (0.9,-6.2) {各为 $T_{kv}\times d$};
+\draw[conn] (1.9700000000000002,-4.05) -- (1.9700000000000002,-3.85) -- (3.43,-3.85) -- (3.43,-4.05);
+\draw[conn,->] (2.7,-3.25) -- (2.7,-3.5) -- (2.7,-3.5) -- (2.7,-3.85);
+\filldraw[fill=kcol!65,draw=black!55,rounded corners=.7pt] (1.9700000000000002,-4.3) rectangle (2.47,-5.4);
+\node[sym] at (2.22,-5.75) {$K_1$};
+\filldraw[fill=vcol!65,draw=black!55,rounded corners=.7pt] (2.93,-4.3) rectangle (3.43,-5.4);
+\node[sym] at (3.18,-5.75) {$V_1$};
+\node[shp] at (2.7,-6.2) {各为 $T_{kv}\times d$};
+\draw[conn] (3.77,-4.05) -- (3.77,-3.85) -- (5.23,-3.85) -- (5.23,-4.05);
+\draw[conn,->] (4.5,-3.25) -- (4.5,-3.5) -- (4.5,-3.5) -- (4.5,-3.85);
+\filldraw[fill=kcol!65,draw=black!55,rounded corners=.7pt] (3.7699999999999996,-4.3) rectangle (4.27,-5.4);
+\node[sym] at (4.02,-5.75) {$K_2$};
+\filldraw[fill=vcol!65,draw=black!55,rounded corners=.7pt] (4.73,-4.3) rectangle (5.23,-5.4);
+\node[sym] at (4.98,-5.75) {$V_2$};
+\node[shp] at (4.5,-6.2) {各为 $T_{kv}\times d$};
+\draw[conn] (5.57,-4.05) -- (5.57,-3.85) -- (7.030000000000001,-3.85) -- (7.030000000000001,-4.05);
+\draw[conn,->] (6.300000000000001,-3.25) -- (6.300000000000001,-3.5) -- (6.300000000000001,-3.5) -- (6.300000000000001,-3.85);
+\filldraw[fill=kcol!65,draw=black!55,rounded corners=.7pt] (5.57,-4.3) rectangle (6.07,-5.4);
+\node[sym] at (5.82,-5.75) {$K_3$};
+\filldraw[fill=vcol!65,draw=black!55,rounded corners=.7pt] (6.530000000000001,-4.3) rectangle (7.030000000000001,-5.4);
+\node[sym] at (6.780000000000001,-5.75) {$V_3$};
+\node[shp] at (6.300000000000001,-6.2) {各为 $T_{kv}\times d$};
+\node[sym] at (3.6,-7.0) {$Q:\ B\times4\times T_q\times d$};
+\node[sym] at (3.6,-7.5) {$K,V:\ B\times4\times T_{kv}\times d$};
+\node[sym] at (3.6,-8.2) {KV 缓存：$C_{\mathrm{MHA}}$};
+\node[font=\small\bfseries,text=black!65] at (11.6,-0.45) {GQA\quad $H_q=4,\ H_{kv}=2$};
+\node[sym] at (11.6,-1.03) {每两个 Q 头共享一组 K/V};
+\filldraw[fill=qcol!65,draw=black!55,rounded corners=.7pt] (8.65,-1.65) rectangle (9.15,-2.2);
+\node[sym] at (8.9,-2.55) {$Q_0$};
+\node[shp] at (8.9,-2.95) {$T_q\times d$};
+\filldraw[fill=qcol!65,draw=black!55,rounded corners=.7pt] (10.450000000000001,-1.65) rectangle (10.950000000000001,-2.2);
+\node[sym] at (10.700000000000001,-2.55) {$Q_1$};
+\node[shp] at (10.700000000000001,-2.95) {$T_q\times d$};
+\filldraw[fill=qcol!65,draw=black!55,rounded corners=.7pt] (12.25,-1.65) rectangle (12.75,-2.2);
+\node[sym] at (12.5,-2.55) {$Q_2$};
+\node[shp] at (12.5,-2.95) {$T_q\times d$};
+\filldraw[fill=qcol!65,draw=black!55,rounded corners=.7pt] (14.05,-1.65) rectangle (14.55,-2.2);
+\node[sym] at (14.3,-2.55) {$Q_3$};
+\node[shp] at (14.3,-2.95) {$T_q\times d$};
+\draw[conn] (9.07,-4.05) -- (9.07,-3.85) -- (10.530000000000001,-3.85) -- (10.530000000000001,-4.05);
+\draw[conn,->] (8.9,-3.25) -- (8.9,-3.5) -- (9.8,-3.5) -- (9.8,-3.85);
+\draw[conn,->] (10.700000000000001,-3.25) -- (10.700000000000001,-3.5) -- (9.8,-3.5) -- (9.8,-3.85);
+\filldraw[fill=kcol!65,draw=black!55,rounded corners=.7pt] (9.07,-4.3) rectangle (9.57,-5.4);
+\node[sym] at (9.32,-5.75) {$K_0$};
+\filldraw[fill=vcol!65,draw=black!55,rounded corners=.7pt] (10.030000000000001,-4.3) rectangle (10.530000000000001,-5.4);
+\node[sym] at (10.280000000000001,-5.75) {$V_0$};
+\node[shp] at (9.8,-6.2) {各为 $T_{kv}\times d$};
+\draw[conn] (12.67,-4.05) -- (12.67,-3.85) -- (14.13,-3.85) -- (14.13,-4.05);
+\draw[conn,->] (12.5,-3.25) -- (12.5,-3.5) -- (13.4,-3.5) -- (13.4,-3.85);
+\draw[conn,->] (14.3,-3.25) -- (14.3,-3.5) -- (13.4,-3.5) -- (13.4,-3.85);
+\filldraw[fill=kcol!65,draw=black!55,rounded corners=.7pt] (12.67,-4.3) rectangle (13.17,-5.4);
+\node[sym] at (12.92,-5.75) {$K_1$};
+\filldraw[fill=vcol!65,draw=black!55,rounded corners=.7pt] (13.63,-4.3) rectangle (14.13,-5.4);
+\node[sym] at (13.88,-5.75) {$V_1$};
+\node[shp] at (13.4,-6.2) {各为 $T_{kv}\times d$};
+\node[sym] at (11.6,-7.0) {$Q:\ B\times4\times T_q\times d$};
+\node[sym] at (11.6,-7.5) {$K,V:\ B\times2\times T_{kv}\times d$};
+\node[sym] at (11.6,-8.2) {KV 缓存：$\frac{1}{2}C_{\mathrm{MHA}}$};
+\node[font=\small\bfseries,text=black!65] at (19.6,-0.45) {MQA\quad $H_q=4,\ H_{kv}=1$};
+\node[sym] at (19.6,-1.03) {全部 Q 头共享一组 K/V};
+\filldraw[fill=qcol!65,draw=black!55,rounded corners=.7pt] (16.65,-1.65) rectangle (17.15,-2.2);
+\node[sym] at (16.9,-2.55) {$Q_0$};
+\node[shp] at (16.9,-2.95) {$T_q\times d$};
+\filldraw[fill=qcol!65,draw=black!55,rounded corners=.7pt] (18.45,-1.65) rectangle (18.95,-2.2);
+\node[sym] at (18.7,-2.55) {$Q_1$};
+\node[shp] at (18.7,-2.95) {$T_q\times d$};
+\filldraw[fill=qcol!65,draw=black!55,rounded corners=.7pt] (20.25,-1.65) rectangle (20.75,-2.2);
+\node[sym] at (20.5,-2.55) {$Q_2$};
+\node[shp] at (20.5,-2.95) {$T_q\times d$};
+\filldraw[fill=qcol!65,draw=black!55,rounded corners=.7pt] (22.049999999999997,-1.65) rectangle (22.549999999999997,-2.2);
+\node[sym] at (22.299999999999997,-2.55) {$Q_3$};
+\node[shp] at (22.299999999999997,-2.95) {$T_q\times d$};
+\draw[conn] (18.869999999999997,-4.05) -- (18.869999999999997,-3.85) -- (20.33,-3.85) -- (20.33,-4.05);
+\draw[conn,->] (16.9,-3.25) -- (16.9,-3.5) -- (19.599999999999998,-3.5) -- (19.599999999999998,-3.85);
+\draw[conn,->] (18.7,-3.25) -- (18.7,-3.5) -- (19.599999999999998,-3.5) -- (19.599999999999998,-3.85);
+\draw[conn,->] (20.5,-3.25) -- (20.5,-3.5) -- (19.599999999999998,-3.5) -- (19.599999999999998,-3.85);
+\draw[conn,->] (22.299999999999997,-3.25) -- (22.299999999999997,-3.5) -- (19.599999999999998,-3.5) -- (19.599999999999998,-3.85);
+\filldraw[fill=kcol!65,draw=black!55,rounded corners=.7pt] (18.869999999999997,-4.3) rectangle (19.369999999999997,-5.4);
+\node[sym] at (19.119999999999997,-5.75) {$K_0$};
+\filldraw[fill=vcol!65,draw=black!55,rounded corners=.7pt] (19.83,-4.3) rectangle (20.33,-5.4);
+\node[sym] at (20.08,-5.75) {$V_0$};
+\node[shp] at (19.599999999999998,-6.2) {各为 $T_{kv}\times d$};
+\node[sym] at (19.6,-7.0) {$Q:\ B\times4\times T_q\times d$};
+\node[sym] at (19.6,-7.5) {$K,V:\ B\times1\times T_{kv}\times d$};
+\node[sym] at (19.6,-8.2) {KV 缓存：$\frac{1}{4}C_{\mathrm{MHA}}$};
+
+\node[fill=black!3,inner sep=10pt,anchor=north,text width=23.0cm,align=left] at (11.6,-9.0) {
+\begin{tabular}{@{}p{1.1cm}p{21.0cm}@{}}
+\textbf{维度} & $B$：批量；$T_q/T_{kv}$：查询/缓存长度；$d$：每头维度；$H_q/H_{kv}$：Q/KV 头数；$s$：每元素字节数。\\[5pt]
+\textbf{对象} & 方块为单个 batch 的浮点头张量；蓝色 Q、橙色 K、紫色 V。$h\in\{0,\ldots,H_q-1\}$，$g(h)$ 是 KV 头编号；$M$ 为加性 mask。\\[5pt]
+\textbf{机制} & 连线表示“使用这组 K/V”，不表示 Q 生成 K/V；共享发生在头轴，Q 头数与输出头数保持不变。缓存比例仅计单层 K 与 V，相同 $B,T_{kv},d,s$，不计额外存储开销。
+\end{tabular}};
+\end{tikzpicture}
+\end{document}

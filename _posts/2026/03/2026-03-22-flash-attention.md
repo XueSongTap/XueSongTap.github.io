@@ -4,151 +4,162 @@ title: FlashAttention：IO 感知的精确 Attention 计算
 tags: LLM
 ---
 
-> 关联阅读：[Transformer 加速技巧](https://xuesongtap.github.io/2025/10/15/transformer-acc.html) | [混合精度训练（AMP）](https://xuesongtap.github.io/2026/03/22/amp-mixed-precision.html)
-
----
+> 关联阅读：[Transformer 加速技巧](https://xuesongtap.github.io/2025/10/15/transformer-acc.html) | [混合精度训练（AMP）](https://xuesongtap.github.io/2026/03/22/amp-mixed-precision.html) | [Sequence Parallel 与 Context Parallel](/2026/03/22/sequence-context-parallel.html)
 
 ## 1. 标准 Attention 的内存瓶颈
 
-标准 Attention 计算为：
+把 Attention 写成代码，最直接的实现就是三步：先算 `Q @ K.T`，再做 softmax，最后乘 `V`。公式很短，中间结果却可能比输入大得多。
+
+固定一个 head，设序列长度为 $N$，head 维度为 $d$，并令 $Q,K,V\in\mathbb R^{N\times d}$：
 
 $$
-\text{Attention}(Q, K, V) = \text{softmax}\!\left(\frac{QK^T}{\sqrt{d_k}}\right) V
+S=\frac{QK^{\mathsf T}}{\sqrt d},\qquad P=\operatorname{softmax}(S),\qquad O=PV
 $$
 
-朴素实现的显存复杂度为 $O(N^2)$（需要存储 $N \times N$ 的 attention score 矩阵），时间复杂度也是 $O(N^2 d)$。
+$Q$、$K$、$V$ 和输出 $O$ 都是 $N\times d$，而 $S$ 和 $P$ 是 $N\times N$。例如 $N=8192,d=64$，按每个元素 2 字节手算，一份 $Q$ 只占 1 MiB，一份分数矩阵却要 128 MiB。这还只是一个 head。
 
-**瓶颈在哪里？** 不是 FLOP 不够，而是 **HBM（显存带宽）** 太慢。
+在分别执行矩阵乘、softmax、矩阵乘的朴素实现里，$S$ 算完要写回 HBM，softmax 再读出它、写入 $P$，后面的矩阵乘又要读出 $P$。这些中间矩阵不仅占显存，还反复消耗显存带宽。尤其是 softmax 的逐元素运算和归约，很容易受数据搬运限制。[1]
 
-以 A100（80GB HBM2e，带宽 2TB/s，FP16 算力 312 TFLOPS）为例：
-- 计算强度（FLOP/Byte）：312T / 2T = **156**；
-- 标准 Attention 的算术强度：对于 $N=1024$，$d=64$，约为 $2N^2d / (4N^2)$ bytes ≈ **32**（远低于 156）；
-- 结论：标准 Attention 是**显存带宽受限（memory-bound）**，大量时间在等数据，而不是在算。
-
----
+FlashAttention 要解决的问题由此变得具体：**能不能让分数算出来以后，就在片上接着完成后续计算，不把完整的 $S$、$P$ 写回显存？**
 
 ## 2. FlashAttention 的核心思想
 
-FlashAttention [1] 不改变最终计算结果（精确，非近似），只改变**计算顺序**，做到：
-1. **Tiling（分块）**：把 $Q$、$K$、$V$ 分成小块，放进 SRAM（片上缓存，带宽高 10-20×）分块计算；
-2. **Online Softmax**：用数值稳定的在线算法，在不完整地看完所有 $K$ 的情况下，增量地维护 softmax 分母；
-3. **Recomputation（重计算）**：反向传播时不存中间的 attention score 矩阵，而是重新从 $Q$、$K$、$V$ 计算，节省大量 HBM 写入。
+矩阵乘本来就可以分块，麻烦在 softmax：某个 query 对当前 key 块的权重，还取决于其他 key 的分数。只把矩阵切小，仍然无法独立完成每一块的归一化。
 
-### 2.1 Tiling：从 HBM 到 SRAM
+FlashAttention 把分块计算与 online softmax 放在一起处理。每次只生成一个局部 tile，同时保留足以合并后续块的状态；已经消费过的分数和权重便可以丢弃。反向传播需要它们时，再从输入和保存的逐行统计量重建。这就是 tiling、online softmax 和 recomputation 在同一条计算链中的分工。[1]
 
-```
-标准实现（HBM-bound）:
-  1. Q, K, V 从 HBM 读入
-  2. 计算 S = QKᵀ → 写回 HBM（N×N 矩阵）
-  3. P = softmax(S) → 写回 HBM
-  4. O = PV → 写回 HBM
+这里的“精确”指计算的是原来的 dense Attention，没有通过稀疏化或低秩近似改变公式；浮点运算顺序变化仍可能带来舍入差异。
 
-FlashAttention（SRAM-first）:
-  1. 把 Q 切成 Tr 块，K/V 切成 Tc 块
-  2. 对每个 (Q_i, K_j, V_j) 的组合，在 SRAM 里做局部 attention
-  3. 维护在线 softmax 状态（m, l）增量更新 O_i
-  4. 只在最后把最终的 O 写回 HBM，S/P 从不写入 HBM
-```
+### 2.1 Tiling：沿着一个 tile 看数据怎样流动
 
-**关键参数**：块大小由 SRAM 大小决定，典型值 $B_r = B_c = 128$（tokens/block）。
+先固定 query 块 $Q_i$，让 key/value 块 $K_j,V_j$ 依次经过它。$B_r$ 是 query 块行数，$B_c$ 是 key/value 块行数。下面采用 FA-2 [2] 的扫描顺序和未归一化输出写法，便于看清哪些状态需要留下来。
 
-### 2.2 Online Softmax（数值稳定 + 增量）
+![单个 tile 的分数计算、权重生成与输出累积，标注块形状和片上状态](/img/2026/03/22/flash-attention-tile-chain.png)
 
-标准 softmax 需要先看完所有 $K$ 才能知道最大值（用于数值稳定）和分母 $\sum \exp(\cdot)$。Online softmax 用两个统计量做增量更新：
+从第一排左侧的两个蓝色块开始：$Q_i$ 的每一行是一个 query，$K_j^{\mathsf T}$ 的每一列是一个 key。两者沿共同的特征维 $d$ 做点积，乘上 $1/\sqrt d$，就得到橙色分数块 $S_{ij}$。它有 $B_r$ 行、$B_c$ 列，每个元素表示当前 query 与当前 key 的匹配分数。
 
-$$
-m_i^{(\text{new})} = \max(m_i^{(\text{old})},\ \max_j s_{ij})
-$$
+沿着箭头向右，online softmax 把分数变成未归一化权重 $\widetilde P_{ij}$。两块橙色矩阵的形状完全一样，变的是元素的含义：从分数变成指数权重。此时还不能按当前块单独归一化，因为后面可能还有 key 没有参与计算。
 
-$$
-\ell_i^{(\text{new})} = e^{m_i^{(\text{old})} - m_i^{(\text{new})}} \cdot \ell_i^{(\text{old})} + \sum_j e^{s_{ij} - m_i^{(\text{new})}}
-$$
+图中的长折线把这份权重接到第二排。$\widetilde P_{ij}$ 与紫色的 $V_j$ 相乘，沿 $B_c$ 维收缩，得到红色的 $\Delta U_i$。这一步把“当前 query 对各个 key 的权重”换成“当前 value 块对输出的贡献”，因此形状回到 $B_r\times d$。
+
+第二排最右侧还要加上旧贡献，但先乘一个逐行缩放系数 $\alpha_i$。更新后的 $U_i$ 是到目前为止的输出分子。接下来换一块 $K_j,V_j$，重复两排计算；只有看完全部 key，才用累计分母 $\ell_i$ 除它，得到最终的 $O_i$。这个缩放系数为什么必需，下一张图会展开。
+
+再看哪些数据需要留下：$Q_i$ 在这轮扫描中复用，$(m_i,\ell_i,U_i)$ 跨块保留；$S_{ij}$ 和 $\widetilde P_{ij}$ 完成本块计算后就可以释放片上空间。这样完整的 $N\times N$ 中间矩阵始终没有出现。
+
+图中的“片上”包括 shared memory 和寄存器，矩阵形状表示逻辑张量，不表示线程或物理存储布局。$B_r,B_c$ 的选择受片上容量、head 维度和 kernel 配置约束。原始 FA-1 [1] 的循环顺序不同，会在块间读写部分输出状态；两者共同省去的是完整分数和概率矩阵的 HBM 读写。
+
+### 2.2 Online Softmax：新块来了，旧贡献怎样接着用
+
+现在回到第一张图中间的 `online softmax` 箭头。假设前面已经处理了一些 key，新块里却出现了更大的分数。为了数值稳定，需要改用新的最大值做指数基准；旧分母和旧输出分子也必须跟着调整，才能与新块相加。
+
+![Online softmax 的逐行最大值、指数权重、分母与输出分子更新](/img/2026/03/22/flash-attention-online-state.png)
+
+第二张图第一排，把橙色分数块沿 key 维做 `rowmax`，宽矩阵就变成了单列：每个 query 得到一个当前块的最大分数 $\widehat m_i$。再与旧最大值比较，得到看过的全部 key 的最大值 $m_i^{\mathrm{new}}$。这里 $i,j$ 是块编号，所以 $m_i$ 是 $B_r\times1$ 的向量，每一行独立更新：
 
 $$
-O_i^{(\text{new})} = \frac{\ell_i^{(\text{old})} \cdot e^{m_i^{(\text{old})} - m_i^{(\text{new})}}}{\ell_i^{(\text{new})}} O_i^{(\text{old})} + \frac{e^{s_{ij} - m_i^{(\text{new})}}}{\ell_i^{(\text{new})}} V_j
+m_i^{\mathrm{new}}=\max\!\left(m_i^{\mathrm{old}},\operatorname{rowmax}S_{ij}\right),
+\qquad \alpha_i=\exp\!\left(m_i^{\mathrm{old}}-m_i^{\mathrm{new}}\right)
 $$
 
-这样对每个 $K$ 块只需一遍扫描，每块更新 $(m, \ell, O)$ 三个统计量。
+第一排右侧的红色向量 $\alpha_i$，就是第一张图里缩放旧贡献的系数。对某一行，如果最大值从 $2$ 变为 $3$，原来按 $e^{s-2}$ 累加的每一项都应乘 $e^{-1}$，变为 $e^{s-3}$；如果最大值没有变，系数就是 $1$。只需缩放已经累加好的结果，无需取回所有旧分数。
 
----
+第二排沿用同一个 $S_{ij}$，减去新的逐行最大值，再做指数化，得到 $\widetilde P_{ij}$。这里每行都减一个标量，因此橙色矩阵仍是 $B_r\times B_c$。继续沿 key 维做 `rowsum`，才缩成右侧的单列 $\Delta\ell_i$：它是新块给分母带来的贡献。
 
-## 3. 内存和速度收益
+$$
+\widetilde P_{ij}=\exp\!\left(S_{ij}-m_i^{\mathrm{new}}\right),
+\qquad \ell_i^{\mathrm{new}}=\alpha_i\odot\ell_i^{\mathrm{old}}+\operatorname{rowsum}\widetilde P_{ij}
+$$
 
-| 指标 | 标准 Attention | FlashAttention |
-|------|--------------|---------------|
-| **HBM 访问量** | $O(N^2)$ | $O(N^2 d / M)$（$M$ 为 SRAM 大小）|
-| **存储 attention score** | $O(N^2)$ | **不存，重计算** |
-| **数值精确性** | 精确 | **精确（等价结果）** |
-| **序列长度支持** | $N$ 受 HBM 限制 | 大幅扩展，仅 $O(N)$ 显存 |
+分母如此，输出分子也一样。新块的贡献就是第一张图第二排算出的 $\widetilde P_{ij}V_j$，与缩放后的旧分子相加：
 
-FlashAttention 实测在 A100 上对长序列 attention 的加速约 **2-4×**（取决于序列长度），且显存使用从 $O(N^2)$ 降到 $O(N)$。
+$$
+U_i^{\mathrm{new}}=\alpha_i\odot U_i^{\mathrm{old}}+\widetilde P_{ij}V_j,
+\qquad O_i=U_i/\ell_i\quad\text{（扫描结束后）}
+$$
 
----
+这里减法、$\odot$ 和最后的除法都按行广播。每次循环结束，$(m_i,\ell_i,U_i)$ 已经概括了看过的全部 key：最大分数是多少、以它为基准的指数和是多少、同一基准下的加权输出是多少。下一块只需要接着更新这三份状态。
 
-## 4. FlashAttention-2 / 3 的改进
+初始状态为 $m_i=-\infty,\ell_i=0,U_i=0$，首个非空块的旧贡献系数取 $0$。两图省略了 mask 和 dropout；使用 causal mask 时，被屏蔽分数置为 $-\infty$，全被屏蔽的行需要跳过无效的指数差值计算。
 
-### FlashAttention-2 [2]
+## 3. 内存和速度收益来自哪里
 
-主要工程优化：
-1. **减少非矩阵乘 FLOP**：把 online softmax 中的 rescale 操作放到最后一次做，减少不必要的重新缩放；
-2. **更好的并行化**：将 $Q$ 的 tile 分配给不同 warp，提高 GPU 占用率；
-3. **序列维度的 warp 分配**：避免 warp 间通信，充分利用 register 文件。
+回看第一张图，两个矩阵乘仍然都在，每个有效的 query-key 配对也仍然要计算。因此 dense Attention 的计算量仍是 $O(N^2d)$。变化在于：橙色中间块的生命周期被限制在片上，而最终留下的输出及逐行统计量只随序列长度线性增长。
 
-FlashAttention-2 比 FA-1 快约 **2×**，在 A100 80GB BF16 下，实测达到 **~72% 的 Tensor Core 利用率**（接近理论峰值）。
+反向传播延续了这个思路。以 FA-2 为例，前向额外保存逐行的 log-sum-exp，即 $m_i+\log\ell_i$；反向再分块重建分数和概率，参与梯度计算。多做一些计算，换掉保存、读取完整中间矩阵的成本。[2]
 
-### FlashAttention-3 [3]（H100 优化）
+| 比较项（单个 head） | 朴素实现 | FlashAttention |
+|------|------|------|
+| 前向计算量 | $O(N^2d)$ | $O(N^2d)$ |
+| 显存中物化完整 $S/P$ | 需要，大小为 $N\times N$ | 不需要，只计算局部块 |
+| Attention 存储规模 | $O(Nd+N^2)$ | $O(Nd)$ |
 
-针对 H100 的硬件特性做了专项优化：
-1. **Warp Specialization**：把 attention 的 producer（GEMM/数据加载）和 consumer（softmax/输出）分配给不同 warp，流水线执行；
-2. **WGMMA（Warp Group Matrix Multiply-Accumulate）**：利用 H100 的 TMA（Tensor Memory Accelerator）硬件指令；
-3. **FP8 支持**：实现了 FP8 的 attention，进一步降低带宽开销。
+显存占用和 HBM 访问量是两个指标。前者回答“同时要放多少数据”，后者回答“整个计算过程搬了多少数据”。原论文在 SRAM 容量 $M$ 以元素数计、$d\le M\le Nd$ 的模型中，给出 FA-1 的 HBM 访问量为 $\Theta(N^2d^2/M)$，标准实现为 $\Theta(Nd+N^2)$。[1] 因而，线性的存储规模并不意味着整个计算只需线性的数据搬运。
 
-H100 上 FA-3 比 FA-2 快约 **1.5-2×**。
+论文报告的 FlashAttention 加速约为 2–4 倍，具体取决于形状和对照实现。[1] 这不是减少了同样倍数的乘加，而是减少中间结果搬运之后，计算单元有更多时间用于实际计算。
 
----
+## 4. FlashAttention-2 / 3 怎样继续优化
+
+### FlashAttention-2：减少额外运算，重新分配工作
+
+前面两张图已经包含了 FA-2 的一个改进：循环里累积未归一化的 $U_i$，最后才除以 $\ell_i$。延后的是归一化，最大值变化时的 $\alpha_i$ 缩放仍然需要逐块执行。
+
+另一部分改进在于工作怎样交给 GPU。不同 $Q_i$ 可以独立产生各自的 $O_i$，FA-2 利用这一点，把 query 序列维也纳入 thread block 的并行分工。在一个 thread block 内，再让不同 warp 负责不同 query 行、共享所需的 K/V，从而减少 warp 之间合并部分输出的通信。[2]
+
+论文在 A100 上报告，相比 FA-1 约有 2 倍加速，前向最高达到理论 FLOPs/s 的 73%。其中端到端 GPT 训练的 72% 指 model FLOPs utilization（MFU），与 Attention kernel 自身的利用率是不同统计口径。[2]
+
+### FlashAttention-3：让搬运、矩阵乘和 softmax 重叠
+
+第一张图为了说明依赖关系，把各个步骤顺序展开。FA-3 在 H100 上进一步考虑：处理当前块时，能否同时搬入下一块？执行矩阵乘时，能否穿插另一阶段的 softmax 工作？
+
+这里要区分两类硬件能力：TMA 负责异步数据搬运，WGMMA 负责异步 warpgroup 矩阵乘。FA-3 用 producer/consumer 分工组织加载和计算，并利用异步执行安排 GEMM 与 softmax 的重叠；FP8 路径还结合分块量化等方法控制数值误差。[3]
+
+论文在 H100 的 FP16 前向测试中报告了相对 FA-2 约 1.5–2 倍的加速。[3] 从图上看，公式依赖没有消失，优化的是不同块、不同阶段在硬件上的执行时间安排。
 
 ## 5. 与 Sequence Parallel 的配合
 
-在 Ulysses SP 模式下，attention 前后各有一次 All-to-All：
+两张图都固定 $Q_i$，让 K/V 分块到来。这也给分布式 Attention 提供了一个自然的连接点：这些块可以从本卡显存读取，也可以由其他设备传来。
+
+Ulysses 先用 All-to-All 改变分工，让每张卡拿到一部分 heads 的完整序列，再在本地调用 FlashAttention。对均匀切分的 MHA，省略 batch 维，设 head 数为 $H$、并行度为 $p$，布局变化可写成：
+
+```text
+(N/p, H, d) → All-to-All → (N, H/p, d)
+           → 本地 FlashAttention → All-to-All → (N/p, H, d)
 ```
-(L/P, d) → All-to-All → (L, d/P) → FlashAttention → All-to-All → (L/P, d)
-```
 
-FlashAttention 此时在 `(L, d/P)` 的张量上做计算，$L$ 是全序列长度，每张卡负责 $d/P$ 个 head。
+这里每卡负责 $H/p$ 个 head，每个 head 的特征维仍是 $d$。[4]
 
-在 Ring CP 模式下，FlashAttention 配合 Ring 通信，对每个 KV 块增量计算局部 attention 后累积（FlashAttention 内置的 online softmax 天然支持这种分块累积）。
+Ring Attention 则更接近第一张图的循环：query 留在本卡，远端 K/V 依次传来，每处理一块就更新在线状态。设备间传递的一个 KV 分片还可以继续切成多个片上 tile；合并结果时仍要保留正确的归一化统计量，不能直接相加各块独立 softmax 后的输出。[5] 更完整的通信与张量布局见[Sequence Parallel 与 Context Parallel](/2026/03/22/sequence-context-parallel.html)。
 
----
+## 6. 使用：从统一接口进入
 
-## 6. 使用
-
-PyTorch 2.0+ 原生集成（`scaled_dot_product_attention`）：
+在 PyTorch 中，通常从 `scaled_dot_product_attention` 调用 Attention。下面假设 `query/key/value` 的形状为 `[batch, heads, sequence, head_dim]`：
 
 ```python
 import torch.nn.functional as F
 
-# 自动选择最优 backend（含 FlashAttention）
 output = F.scaled_dot_product_attention(
     query, key, value,
     attn_mask=None,
     dropout_p=0.0,
-    is_causal=True,          # 因果 mask
-    scale=None,               # 默认 1/sqrt(d_k)
+    is_causal=True,
+    scale=None,  # 默认使用 1 / sqrt(head_dim)
 )
 ```
 
-Megatron-LM / Transformer Engine 默认会在支持的设备上自动使用 FlashAttention：
+这是统一接口，实际 backend 由设备、dtype、形状及其他输入条件决定，调用它并不保证一定走 FlashAttention。[6] 验证性能时，应结合 profiler 确认实际执行的 kernel，再比较相同输入下的耗时和显存占用。
 
-```bash
---use-flash-attn               # Megatron 开关
-```
-
----
+理解这个 kernel 时，可以始终沿着第一张图追问：当前生成的分数块在哪里被消费，处理完以后留下了什么？再用第二张图核对：新块到来时，旧分子和旧分母是否仍处在同一个指数基准下？这两点连起来，FlashAttention 如何减少 IO、又如何保持 Attention 计算不变，就落到了具体的数据和更新操作上。
 
 ## 参考
 
-[1] Dao, T., et al. *FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness.* NeurIPS 2022. [arxiv:2205.14135](https://arxiv.org/abs/2205.14135)
+[1] Dao, T., et al. *FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness.* NeurIPS 2022. [arXiv:2205.14135](https://arxiv.org/abs/2205.14135)，算法与 IO 复杂度见 Algorithm 1、Theorem 2。
 
-[2] Dao, T. *FlashAttention-2: Faster Attention with Better Parallelism and Work Partitioning.* ICLR 2024. [arxiv:2307.08691](https://arxiv.org/abs/2307.08691)
+[2] Dao, T. *FlashAttention-2: Faster Attention with Better Parallelism and Work Partitioning.* ICLR 2024. [arXiv:2307.08691](https://arxiv.org/abs/2307.08691)，更新规则与任务分工见 §3。
 
-[3] Shah, J., et al. *FlashAttention-3: Fast and Accurate Attention with Asynchrony and Low-precision.* 2024. [arxiv:2407.08608](https://arxiv.org/abs/2407.08608)
+[3] Shah, J., et al. *FlashAttention-3: Fast and Accurate Attention with Asynchrony and Low-precision.* 2024. [arXiv:2407.08608](https://arxiv.org/abs/2407.08608)。
+
+[4] DeepSpeed. [Getting Started with DeepSpeed-Ulysses](https://www.deepspeed.ai/tutorials/ds-sequence/)。
+
+[5] Liu, H., et al. *Ring Attention with Blockwise Transformers for Near-Infinite Context.* ICLR 2024. [arXiv:2310.01889](https://arxiv.org/abs/2310.01889)。
+
+[6] PyTorch. [scaled_dot_product_attention](https://docs.pytorch.org/docs/stable/generated/torch.nn.functional.scaled_dot_product_attention.html)。

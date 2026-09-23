@@ -1,0 +1,61 @@
+\documentclass[tikz,border=10pt]{standalone}
+\usepackage[UTF8,fontset=fandol]{ctex}
+\usepackage{amsmath}
+\usetikzlibrary{arrows.meta}
+\definecolor{rep}{HTML}{4F8FA5}
+\definecolor{hid}{HTML}{EE995B}
+\definecolor{att}{HTML}{8A74B5}
+\definecolor{muted}{HTML}{626870}
+\tikzset{every node/.style={font=\small,inner sep=0},arr/.style={-{Stealth[length=2mm]},draw=muted,line width=.6pt}}
+% Geometry ledger (cm): s=1.2, h=2.4, h/t=1.2 for t=2.
+% A face is always (s,h) or (s,s); b is an omitted leading batch axis.
+\newcommand{\face}[5]{\filldraw[fill=#5,draw=black!60,line width=.45pt] (#1-#3/2,#2-.6) rectangle (#1+#3/2,#2+.6);}
+\newcommand{\lab}[4]{\node at (#1,#2-.95) {$#3$};\node[font=\scriptsize,text=muted] at (#1,#2-1.35) {$#4$};}
+\begin{document}
+\begin{tikzpicture}[x=1cm,y=1cm]
+\node[font=\large] at (8,2.2) {$M_{\mathrm{card}}=\textcolor{rep}{10sbh}+\textcolor{hid}{\dfrac{24sbh}{t}}+\textcolor{att}{\dfrac{5bas^2}{t}}\quad\text{（bytes / 层）}$};
+\node[text=muted] at (8,1.35) {同一套全局激活的三类存储归属\quad $t=2$ 示意};
+\node[font=\small\bfseries,text=muted] at (2,.6) {全局逻辑张量};
+\node[font=\small\bfseries,text=muted] at (7,.6) {GPU 0};
+\node[font=\small\bfseries,text=muted] at (10.8,.6) {GPU 1};
+\node[font=\small\bfseries,text=muted] at (14.5,.6) {每卡显存项};
+% Replication: equal shapes have identical faces on both ranks.
+\node[anchor=west,font=\small\bfseries,text=rep] at (.3,-.2) {LayerNorm / Dropout / 输入缓存};
+\foreach \x in {2,7,10.8}{\face{\x}{-1.4}{2.4}{1.2}{rep!60}\lab{\x}{-1.4}{X}{b\times s\times h}}
+\draw[arr] (3.5,-1.4)--(5.4,-1.4);
+\node[font=\scriptsize,text=muted] at (4.45,-.85) {每卡完整保留};
+\node[text=rep,font=\large] at (14.5,-1.15) {$10sbh$};
+\node[text=rep] at (14.5,-1.85) {不除以 $t$};
+% Hidden sharding: parent tiles exactly into two equal-width shards.
+\node[anchor=west,font=\small\bfseries,text=hid!80!black] at (.3,-3.35) {Attention / MLP 中间态：沿 hidden 切分};
+\face{1.4}{-4.55}{1.2}{1.2}{hid!75}
+\face{2.6}{-4.55}{1.2}{1.2}{hid!40}
+\lab{2}{-4.55}{H=[H^{(0)}\mid H^{(1)}]}{b\times s\times h}
+\face{7}{-4.55}{1.2}{1.2}{hid!75}\lab{7}{-4.55}{H^{(0)}}{b\times s\times(h/t)}
+\face{10.8}{-4.55}{1.2}{1.2}{hid!40}\lab{10.8}{-4.55}{H^{(1)}}{b\times s\times(h/t)}
+\draw[arr] (3.5,-4.55)--(5.4,-4.55);
+\node[font=\scriptsize,text=muted] at (4.45,-4) {每卡取半宽};
+\node[text=hid!80!black,font=\large] at (14.5,-4.3) {$24sbh/t$};
+\node[text=hid!80!black] at (14.5,-5) {除以 $t$};
+% Head panels: each square retains both sequence axes.
+\node[anchor=west,font=\small\bfseries,text=att] at (.3,-6.5) {Attention Map：沿 head 切分，$s\times s$ 不切};
+\face{1.2}{-7.7}{1.2}{1.2}{att!75}
+\face{2.8}{-7.7}{1.2}{1.2}{att!40}
+\node[font=\scriptsize] at (1.2,-7.7) {head 0};
+\node[font=\scriptsize] at (2.8,-7.7) {head 1};
+\lab{2}{-7.7}{P}{b\times a\times s\times s}
+\face{7}{-7.7}{1.2}{1.2}{att!75}\lab{7}{-7.7}{P^{(0)}}{b\times(a/t)\times s\times s}
+\face{10.8}{-7.7}{1.2}{1.2}{att!40}\lab{10.8}{-7.7}{P^{(1)}}{b\times(a/t)\times s\times s}
+\node[font=\scriptsize] at (7,-7.7) {head 0};
+\node[font=\scriptsize] at (10.8,-7.7) {head 1};
+\draw[arr] (3.7,-7.7)--(5.4,-7.7);
+\node[font=\scriptsize,text=muted] at (4.55,-7.15) {每卡取半数头};
+\node[text=att,font=\large] at (14.5,-7.45) {$5bas^2/t$};
+\node[text=att] at (14.5,-8.15) {除以 $t$};
+\node[anchor=north west,fill=black!3,inner sep=9pt,text width=15.7cm,align=left] at (.1,-9.75) {%
+\textbf{维度}\quad $b$：micro-batch；$s$：序列长度；$h$：hidden；$a$：头数；$t$：TP 度。\\[5pt]
+\textbf{对象}\quad $X,H$ 表示浮点激活，$P$ 表示注意力概率；系数汇总多份激活与 mask 的字节数。\\[5pt]
+\textbf{机制}\quad 箭头表示存储归属，三行共同组成总显存；图示省略 batch，取 $a=t=2$。\\[5pt]
+\hspace*{2.5em} $H$ 以宽度 $h$ 为例；MLP 的 $4h$ 中间态同样分为每卡 $4h/t$。};
+\end{tikzpicture}
+\end{document}
