@@ -1,0 +1,58 @@
+\documentclass[tikz,border=12pt]{standalone}
+\usepackage[UTF8,fontset=fandol]{ctex}
+\usepackage{amsmath,amssymb}
+\usetikzlibrary{arrows.meta}
+\definecolor{video}{HTML}{4F8FA5}
+\definecolor{action}{HTML}{EE995B}
+\begin{document}
+\begin{tikzpicture}[x=1cm,y=1cm,>=Stealth,font=\small]
+  \node[font=\large] at (5.5,7.1) {$\operatorname{Attn}_{M}(Q,K,V)=\operatorname{softmax}\!\left(QK^{\mathsf T}/\sqrt{d_h}+B_M\right)V$};
+  \node[text=black!65] at (5.5,6.45) {$M_{ij}=1\Rightarrow (B_M)_{ij}=0\ ;\quad M_{ij}=0\Rightarrow (B_M)_{ij}=-\infty$};
+  \node[font=\small\bfseries,text=black!65] at (2.4,5.85) {训练：当前帧、未来视频、动作};
+  \node[font=\small\bfseries,text=black!65] at (10.2,5.85) {推理：当前帧、动作};
+  % Nominal token-axis lengths: N_0=2, N_f=4, H=2; one cell=0.6cm.
+  % The squares encode Boolean support, not attention magnitudes.
+  \foreach \i in {0,...,7}{
+    \foreach \j in {0,...,7}{
+      \pgfmathtruncatemacro{\on}{(\i<2 && \j<2) || (\i>=2 && \i<6 && \j<6) || (\i>=6 && (\j<2 || \j>=6))}
+      \ifnum\on=1
+        \ifnum\i<6 \def\fillcol{video!65}\else\def\fillcol{action!75}\fi
+      \else \def\fillcol{white}\fi
+      \path[fill=\fillcol,draw=black!35,line width=.3pt,rounded corners=.7pt]
+        ({.6*\j+.025},{4.8-.6*(\i+1)+.025}) rectangle ({.6*(\j+1)-.025},{4.8-.6*\i-.025});
+    }
+  }
+  \draw[black!65,line width=.65pt] (0,0) rectangle (4.8,4.8);
+  \foreach \p in {1.2,3.6}{\draw[black!65] (\p,0)--(\p,4.8);}
+  \foreach \p in {1.2,3.6}{\draw[black!65] (0,\p)--(4.8,\p);}
+  \node at (.6,5.15) {$C$}; \node at (2.4,5.15) {$F$}; \node at (4.2,5.15) {$A$};
+  \node at (-.45,4.2) {$C$}; \node at (-.45,2.4) {$F$}; \node at (-.45,.6) {$A$};
+  \node[rotate=90,text=black!60] at (-1.15,2.4) {Query：谁在读取};
+  \node[text=black!60] at (2.4,-.5) {$M_{\mathrm{train}}$};
+  \node[font=\scriptsize,text=black!60] at (2.4,-.95) {$(N_0+N_f+H)\times(N_0+N_f+H)$};
+  \foreach \i in {0,...,3}{
+    \foreach \j in {0,...,3}{
+      \pgfmathtruncatemacro{\on}{(\i<2 && \j<2) || (\i>=2)}
+      \ifnum\on=1
+        \ifnum\i<2 \def\fillcol{video!65}\else\def\fillcol{action!75}\fi
+      \else \def\fillcol{white}\fi
+      \path[fill=\fillcol,draw=black!35,line width=.3pt,rounded corners=.7pt]
+        ({9+.6*\j+.025},{2.4-.6*(\i+1)+.025}) rectangle ({9+.6*(\j+1)-.025},{2.4-.6*\i-.025});
+    }
+  }
+  \draw[black!65,line width=.65pt] (9,0) rectangle (11.4,2.4);
+  \draw[black!65] (10.2,0)--(10.2,2.4); \draw[black!65] (9,1.2)--(11.4,1.2);
+  \node at (9.6,2.85) {$C$}; \node at (10.8,2.85) {$A$};
+  \node at (8.55,1.8) {$C$}; \node at (8.55,.6) {$A$};
+  \node[text=black!60] at (10.2,-.5) {$M_{\mathrm{infer}}$};
+  \node[font=\scriptsize,text=black!60] at (10.2,-.95) {$(N_0+H)\times(N_0+H)$};
+  \draw[->,black!60,line width=1pt] (5.3,2.05)--(7.8,2.05);
+  \node[align=center,text=black!65] at (6.55,3.05) {删除 $F$ 的行与列\\保留相同的信息依赖};
+  \node[align=center,text=black!65] at (10.2,4.25) {$C$ 编码一次，缓存各层 K/V\\$A$ 去噪时重复读取缓存};
+  \node[fill=black!3,inner sep=10pt,align=left,text width=12.1cm,anchor=north west] at (-1.1,-1.6) {
+    \textbf{轴}\quad 横轴为 Key（被读取者），纵轴为 Query；$N_0$、$N_f$、$H$ 为三组 token 数。\\[5pt]
+    \textbf{对象}\quad $C$：干净当前帧；$F$：加噪未来视频；$A$：加噪动作。彩色格为允许，白格为禁止。\\[5pt]
+    \textbf{机制}\quad $A$ 只读 $C$ 与 $A$，$C$ 不读 $F$ 或 $A$；格数仅示意，省略条件注意力。
+  };
+\end{tikzpicture}
+\end{document}
