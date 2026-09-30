@@ -2,21 +2,20 @@
 layout: article
 title: MXFP8 与 SM120：硬件支持之后，软件还缺什么
 tags: FP8 GPU CUDA TransformerEngine
+last_modified_at: "2026-09-30"
 ---
 
 > 前置阅读：[训练中使用 FP8 精度]({% post_url 2025/11/2025-11-03-fp8 %}) · [顺着 FlashAttention 看 SM120 的实现]({% post_url 2026/09/2026-09-19-flash-attention-sm120-sm80 %})
 >
-> 本文的 issue、PR 和源码状态核对于 2026-09-22；讨论 NVIDIA Transformer Engine 的 PyTorch 路径，没有做 SM120 GPU 性能实测。
+> 本文的 Transformer Engine issue、PR 和源码状态核对于 2026-09-22；SGLang 示例核对于 2026-09-25
 
-SM120 原生支持 MXFP8，但在本文核对的 Transformer Engine（下文简称 TE）v2.19 中，MXFP8 可用性检查仍会返回“不支持”。这两个结果分别回答了不同的问题：前者说的是 Tensor Core 能执行什么指令，后者说的是这套训练软件已经接好了哪些路径。
-
-[TE issue #2668](https://github.com/NVIDIA/TransformerEngine/issues/2668) 恰好讨论了这个落差。提问者在 SM120 上使用 `Float8BlockScaling`，发现它最终也会进入 MXFP8 GEMM，于是追问：既然底层计算已经能用，为什么 `MXFP8BlockScaling` 的支持还不完整？
-
-要看懂这个问题，需要把数据格式、GEMM 的布局，以及训练中的前向和反向连起来。
+SM120 原生支持 MXFP8，但在本文核对的 Transformer Engine（下文简称 TE）v2.19 PyTorch 训练路径中，`MXFP8BlockScaling` 的可用性检查仍返回不支持，限制主要落在反向所需的 GEMM 布局。
 
 <!--more-->
 
-## MXFP8 给 FP8 加了什么
+## 0. MXFP8 的格式与计算
+
+### 0.1 MXFP8 是什么：FP8 元素加上块 scale
 
 MX 是 Microscaling。按照 [OCP MX 规范](https://www.opencompute.org/documents/ocp-microscaling-formats-mx-v1-0-spec-final-pdf)，MXFP8 把 32 个 FP8 元素放在一个逻辑块里，共享一个 8-bit 的 E8M0 缩放因子。对一个有限值，解码关系为：
 
@@ -24,19 +23,61 @@ $$
 \hat{x}_i=s_b q_i,\qquad i\in\text{block }b.
 $$
 
-这里的 $q_i$ 仍然是完整的 FP8 数，规范允许 E4M3 和 E5M2 两种编码。每个元素自己的指数还在，块外又多了一层共享的 scale。E8M0 没有符号位和尾数位，其有限值是 $2^k$；它另外保留了 NaN 编码。
+这里先分清两层：**E4M3、E5M2 是单个元素的 8-bit 编码；MXFP8 是 32 个这类元素加一个共享 scale 的块格式。** E4M3 和 E5M2 的每个元素都有 1 位符号位，区别是指数位与尾数位怎么分配。下表的范围指 $q_i$ 本身，即乘上块 scale 之前；数值来自 [OCP FP8 编码规范](https://www.opencompute.org/documents/ocp-8-bit-floating-point-specification-ofp8-revision-1-0-2023-12-01-pdf-1)。
+
+| 元素编码 | 位分配 | 最大有限正数 | 最小正非正规数 | $[1,2)$ 内相邻正规数的间距 |
+| --- | --- | ---: | ---: | ---: |
+| E4M3 | 符号 1、指数 4、尾数 3 | $448$ | $2^{-9}$ | $2^{-3}=0.125$ |
+| E5M2 | 符号 1、指数 5、尾数 2 | $57344$ | $2^{-16}$ | $2^{-2}=0.25$ |
+
+E4M3 在同一数量级上有更密的刻度，E5M2 则把更多位给指数，覆盖更宽的范围。MXFP8 可以选择其中一种作为块内元素格式；增加的 scale 改善的是不同块对数值范围的适应能力，并没有增加单个 FP8 元素的尾数位数。两种块格式见 [OCP MX 规范的格式表](https://www.opencompute.org/documents/ocp-microscaling-formats-mx-v1-0-spec-final-pdf)。
+
+E8M0 没有符号位和尾数位，有限 scale 只能取 $2^k$（$-127\le k\le127$），另有一个 NaN 编码，详见 [E8M0 编码定义](https://www.opencompute.org/documents/ocp-microscaling-formats-mx-v1-0-spec-final-pdf)。它把整块数值一起乘上 $2^k$：例如 E4M3 在 $[1,2)$ 的间距是 $0.125$，乘以 $s_b=4$ 后，解码值在 $[4,8)$ 的间距变成 $0.5$，相对间距仍为 $1/8$。同一块内的离群大值仍可能让小值舍入为零；块 scale 并不保证每个元素都精确。
 
 忽略 padding 和对齐，一个块占 $32\times8+8=264$ bits，平均每个元素是 8.25 bits。这里的“32 个数据加一个 scale”描述的是编码组成，实际实现可以把数据和 scale 放在不同的数组里。
 
-量化时先为每块选择 $s_b$，再计算 $q_i=Q_{\mathrm{FP8}}(x_i/s_b)$。它解决的是不同区域数值范围不一致的问题。普通 FP8 是元素编码，本身并不规定整张张量只能用一个 scale；MXFP8 则把块大小和 scale 编码一起标准化了。
+量化时先为每块选择 $s_b$，再计算 $q_i=Q_{\mathrm{FP8}}(x_i/s_b)$。MX 规范给出转换语义，但具体如何选 scale 可以因实现而异。普通 FP8 是元素编码，本身并不规定整张张量只能用一个 scale；MXFP8 则把块大小和 scale 编码一起标准化了。
 
-可以手算一个极端例子。假设一个向量有 64 个数，前 32 个全是 $2^{10}$，后 32 个全是 $2^{-12}$，使用 E4M3 和就近舍入。若整段共用 $s=4$，大数会变成可精确表示的 $q=256$，小数则变成 $2^{-14}$。E4M3 的最小正非正规数是 $2^{-9}$，这个小数会舍入到零。[E4M3 编码定义](https://www.opencompute.org/documents/ocp-8-bit-floating-point-specification-ofp8-revision-1-0-2023-12-01-pdf-1)
+可以手算一个极端例子。假设一个向量有 64 个数，前 32 个全是 $2^{10}$，后 32 个全是 $2^{-12}$，使用 E4M3 和就近舍入。若整段共用 $s=4$，大数会变成可精确表示的 $q=256$，小数则变成 $2^{-14}$。后者小于 E4M3 的最小正非正规数 $2^{-9}$，会舍入到零。
 
-如果分成两个 MXFP8 块，分别取 $s_0=2^2$ 和 $s_1=2^{-20}$，两块的 $q$ 都可以是 256，解码后正好恢复原值。这是人为构造的算例，用来说明局部 scale 的作用。若大数和小数混在同一个块里，它们仍要共享 scale；MXFP8 没有增加单个 FP8 元素的尾数位数。
+如果分成两个 MXFP8 块，分别取 $s_0=2^2$ 和 $s_1=2^{-20}$，两块的 $q$ 都可以是 256，解码后正好恢复原值。这是人为构造的算例，所选 scale 均可由 E8M0 表示，用来说明局部 scale 的作用，并不表示实际量化器一定选这两个值。若大数和小数混在同一个块里，它们仍要共享 scale，小数仍可能舍入到零。
 
-## SM120 确实有对应的硬件指令
+下图画的是上述**同一个 64 元素向量**：前 32 个数和后 32 个数沿向量轴相邻，各自组成一个 MXFP8 块并选择自己的 scale。画出两块，是为了对比不同数值范围下的量化结果；它们只有拼接关系，没有计算依赖，也不共享 scale。图中省略号只隐藏重复元素。这是逻辑分组和数值关系示意，不代表数据与 scale 的物理存储布局。
 
-原生支持的证据可以直接落到 [NVIDIA CUTLASS 的 `mma_sm120.hpp`](https://github.com/NVIDIA/cutlass/blob/main/include/cute/arch/mma_sm120.hpp)。其中 E4M3 × E4M3 的块缩放操作使用以下 PTX 指令名称，操作数省略：
+![同一 64 元素向量分成两个相邻的 MXFP8 块，各自使用 E8M0 scale](/img/2026/09/22/mxfp8-precision-blocks.png)
+
+### 0.2 推理场景：SGLang 的 MXFP8 KV cache
+
+训练线性层通常关心权重、激活送进 GEMM 时用什么格式；推理还要关心另一份会随生成长度增长的数据：KV cache。每生成一个 token，attention 产生的 K、V 要留给后续 token 使用。把它们从 BF16 改存为低精度格式，可以让同样的显存容纳更多 token。权重格式和 KV cache 格式是两项选择；模型权重即使用 NVFP4，KV cache 也可以单独采用 MXFP8。
+
+SGLang 的 Inkling 长上下文配置就是一个具体例子：权重参数使用 `modelopt_fp4`，注意力选择 `fa4`，缓存页大小设为 `128`，再指定 `--kv-cache-dtype mxfp8`。其配置说明将这条路径标为 B200、B300、GB300 上已验证。这里的 `128` 是**每页容纳的 token 数**；MXFP8 的 `32` 是**一个 token、一个 head 内沿 head dimension 共享 scale 的元素数**，两者不是同一个分块。[SGLang Inkling 配置](https://github.com/sgl-project/sglang/blob/515f5be77e74761c269e007ac41a5895191a1b7d/docs/src/snippets/configs/thinkingmachines/inkling-small.jsx#L420-L451)
+
+沿源码看，`mxfp8` 首先把缓存元素类型选为 E4M3。专用 KV pool 随后分别为 K、V 分配 FP8 数据缓冲和 E8M0 scale 缓冲；每个 head 的最后一维每 32 个值对应一个 scale。`page_size=128` 时，scale 还要重排成 FA4 读取的布局。这说明 `--kv-cache-dtype mxfp8` 改变的不只是一个 PyTorch dtype，scale 是另一份必须同步读写的数据。[dtype 选择](https://github.com/sgl-project/sglang/blob/515f5be77e74761c269e007ac41a5895191a1b7d/python/sglang/srt/mem_cache/kv_cache_dtype.py#L55-L63)、[KV pool 分配](https://github.com/sgl-project/sglang/blob/515f5be77e74761c269e007ac41a5895191a1b7d/python/sglang/srt/mem_cache/memory_pool.py#L3491-L3584)
+
+新 K、V 写入缓存时，量化器沿 head dimension 每 32 个数求最大绝对值，选一个可由 E8M0 表示的 $2^k$，再把除以 scale 的值舍入为 E4M3；实现也提供量化与写缓存融合的路径。后续 attention 读取缓存时，FA4 同时拿到 Q、K、V 的 scale：$QK^T$ 走块缩放 FP8 矩阵计算，V 在 kernel 内还原为 BF16 后参与 $PV$。这是这条 FA4 路径的具体实现，不代表所有 attention 算子都必须以同样方式使用 MXFP8。[量化代码](https://github.com/sgl-project/sglang/blob/515f5be77e74761c269e007ac41a5895191a1b7d/python/sglang/kernels/ops/quantization/mxfp8_quant.py#L24-L80)、[scale 传入 FA4](https://github.com/sgl-project/sglang/blob/515f5be77e74761c269e007ac41a5895191a1b7d/python/sglang/srt/layers/attention/flashattention_backend.py#L427-L447)、[FA4 kernel 注释](https://github.com/sgl-project/sglang/blob/515f5be77e74761c269e007ac41a5895191a1b7d/python/sglang/kernels/ops/attention/flash_attn/cute/flash_fwd_sm100.py#L244-L258)
+
+下图把配置、写入和读取连起来。中间只画一个 token、一个 head 的 $X=K$ 或 $V$；两者各自沿最后一维按 32 个值分块，分别存储 FP8 数据与 scale。当前 Q 也带有自己的 scale 进入 FA4，但不写入 KV cache。图中的两个 32 元素块只是相邻分组示例，不表示 head dimension 固定为 64。
+
+![SGLang Inkling 配置 MXFP8 KV cache 后，从分块量化写入到 FA4 读取的路径](/img/2026/09/22/sglang-inkling-mxfp8-kv.png)
+
+和普通 E4M3 KV cache 相比，MXFP8 的 scale 数量更多：忽略布局开销，平均每个元素是 8.25 bits；普通 FP8 的张量级 scale 均摊到每个元素后，开销通常接近零。相对 BF16 的 16 bits，MXFP8 的编码量仍接近一半。更细的 scale 有机会减少数值范围不一致带来的量化损失，但不能保证每个模型的输出质量都提高。SGLang 的普通 FP8 KV cache 当前使用张量级 scale，而这条 MXFP8 路径按 32 个值选 scale。[SGLang 普通 FP8 KV cache 说明](https://github.com/sgl-project/sglang/blob/515f5be77e74761c269e007ac41a5895191a1b7d/docs/docs/advanced_features/quantized_kv_cache.mdx)
+
+以上 SGLang 路径核对于 2026-09-25 的提交 `515f5be`，讨论的是 Inkling、FA4 与已验证的 GPU 组合。它证明 MXFP8 也能用于推理中的 KV cache；不能据此推断本文后面讨论的 SM120 + TE 训练路径已经接通。
+
+### 0.3 为什么 MXFP8 需要专门的硬件支持
+
+仅仅**存储** MXFP8 并不需要专用矩阵指令：软件可以读出 FP8 元素和 E8M0 scale，逐项相乘还原为 BF16／FP32 再做 GEMM。专门的硬件支持解决的是如何在保留低精度计算与数据搬运优势的同时，把每块不同的 scale 正确纳入矩阵乘加。
+
+假设点积沿归约维分成多个 32 元素块，A、B 各有自己的块 scale，则计算关系是：
+
+$$
+\hat{y}=\sum_b\left(s_b^A s_b^B
+\sum_{i=0}^{31}q_{b,i}^A q_{b,i}^B\right).
+$$
+
+普通的张量级缩放只有一对 scale，可以在整段点积之后统一处理；这里每个 $b$ 的 $s_b^A s_b^B$ 不同，不能把一个系数挪到最外层。没有原生块缩放矩阵指令，软件就得先解码输入，或分别求各块的部分和、缩放后再累加。原生指令则要读取 FP8 数据及与归约维对应的 E8M0 scale，在乘加路径中按块应用，并把结果累加到输出。量化时求最大值、选 scale 仍可由普通 kernel 完成；它不是“硬件必须有一个量化指令”的意思。[OCP MX 点积定义](https://www.opencompute.org/documents/ocp-microscaling-formats-mx-v1-0-spec-final-pdf)、[CUTLASS 块缩放 MMA 说明](https://docs.nvidia.com/cutlass/latest/media/docs/pythonDSL/primitives.html)
+
+SM120 确实有对应的硬件指令。原生支持的证据可以直接落到 [NVIDIA CUTLASS 的 `mma_sm120.hpp`](https://github.com/NVIDIA/cutlass/blob/main/include/cute/arch/mma_sm120.hpp)。其中 E4M3 × E4M3 的块缩放操作使用以下 PTX 指令名称，操作数省略：
 
 ```text
 mma.sync.aligned.kind::mxf8f6f4.block_scale.scale_vec::1X.m16n8k32.row.col.f32.e4m3.e4m3.f32.ue8m0
@@ -46,18 +87,11 @@ mma.sync.aligned.kind::mxf8f6f4.block_scale.scale_vec::1X.m16n8k32.row.col.f32.e
 
 [PTX 的目标架构说明](https://docs.nvidia.com/cuda/parallel-thread-execution/#warp-level-matrix-instructions-mma)明确将这组 block-scale 扩展列在 `sm_120a` 下，PTX 8.8 起也支持 `sm_120f`。因此自己编译这类 kernel 时，要启用对应的架构特性，不能只看设备查询返回的 `(12, 0)`。
 
-硬件需要处理的数学关系也很直观。把点积分成若干个长度为 32 的块，有：
-
-$$
-\hat{y}=\sum_b\left(s_b^A s_b^B
-\sum_{i=0}^{31}q_{b,i}^A q_{b,i}^B\right).
-$$
-
-每个块的部分和要用自己的 scale，再跨块相加。原生 MXFP8 指令把这类缩放纳入计算路径；软件也可以通过解码、转换或分块计算实现相同的数据语义，只是执行代价不同。
-
 到这里能确认的是 SM120 的计算能力。一个框架还要准备正确的数据布局、组织 scale、选择 kernel，并把结果交给下一步计算。
 
-## 先把 TN 和 non-TN 读明白
+## 1. SM120 的软件接入
+
+### 1.1 先把 TN 和 non-TN 读明白
 
 TN 是 GEMM 接口中两个转置标志的组合，依次对应输入 $A$、$B$。先只讨论实数，忽略 GEMM 的标量系数和旧结果累加，计算写成：
 
@@ -92,7 +126,7 @@ $$
 
 所以，“前向 TN、反向 NN/NT”要结合下面 TE 的具体调用来看。它包含存储约定和传参顺序，不能把 TN 当成前向计算的固有属性，也不能仅凭训练公式中有没有上标 $T$ 来判定。
 
-## issue #2668 卡在前向和反向之间
+### 1.2 issue #2668 卡在前向和反向之间
 
 2026-02-11，TE 维护者在 [issue 回复](https://github.com/NVIDIA/TransformerEngine/issues/2668#issuecomment-3881426940)中说明：当时 SM120 的 MXFP8 支持主要受 cuBLAS 的 non-TN GEMM 限制，前向可以执行，但反向所需的路径还不行；这不是根本性的硬件限制。
 
@@ -117,7 +151,7 @@ $$
 
 块量化还让转置变得更复杂。行方向的 $1\times32$ 分组和列方向的 $32\times1$ 分组包含不同的元素，独立量化得到的 scale、FP8 数值也可能不同。把已量化矩阵直接转置，不能代替从高精度数据生成另一方向的量化结果。TE 需要管理这些版本及其 scale 布局。[TE 的 MXFP8 转置说明](https://docs.nvidia.com/deeplearning/transformer-engine/features/low_precision_training/mxfp8/mxfp8.html#handling-transposes)
 
-## 为什么 Float8BlockScaling 也能走 MXFP8 GEMM
+### 1.3 为什么 Float8BlockScaling 也能走 MXFP8 GEMM
 
 这里容易混淆“怎么量化”和“用什么指令计算”。TE 的 `Float8BlockScaling` 使用 128 元素的一维块，或 $128\times128$ 的二维块，scale 存为 FP32；`MXFP8BlockScaling` 默认按 32 元素的一维块量化，scale 存为 E8M0。[TE blockwise 格式说明](https://docs.nvidia.com/deeplearning/transformer-engine/features/low_precision_training/fp8_blockwise_scaling/fp8_blockwise_scaling.html#data-format)
 
@@ -135,7 +169,7 @@ $$
 
 因此，`Float8BlockScaling` 可以借助已准备好的转置表示复用 TN，而 `MXFP8BlockScaling` 的训练路径还需要补齐 NN、NT。这比“两个 recipe 都调用了 MXFP8 kernel”多追了一层，也就解释了 issue 中看似矛盾的现象。
 
-## 当前代码和关联 PR 到了哪里
+### 1.4 当前代码和关联 PR 到了哪里
 
 截至本文核对日期，issue #2668 仍然 open。TE `main` 固定到提交 [`969320524aa14c06477d16bf90a8872066811d70`](https://github.com/NVIDIA/TransformerEngine/commit/969320524aa14c06477d16bf90a8872066811d70) 后，`quantization.py` 中的 `_compute_mxfp8_support()` 仍然对计算能力 12.0 及以上返回 False，理由明确指向“全部 GEMM 布局”尚未支持。[支持检查源码](https://github.com/NVIDIA/TransformerEngine/blob/969320524aa14c06477d16bf90a8872066811d70/transformer_engine/pytorch/quantization.py#L162-L184)
 
@@ -151,7 +185,7 @@ PR 描述和提交说明写出的依赖是 **cuBLASLt 13.6.0.2**；固定到 PR 
 
 这里也需要收紧一句常见的版本描述：[CUDA 12.8 Update 1](https://docs.nvidia.com/cuda/archive/12.8.1/cuda-toolkit-release-notes/index.html#cublas-release-12-8-update-1) 的确已经加入 Blackwell GeForce 的 block-scaled FP8/FP4 支持，但这个事实不能扩展成“从该版本起，TE 的全部 MXFP8 训练路径都可用”。它证明底层库开始提供相关 GEMM 能力，具体覆盖哪些布局、哪些接口，仍要继续查。
 
-## Megatron-LM #4175 把同一个问题带到了训练入口
+### 1.5 Megatron-LM #4175 把同一个问题带到了训练入口
 
 [Megatron-LM issue #4175](https://github.com/NVIDIA/Megatron-LM/issues/4175) 于 2026-04-07 提出。用户在 RTX PRO 6000 上使用 MXFP8 时遇到了下面的错误：
 
@@ -167,7 +201,7 @@ issue 的负责人 `sbhavani` 回复说，团队仍在 Transformer Engine 中添
 
 因此，只更新 Megatron 或打开一个 MXFP8 参数，不能补齐 TE、cuBLASLt 尚未提供的执行路径；删除支持检查也只会让程序继续走向原本被拦住的后端。TE 接通以后，Megatron 仍需验证自己的训练配置，尤其是前后向、并行组合和 grouped GEMM。#4175 提供了上层训练框架中的实际报错，#2668 解释了底层布局缺口，而 #3050 展示了正在进行的接入工作。
 
-## 在自己的环境里怎么判断
+## 2. 在自己的环境里怎么判断
 
 首先记录 GPU、PyTorch、TE 以及实际使用的 cuBLASLt 版本，再询问当前安装的 TE。下面的检查在已安装 TE、CUDA 可用的 NVIDIA GPU 环境中运行，针对本文核对的 API，不需要先启动完整训练：
 

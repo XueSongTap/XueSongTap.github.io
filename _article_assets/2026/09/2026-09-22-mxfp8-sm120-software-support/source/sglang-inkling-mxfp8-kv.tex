@@ -1,0 +1,107 @@
+\documentclass[tikz,border=10pt]{standalone}
+\usepackage[UTF8,fontset=fandol]{ctex}
+\usepackage{amsmath}
+\usepackage{lmodern}
+\usetikzlibrary{arrows.meta,backgrounds,calc,positioning}
+\definecolor{data}{HTML}{4F8FA5}
+\definecolor{scale}{HTML}{EE995B}
+\definecolor{query}{HTML}{8A74B5}
+\definecolor{neutral}{HTML}{85898F}
+
+% Shape ledger: for one token and one head, X in {K,V} has logical shape
+% [d_X]. The last axis is partitioned into d_X/32 consecutive blocks.
+% Each block has 32 E4M3 data values and one E8M0 scale. The two visible
+% groups below illustrate adjacent blocks, not a fixed head dimension of 64.
+% Page size 128 counts tokens, not values along the head dimension.
+\tikzset{
+  arr/.style={-{Stealth[length=2.2mm]},line width=.75pt,draw=black!58},
+  flag/.style={draw=black!32,fill=black!2,rounded corners=2pt,minimum height=.65cm,
+    align=center,font=\small},
+  op/.style={draw=black!45,fill=black!3,rounded corners=2pt,minimum width=2.45cm,
+    minimum height=.72cm,align=center,font=\small},
+  role/.style={draw=black!40,rounded corners=2pt,minimum height=.72cm,align=center,font=\small},
+  stg/.style={font=\small\bfseries,text=black!65,anchor=west},
+}
+\begin{document}
+\begin{tikzpicture}[x=1cm,y=1cm,font=\small]
+  % Formula zone.
+  \node[font=\large] at (8.8,10.48)
+    {$q_{X,b,j}=Q_{\mathrm{E4M3}}(X_{b,j}/s_{X,b}),\quad
+      \hat X_{b,j}=s_{X,b}q_{X,b,j},\qquad X\in\{K,V\},\ 0\le j<32$};
+
+  % Launch flags: each controls a different aspect of the same path.
+  \node[stg] at (.35,9.68) {启动配置};
+  \node[flag,minimum width=5.15cm] at (3.00,9.02)
+    {\texttt{--kv-cache-dtype mxfp8}\\[-1pt]{\scriptsize KV 元素 E4M3 + 块 scale E8M0}};
+  \node[flag,minimum width=5.15cm] at (8.83,9.02)
+    {\texttt{--attention-backend fa4}\\[-1pt]{\scriptsize 读取块缩放 Q/K/V}};
+  \node[flag,minimum width=5.15cm] at (14.65,9.02)
+    {\texttt{--page-size 128}\\[-1pt]{\scriptsize 每页 128 个 token}};
+
+  % Write: one illustrative X path is used independently for K and V.
+  \node[stg] at (.35,8.10) {写入：新 token 的一个 head，$X=K$ 或 $V$};
+  \node[role,fill=data!18,minimum width=2.35cm] (xin) at (1.65,7.15)
+    {$X$：BF16\\[-1pt]{\scriptsize 逻辑向量 $[d_X]$}};
+  \node[op] (quant) at (5.00,7.15)
+    {沿 $d_X$ 每 32 个值\\[-1pt]选 scale 并量化};
+  \draw[arr] (xin.east) -- (quant.west);
+  \node[font=\scriptsize,text=black!60] at (10.10,7.87)
+    {相邻的两个 32 元素块（其余块省略）};
+  \foreach \left/\idx in {8.10/0,10.75/1}{
+    \foreach \i in {0,1,2,3}{
+      \fill[data!65,rounded corners=.6pt] ({\left+\i*.46},6.91)
+        rectangle ++(.41,.47);
+    }
+    \node[font=\scriptsize,text=black!65] at ({\left+.90},6.67) {$q_{X,\idx,:}$};
+    \node[role,fill=scale!25,minimum width=1.70cm,minimum height=.48cm,
+      font=\scriptsize] (sf\idx) at ({\left+.90},5.97) {$s_{X,\idx}$};
+  }
+  \draw[arr] (quant.east) -- (7.83,7.15);
+  \draw[black!58,line width=.75pt] (quant.south) -- (5.00,6.35) -- (11.65,6.35);
+  \draw[arr] (9.00,6.35) -- (sf0.north);
+  \draw[arr] (11.65,6.35) -- (sf1.north);
+  \node[font=\scriptsize,text=black!60,anchor=west] at (13.08,7.55) {E4M3 数据};
+  \node[font=\scriptsize,text=black!60,anchor=west] at (13.08,5.57) {E8M0 scale};
+  \node[role,fill=black!3,minimum width=1.72cm,minimum height=1.42cm]
+    (pool) at (16.18,6.57) {KV pool\\[-1pt]{\scriptsize 分开存储}};
+  \draw[arr] (12.60,7.15) -- (pool.west |- 16.18,7.15);
+  \draw[arr] (12.60,5.97) -- (pool.west |- 16.18,5.97);
+
+  % Read: Q scale is fresh; K/V scales are read alongside cached data.
+  \node[stg] at (.35,5.20) {读取：FA4 attention};
+  \node[role,fill=query!20,minimum width=2.55cm] (q) at (1.75,4.20)
+    {当前 $Q$ + $s_Q$\\[-1pt]{\scriptsize E4M3 / E8M0}};
+  \node[role,fill=data!20,minimum width=2.55cm] (k) at (5.20,4.20)
+    {缓存 $K$ + $s_K$\\[-1pt]{\scriptsize E4M3 / E8M0}};
+  \node[op,minimum width=2.50cm] (qk) at (8.87,4.20)
+    {$QK^T$\\[-1pt]{\scriptsize 块缩放 FP8 MMA}};
+  \node[role,fill=query!15,minimum width=1.78cm] (p) at (12.07,4.20)
+    {$P$\\[-1pt]{\scriptsize softmax 权重}};
+  \draw[arr] (q.north) -- (1.75,4.78) -- (8.87,4.78) -- (qk.north);
+  \draw[arr] (k.east) -- (qk.west);
+  \draw[arr] (qk.east) -- (p.west);
+
+  \node[role,fill=data!20,minimum width=2.55cm] (v) at (5.20,3.10)
+    {缓存 $V$ + $s_V$\\[-1pt]{\scriptsize E4M3 / E8M0}};
+  \node[op,minimum width=2.50cm] (deq) at (8.87,3.10)
+    {还原 $V$\\[-1pt]{\scriptsize kernel 内转 BF16}};
+  \node[op,minimum width=1.78cm] (pv) at (12.07,3.10) {$PV$};
+  \node[role,fill=query!15,minimum width=1.78cm] (out) at (15.13,3.10) {输出};
+  \draw[arr] (v.east) -- (deq.west);
+  \draw[arr] (deq.east) -- (pv.west);
+  \draw[arr] (p.south) -- (pv.north);
+  \draw[arr] (pv.east) -- (out.west);
+
+  % Meaning zone.
+  \fill[black!3,rounded corners=2pt] (.25,-.10) rectangle (17.35,2.22);
+  \node[font=\small\bfseries,text=black!65,anchor=west] at (.55,1.72) {轴};
+  \node[anchor=west,text width=15.6cm,align=left] at (1.55,1.72)
+    {$d_X$ 是一个 head 的 K 或 V 最后一维；每 32 个连续值对应一个 scale。128 是页内 token 数。};
+  \node[font=\small\bfseries,text=black!65,anchor=west] at (.55,1.05) {对象};
+  \node[anchor=west,text width=15.6cm,align=left] at (1.55,1.05)
+    {$q_{X,b,j}$ 是 FP8 数据，$s_{X,b}$ 是正的 E8M0 scale；$Q$ 为当前计算输入，K/V 来自缓存。};
+  \node[font=\small\bfseries,text=black!65,anchor=west] at (.55,.38) {机制};
+  \node[anchor=west,text width=15.6cm,align=left] at (1.55,.38)
+    {128-token 页使 scale 采用 FA4 的交错布局；$QK^T$ 用块缩放计算，$V$ 在 kernel 内还原后参与 $PV$。};
+\end{tikzpicture}
+\end{document}

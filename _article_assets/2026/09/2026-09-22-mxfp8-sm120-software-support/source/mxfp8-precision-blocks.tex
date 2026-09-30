@@ -1,0 +1,68 @@
+\documentclass[tikz,border=10pt]{standalone}
+\usepackage[UTF8,fontset=fandol]{ctex}
+\usepackage{amsmath}
+\usepackage{lmodern}
+\usetikzlibrary{arrows.meta,backgrounds,calc}
+\definecolor{elem}{HTML}{4F8FA5}
+\definecolor{scale}{HTML}{EE995B}
+\definecolor{decoded}{HTML}{8A74B5}
+
+% Shape ledger: x and q are logical 1x64 vectors, split along the only axis
+% into two 1x32 blocks. Each block owns one scalar E8M0 scale. The visible
+% 4 + ellipsis + 4 cells are an elided representation of the same 32 slots.
+% E4M3/E5M2 bit fields refer to one q element; no field is added to it.
+\newcommand{\BitBar}[4]{%
+  \node[anchor=east,font=\small\bfseries] at (1.30,#1) {#2};
+  \fill[black!32,rounded corners=.7pt] (1.60,{#1-.19}) rectangle (2.32,{#1+.19});
+  \fill[elem!55,rounded corners=.7pt] (2.35,{#1-.19}) rectangle ({2.35+#3*.72},{#1+.19});
+  \fill[decoded!55,rounded corners=.7pt] ({2.38+#3*.72},{#1-.19}) rectangle ({2.38+(#3+#4)*.72},{#1+.19});
+  \node[font=\scriptsize] at (1.96,#1) {$S$};
+  \node[font=\scriptsize] at ({2.35+#3*.36},#1) {$E$};
+  \node[font=\scriptsize] at ({2.38+#3*.72+#4*.36},#1) {$M$};
+  \node[anchor=west,font=\small,text=black!65] at (8.25,#1) {符号 1 位，指数 #3 位，尾数 #4 位};
+}
+\newcommand{\Block}[4]{%
+  \node[font=\small\bfseries,text=black!65] at (#1,2.20) {#2};
+  \pgfmathsetmacro{\leftedge}{#1-3.10}
+  \foreach \c in {0,1,2,3,5,6,7,8}{%
+    \pgfmathsetmacro{\xx}{\leftedge+\c*.68}
+    \fill[elem!60,rounded corners=.7pt] (\xx,1.27) rectangle ++(.61,.54);
+  }
+  \node[font=\Large,text=black!55] at ({\leftedge+4.35*.68},1.54) {$\cdots$};
+  \draw[black!60,line width=.6pt] ({\leftedge-.09},1.91) -- ({\leftedge-.22},1.91)
+    -- ({\leftedge-.22},1.18) -- ({\leftedge-.09},1.18);
+  \draw[black!60,line width=.6pt] ({\leftedge+8*.68+.70},1.91) -- ({\leftedge+8*.68+.83},1.91)
+    -- ({\leftedge+8*.68+.83},1.18) -- ({\leftedge+8*.68+.70},1.18);
+  \node[font=\small] at (#1,.94) {$q_{#3,i}=256$};
+  \node[font=\scriptsize,text=black!60] at (#1,.58) {$1\times32$，元素为 E4M3};
+  \node[draw=scale!75!black,fill=scale!25,rounded corners=2pt,
+    minimum width=2.35cm,minimum height=.58cm,font=\small] (s#3) at (#1,-.29) {$s_{#3}=#4$};
+  \node[font=\scriptsize,text=black!60] at (#1,-.75) {1 个 E8M0 scale};
+  \begin{pgfonlayer}{background}
+    \draw[-{Stealth[length=2mm]},black!53,line width=.7pt]
+      (s#3.east) -- ({#1+2.53},-.29) -- ({#1+2.53},1.27);
+  \end{pgfonlayer}
+}
+
+\begin{document}
+\begin{tikzpicture}[x=1cm,y=1cm,font=\small]
+  \node[font=\large] at (7.25,5.40)
+    {$\hat{x}_{b,i}=s_bq_{b,i},\qquad b\in\{0,1\},\quad 0\le i<32$};
+  \node[font=\small\bfseries,text=black!62] at (7.25,4.77) {先选元素编码：每个 $q_i$ 都是完整的 8-bit FP8};
+  \BitBar{4.13}{E4M3}{4}{3}
+  \BitBar{3.49}{E5M2}{5}{2}
+  \node[font=\small\bfseries,text=black!62] at (7.25,2.91) {再沿向量轴按 32 个元素分块：以下以 E4M3 为例};
+  \Block{3.48}{块 0：$x=2^{10}$}{0}{2^2}
+  \Block{11.04}{块 1：$x=2^{-12}$}{1}{2^{-20}}
+  \fill[black!3,rounded corners=2pt] (-.05,-1.35) rectangle (14.55,-3.95);
+  \node[anchor=west,font=\small\bfseries,text=black!65] at (.27,-1.85) {轴};
+  \node[anchor=west,text width=12.95cm,align=left] at (1.23,-1.85)
+    {两个 $1\times32$ 块拼成 $1\times64$ 向量；省略号只隐藏重复元素。};
+  \node[anchor=west,font=\small\bfseries,text=black!65] at (.27,-2.61) {对象};
+  \node[anchor=west,text width=12.95cm,align=left] at (1.23,-2.61)
+    {$q_{b,i}$ 是有符号 FP8 数；$s_b$ 是正的 $2^k$，整块共用且不占每个元素的尾数位。};
+  \node[anchor=west,font=\small\bfseries,text=black!65] at (.27,-3.38) {机制};
+  \node[anchor=west,text width=12.95cm,align=left] at (1.23,-3.38)
+    {箭头表示块 scale 作用于 32 个元素；两块各有 $s_bq_{b,i}=x_{b,i}$。};
+\end{tikzpicture}
+\end{document}
