@@ -1,0 +1,12 @@
+{
+  "title": "昇腾 950：两种显存组合",
+  "subtitle": "共同的计算与 IO 底座，配不同数量和规格的显存模块",
+  "variants": [
+    {"name": "950PR / HiBL 1.0", "color": "#267b81", "count": 8, "capacity": "128 GB", "bandwidth": "1.6 TB/s", "average": "16 GB / 200 GB/s", "focus": "Prefill / 推荐"},
+    {"name": "950DT / HiZQ 2.0", "color": "#9c5531", "count": 4, "capacity": "144 GB", "bandwidth": "4 TB/s", "average": "36 GB / 1 TB/s", "focus": "Decode / 训练"}
+  ],
+  "facts": "官方：2 个 AI Die + 2 个 IO Die；PR 配 8 个显存模块，DT 配 4 个",
+  "assumption": "每模块数值为总规格均分估算：假设模块同规格、带宽可均分",
+  "scope": "方块只表示模块数量；箭头表示访存关系，不表示真实封装位置与接口拓扑",
+  "source": "依据：华为《昇腾 950 NPU 架构白皮书》第 3 章；2025 年全联接大会演讲稿"
+}
