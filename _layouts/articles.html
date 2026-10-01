@@ -31,6 +31,12 @@ layout: page
 
 {%- assign _type = page.articles.type | default: layout.articles.type -%}
 
+{%- if page.home_intro -%}
+  {%- if paginator.page == 1 or paginator == nil -%}
+    {%- include home-intro.html -%}
+  {%- endif -%}
+{%- endif -%}
+
 {%- if _articles -%}
 
   <div class="layout--articles">

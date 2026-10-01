@@ -22,7 +22,7 @@ url     : https://xuesongtap.github.io # the base hostname & protocol for your s
 baseurl : # does not include hostname
 title   : 薛小嵩blog
 description: > # this means to ignore newlines until "Language & timezone"
-  Your Site Description
+  薛小嵩的技术博客，记录 AI Infra、GPU 架构、CUDA/Triton、大模型训练与推理、强化学习工程的学习笔记，结合论文、源码和图解梳理实现细节与设计取舍。
 
 
 ## => Language and Timezone
@@ -37,7 +37,7 @@ author:
   name      : 薛小嵩
   url       :
   avatar    : # path or url of avatar image (square)
-  bio       : I am an amazing person.
+  bio       : 记录 AI Infra、GPU 与大模型工程的学习笔记，从论文和源码出发，用公式、代码与图解梳理实现细节。
   email     :
   facebook  : # "user_name" the last part of your profile url, e.g. https://www.facebook.com/user_name
   twitter   : # "user_name" the last part of your profile url, e.g. https://twitter.com/user_name

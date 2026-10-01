@@ -1,0 +1,36 @@
+<section class="home-intro article__content" aria-labelledby="home-heading">
+  <h1 id="home-heading">AI Infra、GPU 与大模型工程笔记</h1>
+  <p>这里记录我对 AI Infra 与大模型工程的学习和梳理，重点关注 GPU、训练与推理系统，以及强化学习中的工程问题。从论文和源码出发，用公式、代码与图解解释实现细节。</p>
+  <p><a href="{{ '/about.html' | relative_url }}">关于博客</a> · <a href="{{ '/archive.html' | relative_url }}">全部文章与标签</a> · <a href="{{ '/feed.xml' | relative_url }}">订阅更新</a></p>
+  <h2 id="reading-paths">从主题开始阅读</h2>
+  <div class="grid grid--p-3">
+    <section class="cell cell--12 cell--md-4" aria-labelledby="gpu-reading">
+      <h3 id="gpu-reading">GPU 架构与 CUDA</h3>
+      <p>从 Attention 的实现，读到 Blackwell 的计算与低精度支持。</p>
+      <ul>
+        <li><a href="{% post_url 2026/09/2026-09-19-flash-attention-sm120-sm80 %}">顺着 FlashAttention 看 SM120 的实现</a></li>
+        <li><a href="{% post_url 2026/05/2026-05-19-blackwell-tmem-tcgen05-mma %}">Blackwell TMEM 与 tcgen05 MMA 深度解析</a></li>
+        <li><a href="{% post_url 2026/09/2026-09-22-mxfp8-sm120-software-support %}">MXFP8 与 SM120：硬件支持之后，软件还缺什么</a></li>
+      </ul>
+    </section>
+    <section class="cell cell--12 cell--md-4" aria-labelledby="systems-reading">
+      <h3 id="systems-reading">大模型训练与推理</h3>
+      <p>从编译执行，读到分片训练与推理时的 KV Cache 搬运。</p>
+      <ul>
+        <li><a href="{% post_url 2026/09/2026-09-19-torch-compile-graph-breaks %}">从一行 print 看 torch.compile 的 Graph Break</a></li>
+        <li><a href="{% post_url 2026/04/2026-04-12-megatron-fsdp %}">Megatron-FSDP：从 ZeRO 到完全分片的工程实践</a></li>
+        <li><a href="{% post_url 2026/03/2026-03-22-dualpath-kv-cache-inference %}">DualPath：用双路径 KV-Cache 加载打破 Agentic 推理的存储瓶颈</a></li>
+      </ul>
+    </section>
+    <section class="cell cell--12 cell--md-4" aria-labelledby="rl-reading">
+      <h3 id="rl-reading">强化学习与 Coding Agent</h3>
+      <p>从 RLHF 与 GRPO，读到代码任务怎样成为可训练的环境。</p>
+      <ul>
+        <li><a href="{% post_url 2026/03/2026-03-22-rlhf-grpo %}">RLHF 到 GRPO：大模型强化学习训练方法梳理</a></li>
+        <li><a href="{% post_url 2026/09/2026-09-21-codemidas-coding-rl-environments %}">CodeMidas：从源代码构造 Coding Agent 的 RL 训练环境</a></li>
+        <li><a href="{% post_url 2026/09/2026-09-30-mimo-v26-rl-oss-task-environments %}">MiMo-V2.6-RL-oss：一条任务怎样成为 Agentic RL 环境</a></li>
+      </ul>
+    </section>
+  </div>
+  <h2>最新文章</h2>
+</section>
