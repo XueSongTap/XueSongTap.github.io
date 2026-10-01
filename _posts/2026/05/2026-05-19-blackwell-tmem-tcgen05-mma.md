@@ -2,6 +2,10 @@
 layout: article
 title: Blackwell TMEM 与 tcgen05 MMA 深度解析
 tags: GPU CUDA Blackwell TensorCore CUTLASS
+description: >-
+  围绕 Blackwell SM100/SM103 的矩阵乘加路径，解析 TMEM 如何存放累加器、tcgen05.mma 如何发射计算，以及结果读回寄存器后的处理流程，结合分块算例说明寄存器压力、访问约束与同步要求。
+excerpt: >-
+  围绕 Blackwell SM100/SM103 的矩阵乘加路径，解析 TMEM 如何存放累加器、tcgen05.mma 如何发射计算，以及结果读回寄存器后的处理流程，结合分块算例说明寄存器压力、访问约束与同步要求。
 ---
 
 Blackwell 数据中心 GPU（B200、GB200，SM100/SM103）围绕第五代 Tensor Core 引入了一块专用片上存储——TMEM（Tensor Memory）。本文整理 TMEM 的设计动机、tcgen05.mma 指令族的工作方式，以及从 Ampere 到 Blackwell 的 MMA 架构演进。

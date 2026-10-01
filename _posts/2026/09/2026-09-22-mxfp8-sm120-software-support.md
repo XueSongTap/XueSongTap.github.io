@@ -3,6 +3,10 @@ layout: article
 title: MXFP8 与 SM120：硬件支持之后，软件还缺什么
 tags: FP8 GPU CUDA TransformerEngine
 last_modified_at: "2026-09-30"
+description: >-
+  解释 MXFP8 的块缩放格式与 GEMM 转置布局，结合 Transformer Engine v2.19 的 PyTorch 训练路径，分析 SM120 硬件支持之后仍存在的软件限制，并给出版本、可用性与训练路径的检查方法。
+excerpt: >-
+  解释 MXFP8 的块缩放格式与 GEMM 转置布局，结合 Transformer Engine v2.19 的 PyTorch 训练路径，分析 SM120 硬件支持之后仍存在的软件限制，并给出版本、可用性与训练路径的检查方法。
 ---
 
 > 前置阅读：[训练中使用 FP8 精度]({% post_url 2025/11/2025-11-03-fp8 %}) · [顺着 FlashAttention 看 SM120 的实现]({% post_url 2026/09/2026-09-19-flash-attention-sm120-sm80 %})

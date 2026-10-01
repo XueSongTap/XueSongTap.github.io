@@ -2,6 +2,10 @@
 layout: article
 title: 从一行 print 看 torch.compile 的 Graph Break
 tags: LLM PyTorch torch.compile
+description: >-
+  从一行 print 引起的切图出发，说明 torch.compile 中 Dynamo 的捕获与恢复过程，区分 Graph Break、数据依赖分支、动态 shape 和重编译，并介绍 fullgraph、日志与 trace 的排查方法。
+excerpt: >-
+  从一行 print 引起的切图出发，说明 torch.compile 中 Dynamo 的捕获与恢复过程，区分 Graph Break、数据依赖分支、动态 shape 和重编译，并介绍 fullgraph、日志与 trace 的排查方法。
 ---
 
 > 前置阅读：[torch.compile 里 Inductor 是怎么把编译结果包进 CUDA Graph]({% post_url 2026/05/2026-05-19-inductor-cudagraph-analysis %})。这篇往前看一步：Inductor 收到的图，是 Dynamo 怎么捕获出来的。

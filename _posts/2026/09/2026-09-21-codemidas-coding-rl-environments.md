@@ -2,6 +2,10 @@
 layout: article
 title: CodeMidas：从源代码构造 Coding Agent 的 RL 训练环境
 tags: LLM Agent RL GRPO
+description: >-
+  沿着 CodeMidas 的任务构造管线，分析如何从开源仓库提取功能、移除实现、生成隐藏测试，再通过容器执行和 agent rollout 检查泄漏与评分可靠性，最终形成用于 GRPO 的训练环境。
+excerpt: >-
+  沿着 CodeMidas 的任务构造管线，分析如何从开源仓库提取功能、移除实现、生成隐藏测试，再通过容器执行和 agent rollout 检查泄漏与评分可靠性，最终形成用于 GRPO 的训练环境。
 ---
 
 ## 0. 论文概览

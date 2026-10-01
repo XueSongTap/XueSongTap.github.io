@@ -2,6 +2,10 @@
 layout: article
 title: DualPath：用双路径 KV-Cache 加载打破 Agentic 推理的存储瓶颈
 tags: LLM
+description: >-
+  围绕 Agentic 推理中的 KV-Cache 加载瓶颈，介绍 DualPath 如何利用 Prefill 与 Decode 两侧的存储带宽，结合分层流水线、RDMA 流量隔离和自适应调度，梳理论文实验结果与部署限制。
+excerpt: >-
+  围绕 Agentic 推理中的 KV-Cache 加载瓶颈，介绍 DualPath 如何利用 Prefill 与 Decode 两侧的存储带宽，结合分层流水线、RDMA 流量隔离和自适应调度，梳理论文实验结果与部署限制。
 ---
 
 > 论文：*DualPath: Breaking the Storage Bandwidth Bottleneck in Agentic LLM Inference*

@@ -2,6 +2,10 @@
 layout: article
 title: 顺着 FlashAttention 看 SM120 的实现
 tags: LLM GPU CUDA FlashAttention
+description: >-
+  从 FlashAttention 的 SM120 子类源码出发，解释它为何复用 SM80 的 warp-level MMA 主循环，以及 arch、共享内存容量和缓冲复用如何影响输出路径、tile 与 stage 配置，并区分显存容量与片上资源限制。
+excerpt: >-
+  从 FlashAttention 的 SM120 子类源码出发，解释它为何复用 SM80 的 warp-level MMA 主循环，以及 arch、共享内存容量和缓冲复用如何影响输出路径、tile 与 stage 配置，并区分显存容量与片上资源限制。
 ---
 
 > 前置阅读：[FlashAttention]({% post_url 2026/03/2026-03-22-flash-attention %}) · [Blackwell TMEM 与 tcgen05 MMA 深度解析]({% post_url 2026/05/2026-05-19-blackwell-tmem-tcgen05-mma %})

@@ -2,6 +2,10 @@
 layout: article
 title: Megatron-FSDP 深度解析：从 ZeRO 到完全分片的工程实践
 tags: distributed-training megatron
+description: >-
+  基于 Megatron Core v0.16.1 源码，梳理 Megatron-FSDP 的 ZeRO 分片策略、参数与梯度缓冲区、通信流水线和钩子生命周期，重点分析 per-module 分片、通信计算重叠及 TP、HSDP 的集成。
+excerpt: >-
+  基于 Megatron Core v0.16.1 源码，梳理 Megatron-FSDP 的 ZeRO 分片策略、参数与梯度缓冲区、通信流水线和钩子生命周期，重点分析 per-module 分片、通信计算重叠及 TP、HSDP 的集成。
 ---
 
 Megatron-LM 引入了一套自研的 FSDP 实现——**Megatron-FSDP**，替代了之前的custom_fsdp 
