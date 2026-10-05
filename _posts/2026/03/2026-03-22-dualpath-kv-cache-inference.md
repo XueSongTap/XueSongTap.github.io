@@ -11,6 +11,8 @@ excerpt: >-
 > 论文：*DualPath: Breaking the Storage Bandwidth Bottleneck in Agentic LLM Inference*
 > arXiv:2602.21548，2026.02.25，作者：Yongtong Wu, Shaoyuan Chen, Yinmin Zhong 等（北大 + 字节 + 清华）
 
+> 关联阅读：关于 PD 分离中的硬件与显存取舍，可参考 [昇腾 950 的两种显存方案：白鹭、朱雀与 PD 分离]({% post_url 2026/09/2026-09-30-ascend950-hibl-hizq-memory %})。
+
 ---
 
 ## 1. 问题：Agentic 推理的 I/O 瓶颈

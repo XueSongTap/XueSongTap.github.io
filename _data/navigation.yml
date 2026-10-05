@@ -1,4 +1,7 @@
 header:
+  - title: 主题阅读
+    url: /#reading-paths
+
   - titles:
       # @start locale config
       en      : &EN       Archive

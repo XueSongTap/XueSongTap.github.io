@@ -8,6 +8,8 @@ excerpt: >-
   沿着 CodeMidas 的任务构造管线，分析如何从开源仓库提取功能、移除实现、生成隐藏测试，再通过容器执行和 agent rollout 检查泄漏与评分可靠性，最终形成用于 GRPO 的训练环境。
 ---
 
+> 关联阅读：另一套任务与 verifier 的组织方式，见 [MiMo-V2.6-RL-oss：一条任务怎样成为 Agentic RL 环境]({% post_url 2026/09/2026-09-30-mimo-v26-rl-oss-task-environments %})。
+
 ## 0. 论文概览
 
 [CodeMidas](https://arxiv.org/abs/2609.22068) 是小米 LLM Core 等团队提出的一套 Coding Agent 训练数据构造管线。它从开源仓库中找到已经实现的功能，生成需求说明，再移除对应实现，让 agent 在这个仓库里把功能补回来。原实现被保留下来，用于生成测试和验证环境。经过清理和筛选后，每个任务都能在容器中运行，并通过隐藏测试给出训练奖励。

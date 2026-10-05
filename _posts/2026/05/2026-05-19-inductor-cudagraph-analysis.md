@@ -367,3 +367,5 @@ torch.compile(model, options={"triton.cudagraph_or_error": True})
 | 分发 | `compile_fx.cudagraphify` | 懒惰录制，分发到 trees 或简单版 |
 | 内存池管理 | `CUDAGraphTreeManager` | 共享 pool，维护 warmup/record/replay 状态机 |
 | 单次录制 | `CUDAGraphNode` | 持有 `torch.cuda.CUDAGraph`，管理 tensor 生命周期 |
+
+> 关联阅读：如果还想往前看 Dynamo 的捕获与切图过程，可接着读 [从一行 print 看 torch.compile 的 Graph Break]({% post_url 2026/09/2026-09-19-torch-compile-graph-breaks %})。

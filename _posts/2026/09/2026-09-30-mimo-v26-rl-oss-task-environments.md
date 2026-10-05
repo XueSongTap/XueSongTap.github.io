@@ -8,6 +8,8 @@ excerpt: >-
   从 MiMo-V2.6-RL-oss 的具体任务出发，说明需求、容器环境与 verifier 如何组成 Agentic RL 任务，比较 Code、Cyber、Webdev、Music 和 General 的评分方式，并区分 Explorer 在线评分与训练奖励。
 ---
 
+> 关联阅读：任务构造可接着看 [CodeMidas：从源代码构造 Coding Agent 的 RL 训练环境]({% post_url 2026/09/2026-09-21-codemidas-coding-rl-environments %})；训练方法可参考 [RLHF 到 GRPO：大模型强化学习训练方法梳理]({% post_url 2026/03/2026-03-22-rlhf-grpo %})。
+
 一条 Code 任务要求修改某个项目的 GitHub Action：让 `secrets` 参数变成可选项，这样只需要 Vault token 时也能调用它。乍看是普通的软件需求，
 
 
