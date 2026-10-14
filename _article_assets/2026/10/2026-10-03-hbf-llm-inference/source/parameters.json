@@ -1,0 +1,27 @@
+{
+  "experts": 256,
+  "experts_per_token": 8,
+  "batch_min": 1,
+  "batch_max": 256,
+  "highlight_batches": [
+    1,
+    8,
+    32,
+    128
+  ],
+  "title": "A larger batch touches more experts",
+  "subtitle": "Idealized MoE routing  |  256 equal-size experts  |  8 experts per token",
+  "assumptions": "Uniform routing \u2022 Independent tokens \u2022 Equal-size experts",
+  "qualification": "Analytical expectation; illustrative model, not a measured benchmark.",
+  "png_output": "img/2026/10/03/hbf-moe-working-set.png",
+  "width_inches": 12,
+  "height_inches": 7.5,
+  "dpi": 180,
+  "colors": {
+    "curve": "#087E8B",
+    "text": "#172B3A",
+    "muted": "#526574",
+    "grid": "#E5EBEF",
+    "fill": "#E4F4F3"
+  }
+}

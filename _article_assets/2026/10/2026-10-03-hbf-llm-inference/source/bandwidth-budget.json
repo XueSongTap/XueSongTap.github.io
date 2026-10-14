@@ -1,0 +1,26 @@
+{
+  "title": "Bandwidth budgets: count independent stacks",
+  "subtitle": "Parallel interfaces can add bandwidth; more NAND die layers do not automatically do so.",
+  "hbm_channels": 8,
+  "hbm_total_tb_s": 8,
+  "hbf_stack_gib": 512,
+  "hbf_stack_tb_s": 3.072,
+  "hbf_stacks": 4,
+  "png_output": "img/2026/10/03/hbf-bandwidth-budget.png",
+  "figure_inches": [
+    14,
+    10
+  ],
+  "dpi": 180,
+  "colors": {
+    "ink": "#183243",
+    "muted": "#567080",
+    "hbm": "#2567A2",
+    "hbm_fill": "#EEF5FC",
+    "hbf": "#07858B",
+    "hbf_fill": "#EAF7F6",
+    "buffer": "#96752B",
+    "buffer_fill": "#FFF8E6",
+    "line": "#D9E5EB"
+  }
+}
