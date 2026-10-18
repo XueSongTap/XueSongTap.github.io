@@ -1,0 +1,88 @@
+\documentclass[tikz,border=9pt]{standalone}
+\usepackage[UTF8,fontset=fandol]{ctex}
+\usepackage{amsmath,amssymb}
+\usetikzlibrary{arrows.meta,backgrounds}
+\newcommand{\SeqLen}{16}
+\newcommand{\WindowSize}{8}
+\newcommand{\MaskBlockSize}{4}
+\definecolor{ink}{HTML}{303A40}
+\definecolor{muted}{HTML}{60686E}
+\definecolor{teal}{HTML}{4F8FA5}
+\definecolor{orange}{HTML}{EE995B}
+\definecolor{rule}{HTML}{9DA5AA}
+\definecolor{panel}{HTML}{F4F6F7}
+\begin{document}
+\begin{tikzpicture}[x=1cm,y=1cm,text=ink,
+  every node/.style={inner sep=0pt,outer sep=0pt},
+  heading/.style={font=\small\bfseries,text=muted},
+  axis/.style={font=\scriptsize,text=muted},
+  lab/.style={font=\small},
+  arrow/.style={-{Stealth[length=2.6mm]},draw=muted,line width=.8pt}]
+% One spatial extent is shown at token resolution and then at block resolution.
+% Both square faces cover the same 16 x 16 attention coordinates.
+\node[font=\large] at (8.2,2.25)
+  {$M_{ij}=\mathbf{1}[\,0\leq i-j<8\,],\qquad N_q=N_{kv}=16$};
+\node[heading] at (3.48,1.35) {逐元素逻辑 mask};
+\node[heading] at (12.98,1.35) {BlockMask 的块分类};
+\node[axis] at (3.48,.84) {KV 位置 $j$};
+\node[axis] at (12.98,.84) {KV 块 $c$};
+
+\begin{scope}[shift={(.6,0)}]
+  \input{mask-cells.tex}
+  \draw[draw=rule,line width=.55pt] (0,0) rectangle (5.76,-5.76);
+  \foreach \k in {0,4,8,12,15} {
+    \node[axis] at ({.36*(\k+.5)},.34) {$\k$};
+    \node[axis,anchor=east] at (-.25,{-.36*(\k+.5)}) {$\k$};
+  }
+  \foreach \k in {4,8,12} {
+    \draw[draw=rule!70,line width=.45pt,densely dashed]
+      ({.36*\k},0) -- ({.36*\k},-5.76);
+    \draw[draw=rule!70,line width=.45pt,densely dashed]
+      (0,{-.36*\k}) -- (5.76,{-.36*\k});
+  }
+\end{scope}
+
+\draw[arrow] (6.9,-2.88) -- (9.55,-2.88);
+\node[lab,align=center] at (8.22,-2.20) {按 $4\times4$ 聚合};
+\node[axis,align=center] at (8.22,-3.50) {检查块内\texttt{any / all}};
+
+\begin{scope}[shift={(10.1,0)}]
+  \input{block-cells.tex}
+  \draw[draw=rule,line width=.55pt] (0,0) rectangle (5.76,-5.76);
+  \foreach \k in {0,1,2,3} {
+    \node[axis] at ({1.44*(\k+.5)},.34) {$\k$};
+    \node[axis,anchor=east] at (-.25,{-1.44*(\k+.5)}) {$\k$};
+  }
+\end{scope}
+
+\node[lab] at (3.48,-6.20) {$M$};
+\node[axis] at (3.48,-6.65) {$16\times16$ 个布尔值};
+\node[lab] at (12.98,-6.20) {$C$};
+\node[axis] at (12.98,-6.65) {$4\times4$ 个块类别};
+
+% Legend: exact classes and the operation each class enables.
+\draw[draw=rule,line width=.6pt,fill=white,rounded corners=.7pt]
+  (.7,-7.64) rectangle (1.05,-7.29);
+\node[lab,anchor=west] at (1.25,-7.465) {全空：跳过（7 块）};
+\draw[draw=none,fill=teal,rounded corners=.7pt]
+  (5.5,-7.64) rectangle (5.85,-7.29);
+\node[lab,anchor=west] at (6.05,-7.465) {全有效：省去 mask（3 块）};
+\draw[draw=none,fill=orange,rounded corners=.7pt]
+  (11.3,-7.64) rectangle (11.65,-7.29);
+\node[lab,anchor=west] at (11.85,-7.465) {部分有效：执行 mask（6 块）};
+
+% A single full-width meaning box. Labels have a dedicated rail.
+\begin{scope}[on background layer]
+  \fill[panel,rounded corners=1.8pt] (-.25,-8.30) rectangle (17.0,-10.98);
+\end{scope}
+\node[lab,font=\small\bfseries,anchor=north west] at (.10,-8.60) {坐标};
+\node[lab,anchor=north west,text width=14.6cm,align=left] at (1.40,-8.60)
+  {单个 head；行是 query，列是 key/value。$i,j\in\{0,\ldots,15\}$，块坐标 $r,c\in\{0,\ldots,3\}$。};
+\node[lab,font=\small\bfseries,anchor=north west] at (.10,-9.35) {对象};
+\node[lab,anchor=north west,text width=14.6cm,align=left] at (1.40,-9.35)
+  {$M_{ij}=1$ 表示允许注意；左图白格为 $0$。右图数字是块内有效元素数，满块为 $16$。};
+\node[lab,font=\small\bfseries,anchor=north west] at (.10,-10.10) {边界};
+\node[lab,anchor=north west,text width=14.6cm,align=left] at (1.40,-10.10)
+  {$W=8$ 包含当前位置及前 $7$ 个位置。$4\times4$ 仅用于示意；API 默认块大小为 $128\times128$。};
+\end{tikzpicture}
+\end{document}
