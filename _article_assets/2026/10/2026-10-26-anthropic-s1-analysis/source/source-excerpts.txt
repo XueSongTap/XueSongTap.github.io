@@ -1,0 +1,2529 @@
+Source URL: https://www.sec.gov/Archives/edgar/data/2130357/000162828026067168/anthropicpbc-sx1.htm
+Filing date: 2026-10-26
+Downloaded HTML SHA-256: 01ceed043cd6ff4f67d9053ec6f8dac703c931b3327e98d6abf2d56fef45dc89
+Line ranges refer to the locally extracted text; consult printed page numbers in the document.
+
+===== Extracted text lines 470–510 =====
+making model behavior more transparent and verifiable, especially in high-stakes applications.
+“knowledge work” refers to complex cognitive work and related professional activities, including obtaining,
+producing, analyzing, and communicating information through tasks such as coding, drafting analyses,
+synthesizing research, building financial models, and managing and automating documents and workflows.
+“LLMs” refer to large language models, or AI models trained primarily on large datasets to understand and
+generate natural language and computer code.
+“mechanistic interpretability” refers to a subfield of interpretability research focused on reverse-
+engineering the internal computations of neural networks. Rather than inferring model behavior from inputs
+and outputs alone, mechanistic interpretability seeks to identify the specific features and circuits within a model
+that give rise to its behavior with the goal of making model reasoning auditable at the mechanism level and
+detecting failure modes, including deceptive or unsafe behavior, that may not surface in standard testing.
+“model weights” refer to the numerical parameters encoding a trained AI model’s behavior, which are the
+primary intellectual asset of a frontier AI developer, representing the accumulated investment in compute, data,
+and research.
+“multi-agent orchestration” refers to an architecture in which multiple AI agents collaborate on a shared
+task, with one coordinating while others execute subtasks in parallel, enabling more complex, long-horizon
+work than a single agent can complete alone.
+“Net Revenue Retention” reflects customer expansion, contraction, and churn as of a measurement date.
+We calculate Net Revenue Retention by dividing the Qualified Customers’ Current Period revenue by their Base
+Period revenue. A Qualified Customer is a customer with at least $1 of revenue during the Base Period,
+excluding subscribers to our Claude Pro and Max plans, whose fixed-price subscriptions do not reflect the
+3
+Table of Contents
+expansion and contraction behavior this metric is intended to capture. The Base Period is the three months
+ending a year prior to the measurement date. The Current Period is the three months ending as of the
+measurement date.
+“open-weight” refers to an AI model whose trained model weights, or the numerical parameters encoding the
+model’s learned behavior, are publicly released, allowing third parties to download, run, and modify the model,
+subject to the terms of the model’s license, without necessarily providing access to the underlying training data
+or code.
+“pay-for-intelligence” or “consumption” refers to our revenue model under which customers pay for their
+usage of our intelligence service, which is metered in tokens and priced according to the model selected.
+“persistent,” in the context of AI applications, refers to denoting data, state, or context that is continuously
+retained beyond the boundary of a single operation, session, or interaction, remaining accessible for reuse
+across subsequent steps, sessions, or workflows without requiring reinitialization.
+“post-training” refers to the collection of techniques applied to a pre-trained model to refine its behavior,
+including reinforcement learning, supervised refinement methods, and other alignment methods. Post-training
+is the stage in which much of the work to make a frontier model helpful, accurate, and safe is performed,
+including the application of safety and alignment techniques.
+“pre-training” refers to the initial stage of training an AI model, in which the model learns general patterns
+and representations from large-scale datasets of text, code, and other data, typically by predicting the next
+
+===== Extracted text lines 1530–1765 =====
+Class A common stock from us in this offering.
+22
+Table of Contents
+Summary Consolidated Financial and Other Data
+The following tables summarize our consolidated financial and other data. We have derived the summary
+consolidated statements of operations data for the years ended December 31, 2023, 2024, and 2025 from our
+audited consolidated financial statements included elsewhere in this prospectus. We have derived the summary
+consolidated statements of operations data for the six months ended June 30, 2025 and 2026, and the
+summary consolidated balance sheet data as of June 30, 2026, from our unaudited interim consolidated
+financial statements included elsewhere in this prospectus. The summary consolidated financial data in this
+section are not intended to replace our consolidated financial statements and related notes and are qualified in
+their entirety by our consolidated financial statements and related notes included elsewhere in this prospectus.
+Our historical results are not necessarily indicative of the results that may be expected in the future and our
+results for the six months ended June 30, 2026 are not necessarily indicative of the results that may be
+expected for the full year ending December 31, 2026 or any other period. The following summary consolidated
+financial and other data should be read in conjunction with the section titled “Management’s Discussion and
+Analysis of Financial Condition and Results of Operations” and our consolidated financial statements and
+related notes thereto included elsewhere in this prospectus.
+Consolidated Statements of Operations Data
+| | | | | | | | | |
+| |
+Year Ended December 31,
+| |
+Six Months Ended June 30,
+|
+(in millions, except share and per share
+amounts)
+|
+2023
+| |
+2024
+| |
+2025
+| |
+2025
+| |
+2026
+|
+Revenue
+|
+$41
+| |
+$386
+| |
+$4,585
+| |
+$1,163
+| |
+$16,286
+|
+Operating expenses:
+| | | | | | | | |
+|
+Compute and infrastructure
+|
+433
+| |
+2,522
+| |
+7,326
+| |
+2,334
+| |
+8,945
+|
+Personnel(1)
+|
+95
+| |
+454
+| |
+1,839
+| |
+538
+| |
+3,152
+|
+Bartz settlement
+|
+—
+| |
+—
+| |
+1,500
+| |
+—
+| |
+—
+|
+Sales, marketing, and partnerships
+|
+2
+| |
+43
+| |
+568
+| |
+120
+| |
+3,168
+|
+Other operating and administrative
+|
+62
+| |
+347
+| |
+1,412
+| |
+306
+| |
+1,714
+|
+Total operating expenses
+|
+592
+| |
+3,366
+| |
+12,645
+| |
+3,298
+| |
+16,979
+|
+Operating loss
+|
+(551)
+| |
+(2,980)
+| |
+(8,060)
+| |
+(2,135)
+| |
+(693)
+|
+Interest income
+|
+69
+| |
+106
+| |
+431
+| |
+115
+| |
+1,111
+|
+Change in fair value of convertible
+notes, derivative liabilities, and SAFEs
+|
+(1,045)
+| |
+(5,434)
+| |
+(34,308)
+| |
+(10,942)
+| |
+(72,388)
+|
+Other income (expense), net
+|
+(2)
+| |
+—
+| |
+(8)
+| |
+—
+| |
+(8,757)
+|
+Total other income (expense), net
+|
+(978)
+| |
+(5,328)
+| |
+(33,885)
+| |
+(10,827)
+| |
+(80,034)
+|
+Loss before provision for income taxes
+|
+(1,529)
+| |
+(8,308)
+| |
+(41,945)
+| |
+(12,962)
+| |
+(80,727)
+|
+Provision for income taxes
+|
+2
+| |
+1
+| |
+20
+| |
+7
+| |
+21
+|
+Net loss(2)
+|
+$(1,531)
+| |
+$(8,309)
+| |
+$(41,965)
+| |
+$(12,969)
+| |
+$(80,748)
+|
+Net loss per share attributable to common
+stockholders, basic and diluted
+|
+$(1.42)
+| |
+$(5.43)
+| |
+$(23.04)
+| |
+$(7.25)
+| |
+$(39.88)
+|
+Weighted-average number of shares
+
+===== Extracted text lines 7830–7905 =====
+customer trust and supports long-term adoption.
+Second, our ability to expand and diversify distribution.
+A large portion of our growth to date has been self-service and organic. As AI adoption extends further into
+enterprises and more regulated industries, we are investing in direct go-to-market, Applied AI teams, and
+partnerships across all three major cloud platforms, SIs, consultants, and data platforms. We are also
+expanding our ability to serve international customers through the growth of regional offices and partnerships
+in key markets, and we expect international expansion to be a meaningful driver of revenue growth as global
+demand for AI accelerates. The effectiveness of these investments, and our ability to hire and retain go-to-
+market talent, will be a meaningful determinant of growth.
+Third, our ability to land new customers and expand within existing accounts.
+The number of customers with $100,000 or more of revenue on a TTM basis grew from approximately 20 as of
+December 31, 2023, to approximately 200 as of December 31, 2024, to approximately 1,500 as of December 31,
+2025, and to more than 11,900 as of September 30, 2026. Total revenue from these customers grew from
+approximately $37 million to $220 million to $3.5 billion to $ and represented 90%, 57%, 76%, and
+% of total revenue for the years ended December 31, 2023, 2024, and 2025, and the trailing twelve months
+ended September 30, 2026, respectively. The remaining % of total revenue for the trailing twelve months
+ended September 30, 2026 was generated by approximately 40 million customers, each with less than
+$100,000 of revenue on a TTM basis.
+In addition, as of September 30, 2026, we had more than 1,900 customers with $1 million or more of revenue
+on a TTM basis and approximately 250 customers with $10 million or more of revenue on a TTM basis. Despite
+this growth, our penetration into the largest enterprises remains early. Over 50% of the Fortune 500 and over
+30% of the Global 2000 were customers with $100,000 or more of revenue on a TTM basis as of September 30,
+2026. We believe we are in the early stages of our expansion within these customers, with our revenue from
+these Fortune 500 customers representing, on average, less than 0.1% of their total expenses for the three
+months ended September 30, 2026.
+We compare this measure against our largest Fortune 500 customers, who are further along in their adoption of
+AI. For the three months ended September 30, 2026, revenue from our top 10 Fortune 500 customers
+represented, on average, less than 1% of their total expenses—still a small fraction of their overall spend, but
+over eight times the average of our Fortune 500 customers with $100,000 or more of revenue on a TTM basis.
+5 For purposes of this measure, we include only Fortune 500 customers that are publicly traded and calculate the measure using total
+expenses as reported in their publicly available financial statements.
+143
+Table of Contents
+We believe the difference reflects the substantial runway we have to deepen adoption, both within our largest
+customers and within customers earlier in their adoption of Claude.5
+Claude adoption is broad-based. No single customer represented more than 10% of our revenue for the nine
+months ended September 30, 2026. Approximately 79% of our revenue came from customers outside of our top
+five customers for the three months ended September 30, 2026, up from approximately 64% for the three
+months ended March 31, 2026. At the same time, our largest customers continue to expand. For the three
+months ended September 30, 2026, our revenue from each of our top five customers reached a record high.
+Customer Usage Patterns
+Our revenue is influenced by customer usage patterns, which are impacted by the frequency and capability of
+new model version releases, as well as seasonal trends, each of which can create variability in our results from
+period to period. The continuous and overlapping cadence of new model version releases is inherent to
+remaining at the frontier of AI development. For example, model versions released in the six months ended
+September 30, 2026 accounted for over 80% of our revenue for the three months ended September 30, 2026.
+As we have released successive versions of Claude models, we have continued to see revenue growth as new
+capabilities unlock additional use cases, prompting new customers to adopt Claude and existing customers to
+expand their usage.
+Our customer usage patterns have also typically exhibited seasonality, particularly around holiday and vacation
+periods in the summer and winter, when certain workflows slow down and overall customer activity declines.
+For example, developer commits and feature launches are typically slower during the code freezes that many
+companies schedule over holidays. Consistent with this pattern, for the two weeks ended January 2, 2026, total
+customer spend declined by approximately 20% compared to the prior two weeks ended December 19, 2025.
+However, our historical growth rates may mask the impact of seasonal trends on our results. These dynamics
+are inherent aspects of a pay-for-intelligence revenue model and may be important determinants of our
+financial results in future periods.
+Because of these seasonal patterns, our results of operations have varied, and are expected to continue to vary,
+from period to period, and our results for any one period may not be indicative of our results for any future
+period. As our revenue growth rate declines over time, we expect seasonal effects to become more apparent in,
+and to have a greater effect on, our period-to-period results, and to make it more difficult to forecast our results
+of operations.
+Our Commitment to Public Benefit
+Our commitment to public benefit extends to how we deploy our resources. We intend to direct a meaningful
+portion of our resources toward ensuring that frontier AI is safe and its benefits are broadly distributed, which
+we refer to as our public benefit initiatives. This may include significant contributions to nonprofit
+organizations, research institutions, and other third parties working on problems where AI can have the
+greatest positive impact, as well as programs designed to make Claude accessible to underserved communities,
+educators, and public institutions.
+As part of these initiatives, we contributed 846,840,960 shares of our Class N common stock, representing 5%
+of our fully diluted shares as of June 30, 2026 (assuming full conversion of the Amazon Notes), to the
+Anthropic Public Benefit Fund, our wholly owned subsidiary dedicated to the Company Purpose, which we refer
+to as the Initial Public Benefit Issuance. As the value we create grows, we intend for the public benefit to share
+meaningfully in that growth as well. To that end, our board of directors has approved a framework for
+additional contributions tied to future increases in our share price. Following this offering, our board of
+directors, in its discretion, may issue shares of our Class N common stock to the Anthropic Public Benefit Fund
+
+===== Extracted text lines 7950–8020 =====
+Depending on the model, platform, or applications chosen by our customers, they enter into pay-for-
+intelligence pricing, subscription-based pricing, or both. A growing number of enterprise customers agree to
+annual or multi-year contracts with minimum spend commitments.
+Revenue is recognized when customers use our intelligence service, based on the quantity of tokens consumed.
+Subscriptions are generally prepaid on a monthly or annual basis, and are subject to usage limits that reset over
+short periods, which results in revenue being recognized on a ratable basis over the subscription period, which
+is generally 12 months or less.
+We expect our revenue growth rate to decline over time and to fluctuate from period to period. Revenue growth
+in any period may be affected by customer usage patterns, customer adoption, the deployment of our models,
+platform, and applications, the pricing of our offerings, the timing and success of new model and product
+releases, measures we decide to implement to safely deploy new capabilities, our ability to continue meeting
+customer requirements, and other factors affecting demand for our models, platform, and applications,
+including those described in the section titled “Risk Factors—We are at an early stage of our revenue growth, we
+145
+Table of Contents
+have experienced rapid growth in recent periods, and our historical growth rates are not indicative of future
+performance or our ability to sustain or forecast future revenue growth.”
+In addition, our revenue has included, and we expect will continue to include, amounts from customers that we
+subsequently determine are using our models, platform, and applications in violation of our usage policy or
+commercial terms. We believe this dynamic is common in our industry. Because detection, investigation, and
+enforcement take time, we recognize revenue from such customers when the related services are provided,
+before restricting or terminating their access. Based on our detection and review process, we estimate that
+revenue from such customers represented approximately 5% to 7% of our revenue for the nine months ended
+September 30, 2026. This estimate requires judgment and may change as our detection methodologies evolve
+and we identify previously undetected usage. We expect the percentage of revenue from customers using our
+models, platform, and applications in violation of our usage policy or commercial terms to decline in future
+periods as we have enhanced our detection and enforcement efforts, in particular in August and September
+2026; however, the timing and magnitude of any resulting adverse effect on our revenue and revenue growth
+are uncertain.
+Operating Expenses
+Compute and Infrastructure
+Compute and infrastructure expenses primarily consist of costs attributable to operating our technology
+infrastructure, which supports the full range of workloads for our models, including research, model
+development, serving customers, and internal usage of Claude. These costs primarily consist of compute fees
+paid to CSPs under committed and on-demand arrangements, including storage, networking, and connectivity,
+and related support costs, infrastructure costs associated with serving customer workloads through partner
+channels, colocation facility costs, equipment leases and committed power costs associated with our data center
+operations, and third-party application infrastructure software costs directly related to our compute operations.
+Beginning in 2026, as our obligations commence under compute and infrastructure leases, these expenses also
+include operating lease costs, amortization of finance lease assets, variable lease costs, and depreciation and
+amortization on owned servers, networking equipment, and related data center assets. See Note 8 to our
+consolidated financial statements included elsewhere in this prospectus for a functional presentation of our
+operating expenses, including cost of revenue, and a description of the workloads underlying the compute and
+infrastructure expenses within each functional caption. Within that functional presentation, substantially all of
+the cost of revenue consists of compute and infrastructure expenses associated with customer-serving
+workloads. Additionally, cost of revenue includes certain personnel-related costs and allocated overhead costs.
+Customers adopt and retain our technology based on whether our models are at the frontier of AI capability and
+maintaining that frontier position is essential to revenue generation. Each model release represents continuous
+intelligence improvements, making ongoing model development a critical factor in revenue generation. We
+operate an iterative cycle in which compute deployed to model development yields more capable and efficient
+models. Those efficiency gains free compute to serve additional customer workloads. In turn, serving our
+customers at scale generates feedback that informs research and model development. In this cycle, customer-
+serving activity and model development are each a direct input that informs the other, and we therefore view
+compute and infrastructure costs as critical to our ability to generate revenue within a short time of incurring
+such costs.
+We expect compute and infrastructure expenses to increase in absolute dollars and remain our largest
+operating expense for the foreseeable future as additional committed compute becomes available to us under
+multi-year arrangements with CSPs, and as we continue to invest in additional compute. These expenses are
+paid and recognized as compute becomes available to us, rather than when committed, and are generally fixed
+in the near term given the majority of our compute is contracted under multi-year commitments that we
+typically procure 12 to 18 months in advance of availability. We deploy this committed compute as a single,
+shared resource across all workloads, and thus plan, incur, and assess it on a total basis rather than by
+individual workload. As a result, compute and infrastructure expenses as a percentage of revenue will depend
+primarily on how our revenue scales relative to our total committed compute cost base. In addition, as part of
+our public benefit initiatives, we intend to direct a meaningful portion of our resources, which may include
+compute, toward ensuring that the benefits of frontier AI are broadly accessible, and we expect to significantly
+scale these efforts over time.
+146
+Table of Contents
+Personnel
+Personnel expenses primarily consist of stock-based compensation, including expense related to stock options,
+
+===== Extracted text lines 9480–9715 =====
+We define Adjusted Operating Income (Loss) as operating loss excluding (i) stock-based compensation expense,
+(ii) non-cash charitable contributions, and (iii) the Bartz settlement. We define Adjusted Operating Margin as
+Adjusted Operating Income (Loss) divided by revenue.
+156
+Table of Contents
+A reconciliation of our Adjusted Operating Income (Loss) and Adjusted Operating Margin to operating loss and
+operating margin, the most directly comparable GAAP financial measures, respectively, is presented below:
+| | | | | | | | | |
+| |
+Year Ended December 31,
+| |
+Six Months Ended June 30,
+|
+(in millions, except for percentages)
+|
+2023
+| |
+2024
+| |
+2025
+| |
+2025
+| |
+2026
+|
+Operating loss
+|
+$(551)
+| |
+$(2,980)
+| |
+$(8,060)
+| |
+$(2,135)
+| |
+$(693)
+|
+Stock-based compensation expense
+|
+29
+| |
+192
+| |
+1,165
+| |
+286
+| |
+2,185
+|
+Non-cash charitable contributions(1)
+|
+—
+| |
+—
+| |
+541
+| |
+—
+| |
+126
+|
+Bartz settlement(2)
+|
+—
+| |
+—
+| |
+1,500
+| |
+—
+| |
+—
+|
+Adjusted Operating Income (Loss)
+|
+$(522)
+| |
+$(2,788)
+| |
+$(4,854)
+| |
+$(1,849)
+| |
+$1,618
+| | | | | | | | | |
+|
+Revenue
+|
+$41
+| |
+$386
+| |
+$4,585
+| |
+$1,163
+| |
+$16,286
+|
+Operating margin
+|
+(1,344)%
+| |
+(772)%
+| |
+(176)%
+| |
+(184)%
+| |
+(4)%
+|
+Adjusted Operating Margin
+|
+(1,273)%
+| |
+(722)%
+| |
+(106)%
+| |
+(159)%
+| |
+10%
+______________
+(1)Relates to non-cash charges from our donation matching program, the value of which is linked to employee equity awards and
+recorded in other operating and administrative expenses.
+(2)Excluded from our calculation of Adjusted Operating Income (Loss) as it is not indicative of ongoing operations.
+Adjusted Net Income (Loss)
+We define Adjusted Net Income (Loss) as net loss excluding (i) stock-based compensation expense, (ii) non-
+cash charitable contributions, (iii) the Bartz settlement, (iv) the change in fair value of convertible notes,
+derivative liabilities, and SAFEs, and (v) change in fair value of certain mark-to-market financial instruments.
+A reconciliation of Adjusted Net Income (Loss) to net loss, the most directly comparable GAAP financial
+measure, is presented below:
+| | | | | | | | | |
+| |
+Year Ended December 31,
+| |
+Six Months Ended June 30,
+|
+(in millions)
+|
+2023
+| |
+2024
+| |
+2025
+| |
+2025
+| |
+2026
+|
+Net loss(1)
+|
+$(1,531)
+| |
+$(8,309)
+| |
+$(41,965)
+| |
+$(12,969)
+| |
+$(80,748)
+|
+Stock-based compensation expense
+|
+29
+| |
+192
+| |
+1,165
+| |
+286
+| |
+2,185
+|
+Non-cash charitable
+contributions(2)
+|
+—
+| |
+—
+| |
+541
+| |
+—
+| |
+126
+|
+Bartz settlement(3)
+|
+—
+| |
+—
+| |
+1,500
+| |
+—
+| |
+—
+|
+Change in fair value of convertible
+notes, derivative liabilities, and
+SAFEs
+|
+1,045
+| |
+5,434
+| |
+34,308
+| |
+10,942
+| |
+72,388
+|
+Change in fair value of certain
+mark-to-market financial
+instruments
+|
+—
+| |
+—
+| |
+3
+| |
+—
+| |
+8,720
+|
+Adjusted Net Income (Loss)
+|
+$(457)
+| |
+$(2,683)
+| |
+$(4,448)
+| |
+$(1,741)
+| |
+
+===== Extracted text lines 9730–10015 =====
+the same basis as our audited consolidated financial statements included elsewhere in this prospectus and
+includes all adjustments, consisting only of normal recurring adjustments that, in our opinion, are necessary to
+state fairly the results of operations for these periods. Our historical results are not necessarily indicative of the
+results that may be expected in the future and the results for any particular quarter are not necessarily
+indicative of the results to be expected for a full year or any other period. You should read the following
+unaudited quarterly consolidated results of operations in conjunction with our consolidated financial
+statements and related notes included elsewhere in this prospectus.
+Quarterly Consolidated Statements of Operations
+| | | | | | | | | | | |
+| |
+Three Months Ended
+|
+(in millions)
+|
+March 31,
+2025
+| |
+June 30,
+2025
+| |
+September 30,
+2025
+| |
+December 31,
+2025
+| |
+March 31,
+2026
+| |
+June 30,
+2026
+|
+Revenue
+|
+$376
+| |
+$787
+| |
+$1,382
+| |
+$2,040
+| |
+$4,731
+| |
+$11,555
+|
+Operating expenses:
+| | | | | | | | | | |
+|
+Compute and
+infrastructure
+|
+944
+| |
+1,390
+| |
+2,047
+| |
+2,945
+| |
+3,387
+| |
+5,558
+|
+Personnel(1)
+|
+218
+| |
+320
+| |
+489
+| |
+812
+| |
+1,295
+| |
+1,857
+|
+Bartz settlement
+|
+—
+| |
+—
+| |
+1,500
+| |
+—
+| |
+—
+| |
+—
+|
+Sales, marketing, and
+partnerships
+|
+24
+| |
+96
+| |
+202
+| |
+246
+| |
+1,033
+| |
+2,135
+|
+Other operating and
+administrative
+|
+125
+| |
+181
+| |
+233
+| |
+873
+| |
+683
+| |
+1,031
+|
+Total operating
+expenses
+|
+1,311
+| |
+1,987
+| |
+4,471
+| |
+4,876
+| |
+6,398
+| |
+10,581
+|
+Operating income (loss)
+|
+(935)
+| |
+(1,200)
+| |
+(3,089)
+| |
+(2,836)
+| |
+(1,667)
+| |
+974
+|
+Interest income
+|
+51
+| |
+64
+| |
+124
+| |
+192
+| |
+349
+| |
+762
+|
+Change in fair value of
+convertible notes,
+derivative liabilities, and
+SAFEs
+|
+(5,701)
+| |
+(5,241)
+| |
+(9,165)
+| |
+(14,201)
+| |
+(12,791)
+| |
+(59,597)
+|
+Other income (expense),
+net
+|
+—
+| |
+—
+| |
+(3)
+| |
+(5)
+| |
+(309)
+| |
+(8,448)
+|
+Total other income
+(expense), net
+|
+(5,650)
+| |
+(5,177)
+| |
+(9,044)
+| |
+(14,014)
+| |
+(12,751)
+| |
+(67,283)
+|
+Loss before provision for
+income taxes
+|
+(6,585)
+| |
+(6,377)
+| |
+(12,133)
+| |
+(16,850)
+| |
+(14,418)
+| |
+(66,309)
+|
+Provision for income taxes
+|
+7
+| |
+—
+| |
+5
+| |
+8
+| |
+21
+| |
+—
+|
+Net loss
+|
+$(6,592)
+| |
+$(6,377)
+| |
+$(12,138)
+| |
+$(16,858)
+| |
+$(14,439)
+| |
+$(66,309)
+______________
+(1)Includes stock-based compensation expense of $105 million, $181 million, $305 million, $574 million, $924 million, and $1.3
+billion for the three months ended March 31, 2025, June 30, 2025, September 30, 2025, December 31, 2025, March 31, 2026,
+and June 30, 2026, respectively.
+158
+Table of Contents
+Quarterly Consolidated Statements of Operations, as a Percentage of Revenue
+| | | | | | | | | | | |
+| |
+Three Months Ended
+| |
+March 31,
+2025
+| |
+June 30,
+2025
+| |
+September 30,
+2025
+| |
+December 31,
+2025
+| |
+March 31,
+2026
+| |
+June 30,
+2026
+|
+Revenue
+|
+100%
+
+===== Extracted text lines 10590–10660 =====
+(2)Relates to non-cash charges from our donation matching program, the value of which is linked to employee equity awards and
+recorded in other operating and administrative expenses.
+(3)Excluded from our calculation of Adjusted Net Income (Loss) as it is not indicative of ongoing operations.
+Liquidity and Capital Resources
+Since inception, we have financed our operations, corporate investments, and capital expenditures primarily
+through proceeds from the issuance of convertible promissory notes, redeemable convertible preferred stock,
+cash generated from sales, and SAFEs. To date, we have financed our compute and infrastructure primarily
+under arrangements with our CSPs, as well as through proceeds from the financing activities described above
+and cash generated from operations. As of June 30, 2026, we had cash and cash equivalents of $112.4 billion,
+$19.3 billion of short-term investments, and $3.2 billion available under the Credit Facility, as described below.
+Cash and cash equivalents consist of cash held in checking and interest-bearing accounts, money market funds,
+and other highly liquid investments with original maturities of three months or less from the date of purchase.
+We have generated losses from our operations, as reflected in our accumulated deficit of $132.9 billion, which
+includes $113.2 billion related to changes in the fair value of our convertible notes driven by increases in our
+enterprise valuation and derivative liabilities since 2023, including $72.4 billion during the six months ended
+June 30, 2026. Additionally, we have generated negative cash flows from operating and investing activities in
+2023, 2024, and 2025, driven by ongoing expenditures to support business growth including investments to
+secure access to more compute and infrastructure capacity. We continue to invest in our own data center
+infrastructure and enter into compute and infrastructure capacity arrangements to support anticipated demand
+for our intelligence service. Given the long lead times between contracting for, purchasing, or leasing compute
+and that compute becoming available to serve workloads, we secure these arrangements well in advance of
+anticipated demand. To secure certain data center development projects, which require significant capital
+commitments in advance of deployment, we have in some cases relied, and expect to continue to rely, on
+arrangements with financing sources or partners who guarantee the lease obligations to support the
+development of data center capacity that is expected to host such partner’s chips or computing infrastructure.
+Our ability to expand compute and infrastructure capacity through these arrangements in the future may
+depend on the continued willingness and ability of a limited number of CSPs, partners, and financing sources to
+enter into and perform under such arrangements. In some cases, we may also make payments in advance of the
+delivery of the equipment or infrastructure. We anticipate making significant and increased investments for the
+foreseeable future, including for owned or leased compute and infrastructure in advance of delivery. These
+investments help ensure we have the technological resources to maintain and expand our position at the
+frontier of AI.
+Our increasing efforts to build out our compute and infrastructure require substantial capital expenditures and
+are changing the cash flow profile of our business. Whereas the compute purchased through our CSP
+arrangements is generally paid as the compute becomes available to us, we expect an increasing portion of our
+compute and infrastructure investment to take the form of capital expenditures and other commitments,
+including lease obligations, that require significant upfront payments well in advance of the related compute
+becoming operational. We expect our capital expenditures to increase significantly as we expand our build-out,
+and we expect these investments to result in significant net cash used in operating and investing activities for
+the foreseeable future. Our net cash used in these activities may increase regardless of whether our financial
+performance improves. The magnitude and timing of these investments are inherently uncertain and may
+change materially over short periods, including as a result of decisions to accelerate or expand our build-out,
+and such changes could rapidly and significantly affect our cash flows for a given period. In addition, these
+investments are subject to known trends and uncertainties that could adversely affect our results of operations.
+The compute and chips necessary for frontier model development are available from a limited number of
+suppliers and geographies and are subject to intense competition, supply constraints, and evolving export
+controls, and we have historically operated in a compute-constrained environment in which demand for
+compute has exceeded the supply available to us. In addition, certain of the CSPs and chip partners on which we
+rely provide us capital or credit support, serve as our infrastructure vendors, and develop and offer AI models
+162
+Table of Contents
+and services that compete with ours. These relationships could give rise to conflicts of interest that affect our
+access to compute, its cost, the prioritization of our workloads, or the terms on which such capital or credit
+support is provided. For a discussion of these and other risks, see the section titled “Risk Factors.”
+We believe our existing available cash and cash equivalents, together with cash generated from sales and
+amounts available under our A&R Credit Facility (as defined below), will be sufficient to support working
+capital, operating and finance lease payments, and capital expenditure requirements for at least the next 12
+months from the date of this prospectus. However, our future capital requirements will depend on many
+factors, including our revenue growth, the timing and extent of our investments in compute and infrastructure
+capacity, including additional or expanded CSP, equipment lease, and data center arrangements, the success
+and expansion of our sales, marketing, and business development strategies, any potential future investment in
+complementary businesses, products, technologies, assets, and talent, risks associated with the AI industry, and
+other factors described under “Key Factors Affecting Our Performance.” As a result of these and other factors,
+we may be required to seek additional financing sooner than we currently anticipate. Even if we determine that
+additional financing is required, we may not be able to raise it on terms acceptable to us or at all. Any such
+financing, if completed, may be costly, dilutive, or lead to restrictions on how we operate our business. If we are
+unable to raise additional capital when required, or if we cannot expand our operations or otherwise capitalize
+on our business opportunities because we lack sufficient capital, our business, financial condition, results of
+operations, and cash flows would be adversely affected.
+Over the longer term, we expect to have significant cash requirements as we continue to invest in our business,
+primarily for compute and infrastructure, including our data center infrastructure build-out, as well as for
+
+===== Extracted text lines 11235–11350 =====
+(in millions)
+|
+2023
+| |
+2024
+| |
+2025
+| |
+2025
+| |
+2026
+|
+Net cash provided by (used in)
+| | | | | | | | |
+|
+Operating activities
+|
+$(1,627)
+| |
+$(5,692)
+| |
+$(2,637)
+| |
+$(1,513)
+| |
+$3,929
+|
+Investing activities
+|
+(2)
+| |
+(22)
+| |
+(3,077)
+| |
+(49)
+| |
+(17,181)
+|
+Financing activities
+|
+2,320
+| |
+7,248
+| |
+19,960
+| |
+4,749
+| |
+110,774
+Operating Activities
+Net cash used in operating activities for the year ended December 31, 2025 decreased by $3.1 billion compared
+to the year ended December 31, 2024. The decrease was primarily driven by a decrease in prepaid hosting
+services reflecting the consumption during 2025 of hosting capacity that had been prepaid in prior periods and
+an increase in accounts payable, accrued expenses, and other current liabilities due to increased CSP costs and
+the timing of related payments. The decrease was partially offset by higher cash payments, including a payment
+related to the Bartz settlement, higher cash compensation costs from headcount growth, and an increase in
+accounts receivable.
+Net cash used in operating activities for the year ended December 31, 2024 increased by $4.1 billion compared
+to the year ended December 31, 2023. The increase was primarily driven by an increase in prepaid hosting
+services due to business expansion requiring additional hosting capacity.
+Cash provided by operating activities was $3.9 billion for the six months ended June 30, 2026 as compared to
+cash used in operating activities of $1.5 billion for the six months ended June 30, 2025. Our operating cash
+flows result primarily from cash received from our customers, offset by cash payments we make for products
+and services, employee compensation, operating leases, and interest payments. The increase in operating cash
+flow was primarily driven by an improvement in net loss adjusted for non-cash items, and changes in working
+capital, primarily reflecting the timing of payments to vendors and cash receipts from customers. Working
+capital at any point in time is subject to many variables, including the timing of billings and cash collections,
+vendor payment terms, and the timing of invoice receipt and payment.
+Investing Activities
+Net cash used in investing activities for the year ended December 31, 2025 increased by $3.1 billion compared
+to the year ended December 31, 2024. The increase was primarily driven by increased purchases of new
+marketable securities, including U.S. Treasury and agency securities and corporate debt securities, as well as
+higher capital expenditures related to servers, networking and infrastructure equipment, and purchases of
+169
+Table of Contents
+intangible assets. These increases were partially offset by proceeds from sales and maturities of marketable
+securities.
+Net cash used in investing activities for the year ended December 31, 2024 increased by $20 million compared
+to the year ended December 31, 2023. The increase was primarily driven by increased capital investments in
+leasehold improvements and purchases of intangible assets.
+Cash used in investing activities was $17.2 billion for the six months ended June 30, 2026 as compared to cash
+used in investing activities of $49 million for the six months ended June 30, 2025, which primarily reflects the
+increased purchases of short-term investments, including commercial paper, U.S. Treasury and agency
+securities and corporate debt securities, in addition to higher capital expenditures related to servers,
+networking and infrastructure equipment. This was partially offset by proceeds from sales and maturities of
+marketable securities.
+Financing Activities
+Net cash provided by financing activities for the year ended December 31, 2025 increased by $12.7 billion
+compared to the year ended December 31, 2024. The increase was primarily driven by increased proceeds from
+the issuance of redeemable convertible preferred stock, net of issuance costs.
+Net cash provided by financing activities for the year ended December 31, 2024 increased by $4.9 billion
+compared to the year ended December 31, 2023. The increase was primarily driven by increased proceeds from
+the issuance of convertible notes for cash and increased proceeds from the issuance of redeemable convertible
+preferred stock, net of issuance costs.
+Cash provided by financing activities was $110.8 billion for the six months ended June 30, 2026 as compared to
+cash provided by financing activities of $4.7 billion for the six months ended June 30, 2025. Cash inflows from
+financing activities primarily resulted from proceeds from the issuance of redeemable convertible preferred
+stock, net of issuance costs.
+Off-Balance Sheet Arrangements
+Other than hosting services and lease commitments incurred in the normal course of business, funding
+commitments related to our equity method investments, and guaranty and cost reimbursement arrangements
+with developers to support data center capacity development (see Notes 3, 7 and 13 to our consolidated
+financial statements included elsewhere in this prospectus for more information), we did not have during the
+periods presented, and we do not currently have, any off-balance sheet financing arrangements or any
+relationships with unconsolidated entities or financial partnerships.
+Contractual Obligations
+In aggregate, the contractual obligations in the table below plus the short-term and subsequent commitments,
+as well as leases not yet commenced, each described in the paragraphs below are approximately $ ,
+substantially all of which is related to compute and infrastructure.
+The following table summarizes our contractual obligations as of :
+| | | | | | | | | | | | | |
+| |
+Payments Due by Year
+|
+(in millions)
+
+===== Extracted text lines 11410–11510 =====
+to our consolidated financial statements included elsewhere in this prospectus for more information on
+commitments entered into subsequent to .
+Approximately $ of our contractual obligations are expected to be paid in the next 12 months.
+Consistent with our compute and data center strategy, we expect to continue to enter into additional
+arrangements to secure compute and infrastructure capacity, and to make significant related investments as we
+scale our business.
+The following describes certain of our most significant existing arrangements. We are also party to other
+compute infrastructure service arrangements and leases that are not described below.
+Infrastructure Service Arrangements
+In November 2025, we entered into an agreement with Microsoft, which was subsequently amended in
+February and October 2026, pursuant to which we committed to spend an aggregate of at least $44.9 billion
+between November 2026 and May 2033, regardless of actual usage. Our commitment under such agreement is
+non-cancelable except in the event of Microsoft’s uncured material breach or, on a per-tranche basis, for
+undelivered tranches.
+In March 2026, we entered into an agreement with Google, which was subsequently amended between May and
+August 2026, and pursuant to which we committed to spend at least approximately $114.5 billion between April
+2026 and July 2033, regardless of actual usage. If our actual spend falls short, we must pay Google the
+difference as a true-up subject to certain adjustments and exceptions if available. Our commitments under such
+agreement are non-cancelable except in the event of Google’s uncured material breach. In addition, we also
+committed to procure additional TPU compute from TPU providers, including Google, to be delivered between
+2028 and 2031. The payment obligations for such additional compute are determined by the capacity made
+available, the manner in which it is deployed, the pricing mechanics, and the satisfaction of certain deployment
+conditions. We estimate the aggregate future payments for such additional compute to be approximately $125.0
+billion to $150.0 billion, which are not included in the contractual commitments table above.
+171
+Table of Contents
+In April 2026, we entered into an agreement with Amazon, pursuant to which we committed to spend an
+aggregate of at least $110.0 billion between May 2026 and April 2036, regardless of actual usage. If our actual
+spend falls short, we must pay Amazon the difference as a true-up subject to certain adjustments and
+exceptions if available. Our commitment under such agreement is non-cancelable except in the event of
+Amazon’s uncured material breach.
+Between May and October 2026, we entered into and amended several agreements with SpaceX.AI LLC
+(formerly known as X.AI LLC) (“SpaceXAI”), a wholly owned subsidiary of Space Exploration Technologies
+Corp. (collectively, the “SpaceXAI Arrangements”), to access compute powered by NVIDIA GPUs. Under the
+SpaceXAI Arrangements, we agreed to spend an aggregate of up to $120.5 billion over terms extending into
+2029, consisting of approximately $3.1 billion in the aggregate per month once all capacity has been delivered,
+which we expect in December 2026, with different fees during capacity ramping periods. Following initial non-
+cancelable periods ending in January 2027 and March 2027 under the respective agreements, each agreement
+may be cancelled by either party upon 90 days’ advance written notice.
+Under the Hardware Supply Agreement with AMD, we committed to obtain an initial tranche of compute
+capacity in calendar year 2027 by purchasing AMD-based Helios rack-scale systems from approved
+manufacturers or by accessing such systems through third-party service providers, provided certain conditions
+related to deployment proposals are met. The agreement does not specify a fixed dollar commitment. If we
+procure the full amount of this initial committed capacity, we expect aggregate expenditures to exceed $20.0
+billion over the term of the agreement, which are not included in the contractual commitments table above. The
+agreement also provides for the potential procurement of additional capacity of up to approximately the
+amount of our initial commitment. Our agreement with AMD is non-cancelable by us except in the event of
+AMD’s uncured material breach and will automatically terminate 12 months after both parties fulfill their
+commitments under the agreement and all ordered AMD GPU capacity has been delivered.
+In August 2026, we entered into GPU services agreements (collectively, the “Nscale Services Agreements”) with
+wholly owned subsidiaries of Nscale Global Holdings Limited (together with its affiliates, “Nscale”) to access
+compute powered by NVIDIA GPUs. Under the Nscale Services Agreements, we agreed to spend an aggregate of
+up to approximately $44.6 billion over terms extending into 2033, with fees accruing only as capacity is
+delivered to and accepted by us. Nscale is required to use best efforts to obtain qualifying financing for the
+NVIDIA GPUs and data center infrastructure within a specified period following the effective date of such
+agreements (or such later date as may be mutually agreed by the parties and subject to additional negotiation).
+Otherwise, our commitment under each agreement is non-cancelable except in limited circumstances, including
+Nscale’s failure to meet specified delivery or service availability requirements or an uncured material breach by
+the applicable Nscale entity.
+In May, June and August 2026, we entered into agreements (collectively, the “Lambda Agreements”) with
+Lambda, Inc. (“Lambda”) to access compute powered by NVIDIA GPUs. Under the Lambda Agreements, we
+agreed to spend an aggregate of approximately $41.3 billion over terms extending into 2034, with fees accruing
+only as capacity is delivered to and accepted by us. Under our August 2026 agreement, which represents
+approximately $34.9 billion of the aggregate commitment, either party may terminate if Lambda does not
+timely secure the facility lease. Otherwise, our commitment under each of the Lambda Agreements is non-
+cancelable except in the event of Lambda’s uncured material breach or certain other limited circumstances and,
+for certain of the Lambda Agreements, on a per-tranche basis if Lambda fails to meet specified delivery
+milestones for that tranche.
+Infrastructure Equipment Leases
+We have entered into five-year master equipment leases with Broadcom, pursuant to which we receive such
+hardware for deployment in dedicated data center facilities operated by others on our behalf (the “Lease
+Arrangements”). These Lease Arrangements are accounted for as finance leases. Our rent payments over the life
+of these leases are equal to an aggregate of approximately $161.2 billion excluding interest, with rent payable in
+quarterly installments and payment obligations typically commencing upon AI infrastructure equipment
+becoming “ready for service” at the applicable data center facility. Rent payments may commence earlier in
+certain circumstances, such as when the readiness of a data center facility is delayed. The Lease Arrangements
+provide us with access to TPU-based compute capacity, a portion of which began to come online in 2026, with
+additional capacity expected to come online starting in 2027. The Lease Arrangements are non-cancelable by
+172
+Table of Contents
+either party during the applicable lease period except in the case of a default. In connection with the 2026 Lease
+Arrangement, we deposited cash into a restricted cash account for the benefit of Broadcom and may be required
+to deposit additional cash under certain circumstances for the benefit of Broadcom. Our two special purpose
+subsidiaries entered into agreements for the Lease Arrangements, the obligations of which are guaranteed by
+Anthropic, PBC, and such obligations are secured by the leased equipment. Further, we agreed to customary
+events of default, including cross-defaults, upon which our obligations may be accelerated. We may, if needed,
+finance a certain amount of our quarterly rent payments under the 2026 Lease Arrangement through the
+issuance of convertible promissory notes under the Infrastructure Partner 2026 NPA in certain circumstances.
+See the section titled “—Convertible Notes—Broadcom” for more information. In the second quarter of 2026,
+Broadcom assigned a portion of its rights under one of the master equipment leases to another third party.
+Quantitative and Qualitative Disclosures about Market Risk
+We are exposed to market risks in the ordinary course of our business. Market risk represents the risk of loss
+that may impact our financial position due to adverse changes in financial market prices and rates. Our market
+risk exposure is primarily the result of fluctuations in interest rates and foreign currency exchange rates.
+Interest Rate Risk
+As of June 30, 2026, we had $112.4 billion of cash and cash equivalents and $19.3 billion of short-term
+investments in a variety of securities, including money market funds, U.S. Treasury and agency securities,
+corporate debt securities, and commercial paper. In addition, we had $2.5 billion of restricted cash primarily
+due to amounts held as collateral for our lease and other obligations. Our cash, cash equivalents, and short-
+term investments are held for working capital purposes, and we do not enter into investments for trading or
+speculative purposes. Due to the relatively short-term nature of our investment portfolio, a hypothetical 100
+
+===== Extracted text lines 22080–22225 =====
+84
+| |
+222
+| |
+2,079
+| |
+257
+| |
+2,679
+|
+Lease liabilities
+|
+(1)
+| |
+—
+| |
+13
+| |
+7
+| |
+(3)
+|
+Deferred revenue
+|
+7
+| |
+21
+| |
+241
+| |
+124
+| |
+1,380
+|
+Net cash provided by (used in)
+operating activities
+|
+(1,627)
+| |
+(5,692)
+| |
+(2,637)
+| |
+(1,513)
+| |
+3,929
+|
+Cash flows from investing activities:
+| | | | | | | | |
+|
+Purchases of property and equipment
+|
+(2)
+| |
+(15)
+| |
+(131)
+| |
+(18)
+| |
+(482)
+|
+Purchases of short-term investments
+|
+—
+| |
+—
+| |
+(3,082)
+| |
+—
+| |
+(18,972)
+|
+Sales and maturities of short-term
+investments
+|
+—
+| |
+—
+| |
+213
+| |
+—
+| |
+2,610
+|
+Other investing activities
+|
+—
+| |
+(7)
+| |
+(77)
+| |
+(31)
+| |
+(337)
+|
+Net cash used in investing activities
+|
+(2)
+| |
+(22)
+| |
+(3,077)
+| |
+(49)
+| |
+(17,181)
+|
+Cash flows from financing activities:
+| | | | | | | | |
+|
+Proceeds from issuance of redeemable
+convertible preferred stock, net of issuance
+costs
+|
+445
+| |
+1,188
+| |
+16,548
+| |
+3,549
+| |
+110,432
+|
+Principal payments for finance leases
+|
+—
+| |
+—
+| |
+—
+| |
+—
+| |
+(4)
+|
+Issuance of convertible notes for cash
+|
+1,750
+| |
+6,050
+| |
+
+===== Extracted text lines 22380–22410 =====
+principles generally accepted in the United States of America (“GAAP”). The Company consolidates its wholly
+owned subsidiaries over which it exercises control, as well as variable interest entities (“VIEs”) where the
+Company is deemed to be the primary beneficiary. All intercompany balances and transactions between
+consolidated entities have been eliminated in consolidation.
+Change in Presentation and Reclassification of Prior Periods
+Certain amounts reported in the Company’s prior period consolidated financial statements have been
+reclassified to conform to the current period presentation. During the year ended December 31, 2025, the
+Company changed its presentation of operating expenses from a functional classification under which cost of
+revenue, gross profit (loss), research and development, sales and marketing, and general and administrative
+were presented as separate line items, to a classification based on the nature of expenses. As a result of this
+change in presentation, cost of revenue, gross profit (loss), research and development, sales and marketing, and
+general and administrative are no longer presented as separate line items in the consolidated statements of
+operations.
+Under the new presentation, expenses are presented by major categories, including compute and
+infrastructure; personnel; sales, marketing, and partnerships; Bartz settlement; and other operating and
+administrative. In addition, the Company combined certain captions on its consolidated balance sheets and
+consolidated statements of cash flows. These reclassifications and certain other prior period amounts have been
+recast for all prior periods presented to conform to the current period presentation. These reclassifications
+affect presentation only and did not impact total assets, total liabilities, total stockholders’ equity (deficit), total
+operating loss, net loss, or net cash provided by (used in) operating, investing, or financing activities.
+Unaudited Interim Consolidated Financial Information
+The accompanying interim consolidated balance sheet as of June 30, 2026 and the interim consolidated
+statements of operations, comprehensive loss, redeemable convertible preferred stock and stockholders’ deficit,
+and cash flows for the six months ended June 30, 2025 and 2026 and the related notes to such interim
+consolidated financial statements are unaudited. These unaudited interim consolidated financial statements are
+presented in accordance with the rules and regulations of the U.S. Securities and Exchange Commission and do
+not include all disclosures normally required in annual consolidated financial statements prepared in
+accordance with GAAP. In management’s opinion, the unaudited interim consolidated financial statements
+have been prepared on the same basis as the annual consolidated financial statements and reflect all normal
+and recurring adjustments necessary for the fair statement of the Company’s financial position as of June 30,
+2026 and the Company’s consolidated results of operations and cash flows for the six months ended June 30,
+
+===== Extracted text lines 23190–23235 =====
+(unaudited)
+|
+Consumption-based
+|
+$39
+| |
+$288
+| |
+$3,796
+| |
+$983
+| |
+$13,064
+|
+Subscription-based
+|
+2
+| |
+98
+| |
+789
+| |
+180
+| |
+3,222
+|
+Total
+|
+$41
+| |
+$386
+| |
+$4,585
+| |
+$1,163
+| |
+$16,286
+Deferred Revenue
+Significant changes in the deferred revenue balance are as follows (in millions):
+| | |
+| | |
+Total
+|
+Balance as of December 31, 2023
+| |
+$7
+
+===== Extracted text lines 25440–25577 =====
+$534
+|
+Right-of-use assets obtained in
+exchange for operating lease
+liabilities
+|
+$38
+| |
+$8
+| |
+$82
+| |
+$1
+| |
+$963
+|
+Right-of-use assets obtained in
+exchange for finance lease
+liabilities
+|
+$—
+| |
+$—
+| |
+$—
+| |
+$—
+| |
+$445
+F-39
+Table of Contents
+Anthropic, PBC
+Notes to Consolidated Financial Statements
+(Continued)
+Supplemental Operating Expense Information
+The following table presents the Company’s operating expenses grouped by function (in millions):
+| | | | | | | | | |
+| |
+Year Ended December 31,
+| |
+Six Months Ended June 30,
+| |
+2023
+| |
+2024
+| |
+2025
+| |
+2025
+| |
+2026
+| | | | | | | |
+(unaudited)
+|
+Cost of revenue(1)
+|
+$26
+| |
+$752
+| |
+$2,773
+| |
+$1,019
+| |
+$2,380
+|
+Research and development(2)
+|
+422
+| |
+2,275
+| |
+6,338
+| |
+1,850
+| |
+9,741
+|
+Sales and marketing(3)
+|
+76
+| |
+163
+| |
+911
+| |
+239
+| |
+3,808
+|
+Bartz settlement
+|
+—
+| |
+—
+| |
+1,500
+| |
+—
+| |
+—
+|
+General and administrative(4)
+|
+68
+| |
+176
+| |
+1,123
+| |
+190
+| |
+1,050
+|
+Total operating expenses
+|
+$592
+| |
+$3,366
+| |
+$12,645
+| |
+$3,298
+| |
+$16,979
+______________
+(1)Substantially all of cost of revenue consists of compute and infrastructure costs associated with customer-serving workloads.
+Additionally, cost of revenue includes certain personnel-related costs and allocated overhead costs.
+(2)Research and development expenses primarily consist of compute and infrastructure costs associated with model development,
+research, and internal usage workloads, personnel-related costs, software expenses, and allocated overhead costs.
+(3)Sales and marketing expenses primarily consist of channel partner costs, marketing and advertising, personnel-related costs,
+compute and infrastructure costs associated with providing free access to the Company’s intelligence service, and allocated
+overhead costs.
+(4)General and administrative expenses primarily consist of the Company’s donation matching obligation, personnel-related costs,
+facility costs, allocated overhead costs, legal fees, and non-income-based taxes.
+9. Convertible Notes, Revolving Credit Agreement and SAFEs
+Convertible Notes
+The Company has entered into note purchase agreements which provide for the issuance of one or more
+===== Supplemental customer and operating metrics =====
+
+===== Extracted text lines 3629–3667 =====
+customers and distribution channels, and the loss of, or a significant reduction in, spend from
+one or more of our top customers or disruption through those channels could adversely affect
+our prospects, business, and financial condition.
+A substantial portion of our revenue is driven by a limited number of customers. While no single customer
+represented more than 10% of our revenue for the nine months ended September 30, 2026, our top five
+customers represented approximately 25% of our revenue for the nine months ended September 30, 2026.
+Many of our top customers are not subject to long-term contracts with us or have contracts with near-term
+expiration dates and are able to reduce or in some cases cease spending at any time and for any reason. Further,
+we have agreements with certain large customers which provide flexibility around financial commitments,
+termination rights, indemnification, and security obligations. Our top customers may vary spend levels period
+to period, and there can be no assurances that our large customers will continue to spend at levels similar to
+prior periods.
+We anticipate that we will continue to derive a significant portion of our revenue from a limited number of
+customers for the foreseeable future, and in some cases, the portion of our revenue attributable to certain
+customers may increase in the future. The composition of our customer base, including our top customers, may
+fluctuate from period to period given that our customer composition has evolved and is expected to continue to
+evolve significantly as our business continues to evolve and scale and as the use cases for AI continue to
+develop.
+In addition, a significant portion of our revenue and accounts receivable is associated with transactions
+conducted with a limited number of CSPs that act as distribution and billing channels for our models. During
+the years ended December 31, 2023, 2024, and 2025 and the six months ended June 30, 2026, revenue
+generated from sales to customers through CSP marketplaces represented approximately 11%, 32%, 47%, and
+48%, respectively, of total revenue. As of December 31, 2024 and 2025 and June 30, 2026, net accounts
+receivable from sales through CSP marketplaces to customers represented 42%, 60%, and 58%, respectively, of
+our net accounts receivable. These platforms bill end customers, collect payments on our behalf, and remit such
+amounts to us, net of applicable platform and other fees. Any change to, or termination of, one of our significant
+distribution relationships could adversely affect our business by disrupting customer access to our models,
+reducing usage, or increasing customer acquisition, onboarding, and migration costs. In these third-party
+arrangements, we generally maintain separate contractual arrangements with end customers governing access
+57
+Table of Contents
+to, and pricing for, our models, independent of the applicable platform, and changes in, or termination of, a
+particular distribution relationship would not independently eliminate those contractual relationships.
+However, customers may be unwilling or unable to transition to alternative access points on commercially
+acceptable terms or timelines, or at all, following a disruption, which could result in revenue loss, increased
+costs, or adverse impacts to our growth, margins, and results of operations. In addition, any delay, dispute, or
+operational issue affecting a platform’s collection or remittance of customer payments could adversely affect
+our cash flows and working capital.
+We may not be able to maintain or increase revenue from our top customers for a variety of reasons, including
+
+===== Extracted text lines 7557–7573 =====
+during the same period. While serving our growing customer demand, we also made significant research
+advances to the frontier with new leading models, including Mythos 5, Fable 5, and Opus 5, and launched new
+products, including Claude Cowork and Claude Design.
+Operating Efficiency
+Our operating efficiency is derived from our high talent density, our efficient go-to-market, and how extensively
+our teams leverage Claude in their work. Claude is the common thread, amplifying the output of our employees.
+For example, over 90% of the contributions to our codebase in September 2026 were written by Claude.
+Additionally, the average daily volume of code contributed to our codebase per engineer in the three months
+ended September 30, 2026 was over 45 times the average daily volume in the year ended December 31, 2024.
+From September 30, 2025 to September 30, 2026, TTM revenue increased approximately 1,200% while
+headcount increased approximately 170%, driving TTM revenue per employee from $1.4 million to over $6.6
+million, a reflection of extraordinary talent density and a culture built to compound it.
+Our go-to-market model reflects this as well—intelligence-led growth and broad distribution partnerships
+enable us to rapidly expand customer adoption and revenue without being limited by the rate at which we can
+grow our sales and marketing organization, resulting in greater sales efficiency as compared to typical
+enterprise technology companies.
+Our revenue was $16.3 billion for the six months ended June 30, 2026, up from $1.2 billion for the six months
+
+===== Extracted text lines 7839–7888 =====
+Third, our ability to land new customers and expand within existing accounts.
+The number of customers with $100,000 or more of revenue on a TTM basis grew from approximately 20 as of
+December 31, 2023, to approximately 200 as of December 31, 2024, to approximately 1,500 as of December 31,
+2025, and to more than 11,900 as of September 30, 2026. Total revenue from these customers grew from
+approximately $37 million to $220 million to $3.5 billion to $ and represented 90%, 57%, 76%, and
+% of total revenue for the years ended December 31, 2023, 2024, and 2025, and the trailing twelve months
+ended September 30, 2026, respectively. The remaining % of total revenue for the trailing twelve months
+ended September 30, 2026 was generated by approximately 40 million customers, each with less than
+$100,000 of revenue on a TTM basis.
+In addition, as of September 30, 2026, we had more than 1,900 customers with $1 million or more of revenue
+on a TTM basis and approximately 250 customers with $10 million or more of revenue on a TTM basis. Despite
+this growth, our penetration into the largest enterprises remains early. Over 50% of the Fortune 500 and over
+30% of the Global 2000 were customers with $100,000 or more of revenue on a TTM basis as of September 30,
+2026. We believe we are in the early stages of our expansion within these customers, with our revenue from
+these Fortune 500 customers representing, on average, less than 0.1% of their total expenses for the three
+months ended September 30, 2026.
+We compare this measure against our largest Fortune 500 customers, who are further along in their adoption of
+AI. For the three months ended September 30, 2026, revenue from our top 10 Fortune 500 customers
+represented, on average, less than 1% of their total expenses—still a small fraction of their overall spend, but
+over eight times the average of our Fortune 500 customers with $100,000 or more of revenue on a TTM basis.
+5 For purposes of this measure, we include only Fortune 500 customers that are publicly traded and calculate the measure using total
+expenses as reported in their publicly available financial statements.
+143
+Table of Contents
+We believe the difference reflects the substantial runway we have to deepen adoption, both within our largest
+customers and within customers earlier in their adoption of Claude.5
+Claude adoption is broad-based. No single customer represented more than 10% of our revenue for the nine
+months ended September 30, 2026. Approximately 79% of our revenue came from customers outside of our top
+five customers for the three months ended September 30, 2026, up from approximately 64% for the three
+months ended March 31, 2026. At the same time, our largest customers continue to expand. For the three
+months ended September 30, 2026, our revenue from each of our top five customers reached a record high.
+Customer Usage Patterns
+Our revenue is influenced by customer usage patterns, which are impacted by the frequency and capability of
+new model version releases, as well as seasonal trends, each of which can create variability in our results from
+period to period. The continuous and overlapping cadence of new model version releases is inherent to
+remaining at the frontier of AI development. For example, model versions released in the six months ended
+September 30, 2026 accounted for over 80% of our revenue for the three months ended September 30, 2026.
+As we have released successive versions of Claude models, we have continued to see revenue growth as new
+capabilities unlock additional use cases, prompting new customers to adopt Claude and existing customers to
+expand their usage.
+Our customer usage patterns have also typically exhibited seasonality, particularly around holiday and vacation
+periods in the summer and winter, when certain workflows slow down and overall customer activity declines.
+For example, developer commits and feature launches are typically slower during the code freezes that many
+companies schedule over holidays. Consistent with this pattern, for the two weeks ended January 2, 2026, total
+customer spend declined by approximately 20% compared to the prior two weeks ended December 19, 2025.
+However, our historical growth rates may mask the impact of seasonal trends on our results. These dynamics
+are inherent aspects of a pay-for-intelligence revenue model and may be important determinants of our
+financial results in future periods.
+Because of these seasonal patterns, our results of operations have varied, and are expected to continue to vary,
+from period to period, and our results for any one period may not be indicative of our results for any future
+
+===== Extracted text lines 12430–12465 =====
+Our broad and diverse distribution strategy seeks to maximize customers’ access to our platform and
+applications regardless of where they work. From there, adoption can scale frictionlessly, and through our
+Applied AI teams and partnerships, we help enterprises realize more value as their adoption grows.
+Unprecedented Financial Model to Support Long-Term Investments
+We believe the diffusion of AI through the global economy represents one of the largest opportunities in history
+to improve how humans live and work, and it is just beginning. As of September 30, 2026, our customers with
+$100,000 or more of revenue on a TTM basis included every company in the Fortune 10, over 50% of the
+Fortune 500, and over 30% of the Global 2000. Within the Fortune 500, these customers included the 10
+largest software and IT services companies, the 10 largest internet companies, nine of the 10 largest
+pharmaceutical companies, the 10 largest banks, nine of the 10 largest semiconductor companies, and eight of
+the 10 largest healthcare companies. We believe enterprises are still in early phases of deployment, and we
+believe most knowledge workers have yet to fully experience what frontier AI can help them accomplish. We
+believe many industries have barely begun to explore the transformative potential of AI-native workflows.
+Furthermore, each successive version of a Claude model is designed to unlock new use cases, new customer
+types, and entirely new categories of economic value and expand our addressable market.
+We will continue to invest in the responsible development and maintenance of advanced AI for the long-term
+benefit of humanity. Our financial model provides us with competitive advantages to make these investments
+and advance the frontier.
+Significant Revenue Growth
+Rapid Customer Adoption and Revenue Growth
+Our enterprise strategy is designed to drive durable customer adoption by embedding Claude directly into
+business-critical workflows and enabling the development of products built on Claude. Over the past three
+years, we have seen rapid customer adoption across companies of every size and industry around the world.
+From September 30, 2025 to September 30, 2026, we have grown customers with $100,000 or more of revenue
+on a TTM basis from more than 950 to more than 11,900. Additionally, our Run-Rate Revenue was $ as of
+October 31, 2026.11
+Significant Customer Expansion
+195
+Table of Contents
+Our customers’ journey using Claude often begins with a single use case before expanding across departments,
+applications, and workflows. As our models become more capable, customers often deepen our partnerships—
+they find more ways to embed Claude into their workflows, increasing the scope of what Claude can accomplish
+within their enterprises. This pattern of initial deployment, demonstrated value, and rapid expansion has been
+replicated across organizations and is reflected in our Net Revenue Retention of approximately 900% as of
+September 30, 2026.
+We see this expansion as customers adopt agentic products like Claude Code. For example, in the three months
+
+===== Extracted text lines 12500–12510 =====
+Closing the Loop. The practical value of “closing the loop” is enormous for compute efficiency: Claude has
+helped write and iterate on compute multipliers that are central to efficient inference and has accelerated
+development and model release timelines.
+Operating Efficiency
+High Talent Density. As of September 30, 2026, with approximately 5,300 employees, our TTM revenue per
+employee was over $6.6 million—a reflection of what we believe is the deepest concentration of AI research
+talent in the world. We cultivate a low-ego, high-impact, and mission-aligned culture that minimizes friction,
+which we believe results in an organization that produces output disproportionate to its headcount.
+196
+Table of Contents
+Efficient Go-to-Market. We do not rely exclusively on a traditional enterprise sales force. Our intelligence-led
+
+===== Extracted text lines 22449–22576 =====
+Significant Customers
+The table below sets forth concentrations of credit risk with respect to accounts receivable from major
+customers that accounted for 10% or more of the Company’s total accounts receivable:
+| | | | | |
+| |
+As of December 31,
+| |
+As of June 30,
+| |
+2024
+| |
+2025
+| |
+2026
+| | | | | |
+(unaudited)
+|
+Customer A
+|
+*
+| |
+13%
+| |
+13%
+|
+Customer C
+|
+*
+| |
+*
+| |
+10%
+______________
+*Less than 10% of total
+The table below sets forth concentrations of revenue from customers that accounted for 10% or more of the
+Company’s total revenue:
+| | | | | | | | | |
+| |
+Year Ended December 31,
+| |
+Six Months Ended June 30,
+| |
+2023
+| |
+2024
+| |
+2025
+| |
+2025
+| |
+2026
+| | | | | | | |
+(unaudited)
+|
+Customer A
+|
+*
+| |
+*
+| |
+12%
+| |
+*
+| |
+*
+|
+Customer B
+|
+*
+| |
+*
+| |
+12%
+| |
+18%
+| |
+*
+|
+Customer C
+|
+43%
+| |
+*
+| |
+*
+| |
+*
+| |
+11%
+|
+Customer D
+|
+11%
+| |
+*
+| |
+*
+| |
+*
+| |
+*
+______________
+*Less than 10% of total
+F-16
+Table of Contents
+Anthropic, PBC
+Notes to Consolidated Financial Statements
+(Continued)
+Other Concentrations
+Prior to 2026, the Company obtained substantially all of its compute infrastructure from three cloud service
+providers (“CSPs”). During the six months ended June 30, 2026 (unaudited), the Company obtained a
+substantial majority of its compute infrastructure from a limited number of CSPs and other suppliers under
+long-term hosting and lease agreements. This created dependencies and potential vulnerabilities, in that a
+disruption affecting these counterparties could have adversely affected the Company’s operations. While the
+Company is expanding its relationships with its existing CSPs, it is also expanding its compute capacity through
+commitments with additional CSPs and through compute procured from other sources, including leased
+infrastructure operated on its behalf.
+The Company also provides access to its intelligence service through CSP marketplaces, with CSPs acting as
+collection agents for the Company in these transactions. During the years ended December 31, 2023, 2024, and
+2025, revenue generated from sales through CSP marketplaces to customers represented approximately 11%,
+32%, and 47% of total revenue, respectively. During the six months ended June 30, 2025 and 2026 (unaudited),
+revenue generated from sales through CSP marketplaces to customers represented approximately 44% and 48%
+of total revenue, respectively. As of December 31, 2024 and 2025 and June 30, 2026 (unaudited), net accounts
+receivable from sales through CSP marketplaces to customers represented 42%, 60%, and 58% of the
+Company’s net accounts receivable, respectively.
+Certain of the CSPs also hold the Company’s non-voting redeemable convertible preferred stock and convertible
+notes. See Notes 9 and 10 for further information.
+Cash and Cash Equivalents
+
+===== Extracted text lines 22845–22866 =====
+when customers use the Company’s intelligence service, based on the quantity of tokens consumed. Intelligence
+service provided on a subscription basis is subject to usage limits that reset over short periods, which results in
+revenue being recognized ratably over the subscription period, which is generally 12 months or less. Payment
+terms vary by customer and sales channel but are generally less than 60 days. Subscription fees are generally
+prepaid. Certain enterprise contracts may include minimum spend commitments.
+F-21
+Table of Contents
+Anthropic, PBC
+Notes to Consolidated Financial Statements
+(Continued)
+When the Company utilizes CSP marketplaces that distribute the intelligence service to customers, the
+customer receives the same intelligence service as is available through its web, mobile, and desktop interfaces
+and APIs, and the intelligence service represents a single promise in customer contracts. In these arrangements,
+the Company is the principal and recognizes revenue on a gross basis because the Company has a direct
+contractual relationship with customers, is primarily responsible for providing the intelligence service to
+customers, and establishes pricing. The CSPs in these arrangements do not obtain control of the Company’s
+intelligence service at any point prior to transfer to the customer.
+Deferred Revenue
+Deferred revenue consists of amounts billed or received in advance of the Company satisfying its performance
+obligations, and is recognized as revenue as services are delivered to customers. Deferred revenue relates
+primarily to subscriptions that are subject to usage limits that reset over short periods, which results in revenue
+being recognized ratably over the subscription period, which is generally 12 months or less.
+
+===== Extracted text lines 23118–23173 =====
+The following table presents revenue by geographical region, determined by the billing address of the customer
+(in millions):
+| | | | | | | | | |
+| |
+Year Ended December 31,
+| |
+Six Months Ended June 30,
+| |
+2023
+| |
+2024
+| |
+2025
+| |
+2025
+| |
+2026
+| | | | | | | |
+(unaudited)
+|
+United States
+|
+$34
+| |
+$263
+| |
+$3,362
+| |
+$820
+| |
+$11,763
+|
+International
+|
+7
+| |
+123
+| |
+1,223
+| |
+343
+| |
+4,523
+|
+Total
+|
+$41
+| |
+$386
+| |
+$4,585
+| |
+$1,163
+| |
+$16,286
+The following table presents consumption-based and subscription-based revenue (in millions):
+
+===== Extracted text lines 23263–23284 =====
+(196)
+|
+Amounts billed or received in advance and not recognized as revenue and other (unaudited)
+| |
+1,577
+|
+Balance as of June 30, 2026 (unaudited)
+| |
+$1,650
+Remaining Performance Obligations
+Remaining performance obligations represent deferred revenue and amounts that will be recognized as revenue
+in future periods for arrangements with non-cancelable commitments. As of June 30, 2026 (unaudited),
+remaining performance obligations amounted to $10.8 billion. The Company expects to recognize
+approximately 75% (unaudited) of this amount as revenue over the next 12 months and the remainder
+thereafter. The amount and timing of revenue recognition is driven by customer usage and the Company’s
+performance in accordance with contractual terms.
+F-27
+Table of Contents
+Anthropic, PBC
+Notes to Consolidated Financial Statements
+(Continued)
+3. Investments
+===== Offering and lock-up schedule =====
+
+===== Extracted text lines 1310–1465 =====
+| | |
+|
+Class A common stock offered by us
+| |
+shares
+| | |
+|
+Class A common stock offered by the selling
+stockholders
+| |
+shares
+| | |
+|
+Underwriters’ option to purchase additional
+shares of Class A common stock from us
+| |
+shares
+| | |
+|
+Class A common stock to be outstanding after
+this offering
+| |
+shares (or shares if the underwriters exercise
+their option to purchase additional shares of our Class A
+common stock in full)
+| | |
+|
+Class N common stock to be outstanding after
+this offering
+| |
+shares
+| | |
+|
+Class T common stock to be outstanding after
+this offering
+| |
+1 share
+| | |
+|
+Class E common stock to be outstanding after
+this offering
+| |
+0 shares
+| | |
+|
+Class F common stock to be outstanding after
+this offering
+| |
+1 share
+| | |
+|
+Class A, Class N, Class T, Class E, and Class F
+common stock to be outstanding after this
+offering
+| |
+shares (or shares if the underwriters exercise
+their option to purchase additional shares of our Class A
+common stock in full)
+| | |
+|
+Use of proceeds
+| |
+We estimate that the net proceeds from the sale of shares of
+our Class A common stock by us in this offering will be
+approximately $ (or approximately $ if the
+underwriters’ option to purchase additional shares of our
+Class A common stock is exercised in full), based upon the
+assumed initial public offering price of $ per share,
+which is the midpoint of the estimated offering price range
+set forth on the cover page of this prospectus, and after
+deducting estimated underwriting discounts and
+commissions and estimated offering expenses payable by
+us. We will not receive any proceeds from the sale of shares
+of Class A common stock by the selling stockholders.
+The principal purposes of this offering are to increase our
+capitalization and financial flexibility, create a public
+market for our Class A common stock, facilitate an orderly
+distribution of shares for the selling stockholders, and
+enable access to the public equity markets for us and our
+stockholders. We intend to use the net proceeds from this
+offering for general corporate purposes, including working
+capital, operating expenses, and capital expenditures,
+including investments in compute and infrastructure, as
+well as hiring and retention of highly skilled personnel.
+Additionally, we may use a portion of the net proceeds to
+acquire or invest in businesses, products, services, or
+technologies. However, we do not have agreements or
+commitments for any material acquisitions or investments
+at this time. We also intend to use a portion of the net
+proceeds to satisfy our anticipated tax withholding and
+remittance obligations related to the settlement of certain
+of our outstanding restricted stock units (“RSUs”). See the
+section titled “Use of Proceeds” for more information.
+| | |
+19
+Table of Contents
+| | |
+|
+Voting rights
+| |
+Shares of our Class A common stock are entitled to one vote
+per share. Shares of our Class N common stock have no
+voting rights, except as otherwise required by law. The
+share of our Class T common stock has no voting rights
+with respect to matters submitted to stockholders
+generally, except as set forth within our amended and
+restated certificate of incorporation, including with respect
+to the election of a majority of our board of directors or as
+required by law. The share of our Class F common stock
+will be entitled to an aggregate number of votes that
+represents 50.1% of the total voting power of our
+outstanding shares as of the applicable record date on all
+matters submitted to a vote of stockholders generally,
+including the election of the directors other than the Class T
+directors. Shares of our Class E common stock will be
+entitled to one vote per share with respect to certain limited
+matters.
+| | |
+|
+Controlled company
+| |
+We are considered a “controlled company” within the
+meaning of the Nasdaq Global Select Market corporate
+governance requirements. See the sections titled “Our
+Governance Structure and Its Goals,” “Management,” and
+“Description of Capital Stock” for additional information.
+| | |
+|
+Risk Factors
+| |
+See the section titled “Risk Factors” and other information
+included in this prospectus for a discussion of some of the
+factors you should consider before deciding to invest in our
+Class A common stock.
+| | |
+|
+Proposed trading symbol
+| |
+“ANT”
+The number of shares of our Class A common stock, Class N common stock, Class T common stock, and Class F
+common stock that will be outstanding after this offering is based on shares of our Class A common stock,
+shares of our Class N common stock, one share of our Class T common stock, and one share of our Class F
+common stock outstanding as of September 30, 2026, which reflects:
+•the automatic conversion of (i) all outstanding shares of our Series A, C-1, D-1, D-2, E-1, F-1, G-1,
+and H-1 redeemable convertible preferred stock into shares of Class A common stock and (ii) all
+outstanding shares of our Series B, C-2, D-3, E-2, E-3, E-4, E-5, F-2, G-2, G-3, G-4, H-2, H-3,
+and H-4 redeemable convertible preferred stock into shares of Class N common stock,
+immediately prior to the completion of this offering pursuant to the terms of our amended and restated
+certificate of incorporation (collectively, the “Preferred Stock Conversion”);
+•one share of our Class F common stock that will be issued immediately prior to the completion of this
+offering to the Founder LLC (the “Class F Stock Issuance”);
+•the conversion of $ in aggregate principal amount of our
+outstanding convertible promissory notes into shares of Class N common stock immediately
+prior to the completion of this offering, representing shares issuable to Amazon Web Services, Inc.
+upon the completion of this offering without causing it to exceed the applicable ownership cap (the
+“Convertible Notes Conversion”);
+
+===== Extracted text lines 18186–18424 =====
+Shares Eligible for Future Sale
+As a result of the lock-up and market standoff agreements described below, as well as undertakings in the
+underwriting agreement to be executed in connection with this offering, and subject to such agreements and the
+provisions of Rules 144 and 701 under the Securities Act (including, with respect to shares held by affiliates,
+Rule 144 volume limitations), based on information available to us, these restricted securities will be available
+for sale in the public market as follows (assuming no exercise of outstanding stock options subsequent to
+September 30, 2026 and no settlement of RSUs, and assuming that, where a date below is a specified number of
+days after another date and such day is not a trading day, such shares become available for sale on the next
+trading day):
+| | |
+|
+Earliest Date Available for Sale in the Public
+Market
+| |
+Approximate Number of Shares of Class A
+Common Stock
+|
+The first trading day following the date of this prospectus ...................
+| |
+Up to shares of Class A common stock held by our non-founder
+directors and officers and certain of our current and former
+employees and consultants, representing % of the shares
+subject to the 180-day lock-up and market standoff period, as to
+which the restrictions under the lock-up and market standoff
+agreements expire on such date.
+|
+27th day after the date of this prospectus .................................................
+| |
+Up to shares of Class A common stock, representing % of
+the shares subject to the 180-day lock-up and market standoff
+period and % of the shares subject to the extended 365-day
+lock-up period.
+|
+48th day after the date of this prospectus ..................................................
+| |
+Up to shares of Class A common stock, representing % of
+the shares subject to the 180-day lock-up and market standoff
+period and % of the shares subject to the extended 365-day
+lock-up period.
+|
+62nd day after the date of this prospectus ..................................................
+| |
+Up to shares of Class A common stock, representing % of
+the shares subject to the 180-day lock-up and market standoff
+period and % of the shares subject to the extended 365-day
+lock-up period.
+|
+76th day after the date of this prospectus ..................................................
+| |
+Up to shares of Class A common stock, representing % of
+the shares subject to the 180-day lock-up and market standoff
+period and % of the shares subject to the extended 365-day
+lock-up period.
+|
+The second full trading day on Nasdaq immediately
+following the public release of our annual financial
+results for the fiscal year ending December 31, 2026 (the date of
+such public release, the “FY26 Earnings Release Date”) ........................
+| |
+Up to shares of Class A common stock, representing % of
+the shares subject to the 180-day lock-up and market standoff
+period and % of the shares subject to the extended 365-day
+lock-up period.
+|
+13th day after the FY26 Earnings Release Date .........................................
+| |
+Up to shares of Class A common stock,
+representing % of the shares subject to the 180-day lock-up
+and market standoff period and % of the shares subject to the
+extended 365-day lock-up period.
+|
+27th day after the FY26 Earnings Release Date ........................................
+| |
+Up to shares of Class A common stock, representing % of
+the shares subject to the 180-day lock-up and market standoff
+period and % of the shares subject to the extended 365-day
+lock-up period.
+|
+41st day after the FY26 Earnings Release Date .........................................
+| |
+Up to shares of Class A common stock, representing % of
+the shares subject to the 180-day lock-up and market standoff
+period and % of the shares subject to the extended 365-day
+lock-up period.
+|
+55th day after the FY26 Earnings Release Date ........................................
+| |
+Up to shares of Class A common stock, representing % of
+the shares subject to the 180-day lock-up and market standoff
+period and % of the shares subject to the extended 365-day
+lock-up period.
+|
+69th day after the FY26 Earnings Release Date ........................................
+| |
+Up to shares of Class A common stock, representing % of
+the shares subject to the 180-day lock-up and market standoff
+period and % of the shares subject to the extended 365-day
+lock-up period.
+|
+The earlier of (x) the second full trading day on Nasdaq immediately
+following the public release of our quarterly financial results for the
+fiscal quarter ending March 31, 2027 (the date of such public release,
+the “Q1 Earnings Release Date”) and (y) immediately after the close
+of trading on the 180th day after the date of this prospectus ..................
+| |
+Up to shares of Class A common stock, representing all
+remaining shares subject to the 180-day lock-up and market
+standoff period and % of the shares subject to the extended
+365-day lock-up period.
+|
+34th day after the Q1 Earnings Release Date .............................................
+| |
+Up to shares of Class A common stock, representing % of
+the shares subject to the extended 365-day lock-up period.
+|
+48th day after the Q1 Earnings Release Date .............................................
+| |
+Up to shares of Class A common stock, representing % of
+the shares subject to the extended 365-day lock-up period.
+308
+Table of Contents
+| | |
+|
+62nd day after the Q1 Earnings Release Date ............................................
+| |
+Up to shares of Class A common stock, representing % of
+the shares subject to the extended 365-day lock-up period.
+|
+76th day after the Q1 Earnings Release Date .............................................
+| |
+Up to shares of Class A common stock, representing % of
+the shares subject to the extended 365-day lock-up period.
+|
+The second full trading day on Nasdaq immediately
+following the public release of our quarterly financial
+results for the fiscal quarter ending June 30, 2027 (the date of such
+public release, the “Q2 Earnings Release Date”) .....................................
+| |
+Up to shares of Class A common stock, representing % of
+the shares subject to the extended 365-day lock-up period.
+|
+27th day after the Q2 Earnings Release Date ............................................
+| |
+Up to shares of Class A common stock, representing % of
+the shares subject to the extended 365-day lock-up period.
+|
+41st day after the Q2 Earnings Release Date .............................................
+| |
+Up to shares of Class A common stock, representing % of
+the shares subject to the extended 365-day lock-up period.
+|
+55th day after the Q2 Earnings Release Date ............................................
+| |
+Up to shares of Class A common stock, representing % of
+the shares subject to the extended 365-day lock-up period.
+|
+69th day after the Q2 Earnings Release Date ............................................
+| |
+Up to shares of Class A common stock, representing % of
+the shares subject to the extended 365-day lock-up period.
+|
+83rd day after the Q2 Earnings Release Date ............................................
+| |
+Up to shares of Class A common stock, representing % of
+the shares subject to the extended 365-day lock-up period.
+|
+The earlier of (x) the second full trading day on Nasdaq immediately
+following the public release of our quarterly financial results for the
+fiscal quarter ending September 30, 2027 (the date of such public
+release, the “Q3 Earnings Release Date”) and (y) immediately after
+the close of trading on the 365th day after the date of this prospectus .
+| |
+Up to shares of Class A common stock, representing the
+remaining shares subject to the extended 365-day lock-up period.
+Lock-Up and Market Standoff Agreements
+All of our directors and officers and substantially all of our stockholders are subject to lock-up agreements with
+the underwriters or market standoff agreements with us that restrict their ability to transfer shares of our Class
+A common stock and Class N common stock and securities convertible into or exercisable or exchangeable for
+such shares for:
+(1)Our non-founder directors, officers, and certain of our current and former employees and consultants,
+during the period ending upon the earlier to occur of (x) 6:00 AM Eastern Time on the second full
+trading day immediately following the Q1 Earnings Release Date or (y) immediately after the close of
+the trading day on the 180th day after the date of this prospectus or, if the 180th day is not a trading
+day, immediately after the close of the last trading day immediately preceding the 180th day;
+(2)For certain stockholders holding approximately % of our fully diluted shares immediately prior to
+this offering, during the period ending upon the earlier to occur of (x) 6:00 AM Eastern Time on the
+second full trading day immediately following the Q1 Earnings Release Date or (y) immediately after
+the close of the trading day on the 180th day after the date of this prospectus or, if the 180th day is not
+a trading day, immediately after the close of the last trading day immediately preceding the 180th day;
+(3)For certain stockholders holding approximately % of our fully diluted shares immediately prior to
+this offering, during the period ending upon the earlier to occur of (x) 6:00 AM Eastern Time on the
+second full trading day immediately following the Q3 Earnings Release Date or (y) immediately after
+the close of the trading day on the 365th day after the date of this prospectus or, if the 365th day is not
+a trading day, immediately after the close of the last trading day immediately preceding the 365th day;
+and
+(4)Our seven co-founders, during the period ending upon the earlier to occur of (x) 6:00 AM Eastern
+Time on the second full trading day immediately following the Q3 Earnings Release Date or (y)
+immediately after the close of the trading day on the 365th day after the date of this prospectus or, if
+the 365th day is not a trading day, immediately after the close of the last trading day immediately
+preceding the 365th day,
+subject to timed automatic expirations described in the “Underwriting—Lock-up and Market Standoff
+Agreements” section of this prospectus.
+The lock-up agreements and market standoff agreements described above are subject to a number of
+exceptions.
+309
+Table of Contents
+See the section titled “Underwriting—Lock-up and Market Standoff Agreements” for more information about
+these transfer restrictions and related expirations and exceptions.
+Class N Common Stock
+Shares of our Class N common stock are not listed on a stock exchange and are not registered under the
+Securities Act. Shares of our Class N common stock will automatically convert into shares of Class A common
+stock upon a qualifying transfer, which shares would be subject to the resale restrictions and registration rights
+described in this section. See the section titled “Description of Capital Stock” for a complete description of the
+conversion mechanics applicable to our Class N common stock.
+Following the completion of this offering, shares of Class N common stock will consist of:
+• shares, representing shares outstanding as of September 30, 2026 and shares to be issued
+immediately prior to the completion of this offering pursuant to the Preferred Stock Conversion with
+respect to all outstanding shares of our non-voting redeemable convertible preferred stock;
+• shares to be issued immediately prior to the completion of this offering pursuant to the
+conversion of outstanding convertible promissory notes at the applicable fixed conversion prices,
+representing shares issuable upon the completion of this offering without causing the holder to exceed
+any applicable ownership cap;
+• shares issuable at certain intervals following the completion of this offering pursuant to the
+conversion of any remaining outstanding convertible promissory notes at the applicable fixed
+conversion prices that could not be converted immediately prior to the completion of this offering
+without exceeding such ownership cap; and
+•any shares issuable in connection with (i) the conversion of any convertible promissory notes that may
+be issued under our NPAs following the completion of this offering, (ii) draws under our NPAs that are
+settled directly in shares of Class N common stock following the completion of this offering, (iii)
+donations that we match under our Donation Matching Plan, and (iv) certain contractual rights to
+private placements, whether concurrent with or following the completion of this offering.
+For a description of the conversion mechanics of the outstanding notes and the rights to future issuances of
+notes and Class N common stock, see the section titled “Management’s Discussion and Analysis of Financial
+Condition and Results of Operations—Liquidity and Capital Resources—Convertible Notes.”
+Additionally, certain holders of our Class N common stock are entitled to registration rights with respect to
+their shares, the exercise of which could facilitate sales of large blocks of our shares into the public market
+following any applicable lock-up period. See the section titled “Description of Capital Stock—Registration
+Rights” for a description of these registration rights.
+Rule 144
+
+===== Extracted text lines 19048–19149 =====
+to the terms of a lock-up agreement.
+Our non-founder directors, officers, and certain current or former employees or consultants of ours have agreed
+with the underwriters, or are bound by market standoff agreements with us for the benefit of the underwriters,
+such that all of the lock-up securities owned by them are subject to the restrictions described above until the
+earlier to occur of (x) 6:00 AM Eastern Time on the second full trading day immediately following the Q1
+Earnings Release Date or (y) immediately after the close of the trading day on the 180th Day, subject to
+specified early expiration provisions as follows:
+a.on or after the commencement of trading of our Class A common stock on the first trading day
+following the date of this prospectus, up to 10% of the aggregate number of lock-up securities held by
+such lock-up parties as of the last day of the month preceding the month of the date of this prospectus
+may be Transferred; and
+b.on or after 6:00 AM Eastern Time on the second full trading day immediately following the public
+release of our annual financial results (which for this purpose does not include “flash” numbers or
+preliminary, partial earnings) for the fiscal year ending December 31, 2026 (the date of such public
+release, the “FY26 Earnings Release Date”), up to an additional 35% of lock-up securities held by such
+lock-up parties as of the last day of the month preceding the month of the date of this prospectus may
+be Transferred.
+Certain of our stockholders have agreed with the underwriters, or are bound by market standoff agreements
+with us for the benefit of the underwriters, such that all of the lock-up securities owned by them are subject to
+the restrictions described above until the earlier to occur of (x) 6:00 AM Eastern Time on the second full
+trading day immediately following the Q1 Earnings Release Date or (y) immediately after the close of the
+trading day on the 180th Day, subject to specified early expiration provisions as follows:
+a.on or after 6:00 AM Eastern Time on each of the dates that are 27 and 48 days, respectively, after the
+date of this prospectus, up to 6% of the aggregate number of lock-up securities held by such lock-up
+parties as of the date that is seven days prior to the date of this prospectus may be Transferred;
+b.on or after 6:00 AM Eastern Time on each of the dates that are 62 and 76 days, respectively, after the
+date of this prospectus, up to an additional 7% of the aggregate number of lock-up securities held by
+such lock-up parties as of the date that is seven days prior to the date of this prospectus may be
+Transferred;
+322
+Table of Contents
+c.on or after 6:00 AM Eastern Time on the second full trading day immediately following the FY26
+Earnings Release Date, up to an additional 12.5% of the aggregate number of lock-up securities held by
+such lock-up parties as of the date that is seven days prior to the date of this prospectus may be
+Transferred; and
+d.on or after 6:00 AM Eastern Time on each of the dates that are 13, 27, 41, 55, and 69 days, respectively,
+after the FY26 Earnings Release Date, up to an additional 9.5% of the aggregate number of lock-up
+securities held by such lock-up parties as of the date that is seven days prior to the date of this
+prospectus may be Transferred.
+Certain of our stockholders holding more than 0.5% of our fully diluted shares prior to this offering have agreed
+with the underwriters that the lock-up securities owned by them are subject to the restrictions described above
+until the earlier to occur of (x) 6:00 AM Eastern Time on the second full trading day immediately following the
+public release of our quarterly financial results (which for this purpose does not include “flash” numbers or
+preliminary, partial earnings) for the fiscal quarter ending September 30, 2027 (the date of such public release,
+the “Q3 Earnings Release Date”), or (y) immediately after the close of the trading day on the 365th day after the
+date of this prospectus, subject to specified early expiration provisions as follows:
+a.on or after 6:00 AM Eastern Time on each of the dates that are 27 and 48 days, respectively, after the
+date of this prospectus, up to 1.8% of the aggregate number of lock-up securities held by such lock-up
+parties as of the date that is seven days prior to the date of this prospectus may be Transferred;
+b.on or after 6:00 AM Eastern Time on each of the dates that are 62 and 76 days, respectively, after the
+date of this prospectus, up to an additional 2.1% of the aggregate number of lock-up securities held by
+such lock-up parties as of the date that is seven days prior to the date of this prospectus may be
+Transferred;
+c.on or after 6:00 AM Eastern Time on the second full trading day immediately following the FY26
+Earnings Release Date, up to an additional 3.75% of the aggregate number of lock-up securities held by
+such lock-up parties as of the date that is seven days prior to the date of this prospectus may be
+Transferred;
+d.on or after 6:00 AM Eastern Time on each of the dates that are 13, 27, 41, 55, and 69 days, respectively,
+after the FY26 Earnings Release Date, up to an additional 2.85% of the aggregate number of lock-up
+securities held by such lock-up parties as of the date that is seven days prior to the date of this
+prospectus may be Transferred;
+e.on or after the earlier to occur of (i) 6:00 AM Eastern Time on the second full trading day immediately
+following the Q1 Earnings Release Date, and (ii) immediately after the close of the trading day on the
+180th Day, up to an additional 4.2% of the aggregate number of lock-up securities held by such lock-up
+parties as of the date that is seven days prior to the date of this prospectus may be Transferred;
+f.on or after 6:00 AM Eastern Time on each of the dates that are 34, 48, 62, and 76 days, respectively,
+after the Q1 Earnings Release Date, up to an additional 5.6% of the aggregate number of lock-up
+securities held by such lock-up parties as of the date that is seven days prior to the date of this
+prospectus may be Transferred;
+g.on or after 6:00 AM Eastern Time on the second full trading day immediately following the public
+release of our quarterly financial results (which for this purpose does not include “flash” numbers or
+preliminary, partial earnings) for the fiscal quarter ending June 30, 2027 (the date of such public
+release, the “Q2 Earnings Release Date”), up to an additional 7.0% of the aggregate number of lock-up
+securities held by such lock-up parties as of the date that is seven days prior to the date of this
+prospectus may be Transferred; and
+h.on or after 6:00 AM Eastern Time on each of the dates that are 27, 41, 55, 69, and 83 days, respectively,
+after the Q2 Earnings Release Date, up to an additional 6.3% of the aggregate number of lock-up
+securities held by such lock-up parties as of the date that is seven days prior to the date of this
+prospectus may be Transferred.
+323
+Table of Contents
+Our founders have agreed with the underwriters that all of the lock-up securities owned by them, other than any
+shares of Class A common stock to be sold by them in this offering pursuant to the underwriting agreement, are
+subject to the restrictions described above until the earlier to occur of (x) 6:00 AM Eastern Time on the second
+full trading day immediately following the Q3 Earnings Release Date, or (y) immediately after the close of the
+trading day on the 365th day after the date of this prospectus. Notwithstanding the foregoing, each founder,
+together with any other signatories to such founder’s lock-up agreement, may Transfer up to 29% of the
+aggregate number of lock-up securities held by them (as allocated among them) as of the last day of the month
+preceding the month of the date of this prospectus beginning upon the earlier to occur of (x) 6:00 AM Eastern
+Time on the second full trading day immediately following the Q1 Earnings Release Date, and (y) immediately
+after the close of the trading day on the 180th Day.
+For purposes of the foregoing, (i) if the 180th Day or the 365th day after the date of this prospectus is not a
+trading day, references to the close of the trading day on such day refer to the close of the last trading day
+immediately preceding such day, and (ii) if any day that is a specified number of days after the date of this
+prospectus, the FY26 Earnings Release Date, the Q1 Earnings Release Date, or the Q2 Earnings Release Date is
+not a trading day, the applicable Transfer may be made beginning at 6:00 AM Eastern Time on the next trading
+day.
+The representatives, in their joint discretion, may release the lock-up securities described above in whole or in
+part at any time. In certain circumstances, the release of lock-up securities from the lock-up restrictions
+described above will trigger a pro rata release of lock-up securities held by certain other holders.
+See the section titled “Shares Eligible for Future Sale” for additional information regarding when shares of our
+Class A common stock will be available for sale in the public market as a result of the lock-up and market
