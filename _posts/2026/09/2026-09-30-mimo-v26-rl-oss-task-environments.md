@@ -52,7 +52,7 @@ General 的 989 条任务又分两类：925 条模拟工作场景，64 条是终
 
 数据集卡片给了领域、任务家族和 verifier 的概览，但没有逐条展开候选任务从哪来、经过哪些过滤、每一步留下多少。CodeMidas 论文倒是详细写了自己的环境清理、参考答案检查和 rollout 筛选流程，但这些步骤不能直接套成 MiMo-V2.6-RL-oss 所有领域统一的入库规则。[1][7]
 
-小米把任务、Docker 镜像和基于 verl 的训练代码一起发布了。FineEnvs 和 Hugging Face 做的 [Explorer][explorer] 是非官方的浏览和试跑界面：用 OpenCode 当 agent harness，模型和裁判由试跑的人自己选。打开某道题的轨迹，能看到 agent 做了什么、哪项检查没过；但它的一次在线得分不能直接和小米报告里的训练 reward 或基准结果放在一起比。[5][6][8]
+mimo 把任务、Docker 镜像和基于 verl 的训练代码一起发布了。FineEnvs 和 Hugging Face 做的 [Explorer][explorer] 是非官方的浏览和试跑界面：用 OpenCode 当 agent harness，模型和裁判由试跑的人自己选。打开某道题的轨迹，能看到 agent 做了什么、哪项检查没过；但它的一次在线得分不能直接和小米报告里的训练 reward 或基准结果放在一起比。[5][6][8]
 
 
 ## 参考
