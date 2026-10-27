@@ -17,7 +17,7 @@ excerpt: >-
 
 ## 1. 问题：Agentic 推理的 I/O 瓶颈
 
-近年来，以 Coding Agent 为代表的 Agentic LLM 应用呈现出与批量推理截然不同的访问模式。论文给出了来自生产环境的真实 trace 数据（coding task）：
+以 Coding Agent 为代表的 Agentic LLM 应用，访问模式和批量推理很不一样。论文给出了一份生产环境的真实 trace（coding task）：
 
 | 指标 | 数值 |
 |------|------|
@@ -62,7 +62,7 @@ excerpt: >-
 - 模型推理通信 → 高优先级 VL（占 ~99% 带宽）；
 - KV-Cache 传输 → 低优先级 VL（利用空闲带宽）。
 
-工程细节：RDMA write 提交约 1μs（mmio 写寄存器），vs `cudaMemcpyAsync` 的 5-7μs，支持 doorbell batching 摊销开销。论文直接表示这是**目前唯一实用的隔离方案**。
+工程细节：RDMA write 提交约 1μs（mmio 写寄存器），而 `cudaMemcpyAsync` 要 5-7μs，还支持 doorbell batching 摊销开销。论文直接表示这是**目前唯一实用的隔离方案**。
 
 ### 2.3 自适应调度器
 
@@ -75,7 +75,7 @@ excerpt: >-
 
 ### 2.4 Bottleneck-Free 条件分析
 
-论文推导了在以下参数范围内系统无瓶颈（$g$=GPU数/节点，$s$=SNIC数/CNIC数之比，$M$=内存带宽，$B$=CNIC带宽）：
+论文推导出系统无瓶颈的参数范围（$g$=GPU数/节点，$s$=SNIC数/CNIC数之比，$M$=内存带宽，$B$=CNIC带宽）：
 
 $$
 \frac{s}{g-s} \leq \frac{P}{D} \leq \min\!\left\{ \frac{g-2s}{s},\ \frac{g-s}{2s},\ \frac{M/Bs-3}{2} \right\}

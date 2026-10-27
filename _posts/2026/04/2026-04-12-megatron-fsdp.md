@@ -8,23 +8,20 @@ excerpt: >-
   基于 Megatron Core v0.16.1 源码，梳理 Megatron-FSDP 的 ZeRO 分片策略、参数与梯度缓冲区、通信流水线和钩子生命周期，重点分析 per-module 分片、通信计算重叠及 TP、HSDP 的集成。
 ---
 
-Megatron-LM 引入了一套自研的 FSDP 实现——**Megatron-FSDP**，替代了之前的custom_fsdp 
-位于 `megatron/core/distributed/fsdp/src/megatron_fsdp/`, 可以独立作为一个pip 包独立release
+Megatron-LM 引入了一套自研的 FSDP 实现——**Megatron-FSDP**，替代了之前的 custom_fsdp。代码位于 `megatron/core/distributed/fsdp/src/megatron_fsdp/`，可以作为一个 pip 包单独 release。
 
-本文从v0.16的源码出发，深入分析它的设计取舍、与 PyTorch FSDP2 的差异、以及它如何与 Megatron m-core 体系深度集成。
+本文从 v0.16（`core_v0.16.1`）的源码出发，分析它的设计取舍、与 PyTorch FSDP2 的差异，以及它如何与 Megatron m-core 体系集成。
 
-v0.16（`core_v0.16.1`）
-
-## 一、mFSDP的定位？
+## 一、mFSDP 的定位
 
 PyTorch FSDP2（`torch.distributed.fsdp`）虽然功能完善，但对 Megatron-LM 的需求存在几个痛点：
 
 1. **并行维度耦合**：Megatron 同时使用 TP/PP/CP/EP 四种并行。FSDP2 的 module-wrapping 风格难以与 `parallel_state` 管理的 process group 无缝对接。
 2. **Bucket 粒度**：Megatron 需要按 FSDP Unit（通常是 TransformerLayer）精细控制参数的释放时机，避免激活重计算（activation recompute）时产生二次 all-gather。
 3. **通信流水线**：Megatron 原有的 DistributedOptimizer 已经有成熟的 `reduce_scatter + all_gather` overlap 机制，Megatron-FSDP 在此基础上演化，而不是从头适配 FSDP2 的 API。
-4. **FP8 支持**：TransformerEngine 的 FP8 参数需要管理 transpose cache，FSDP2 对此透明度不够
+4. **FP8 支持**：TransformerEngine 的 FP8 参数需要管理 transpose cache，FSDP2 对此透明度不够。
 
-简单来说就是torch 易用性很好，但是性能一般，拓展性比较差
+简单来说就是 torch 易用性很好，但性能一般，扩展性比较差。
 
 ### 为什么不直接用 Megatron m-core 的分布式实现？
 
@@ -32,12 +29,12 @@ Megatron m-core 是一套高度优化的建模体系（`megatron/core/models/`�
 
 - **Modeling 侵入性强**：m-core 对 Transformer 层结构有强假设（如 `TransformerLayer` 的具体 API、`parallel_state` 的全局状态管理），若要改模型结构——比如换 attention 实现或插入自定义算子——需要在 m-core 内部做"魔改"，维护成本高。
 - **与原生 PyTorch 生态脱节**：很多算法论文的参考实现直接用 `torch.nn.Module` + 标准 `torch.optim` 写成。m-core 的接口与这套生态不兼容，移植成本较大。
-- **Megatron-FSDP 的定位**：作为一个[独立 pip 包](https://pypi.org/project/megatron-fsdp/)（`megatron-fsdp`），它只依赖 PyTorch，可以包装**任意** `torch.nn.Module`，不要求模型实现对齐 m-core。这使得在原生 PyTorch 实现的模型上接入 FSDP 和 ZeRO 优化几乎零改动。
+- **Megatron-FSDP 的定位**：作为一个[独立 pip 包](https://pypi.org/project/megatron-fsdp/)（`megatron-fsdp`），它只依赖 PyTorch，可以包装**任意** `torch.nn.Module`，不要求模型实现对齐 m-core。所以在原生 PyTorch 实现的模型上接入 FSDP 和 ZeRO 优化，几乎不用改代码。
 
-本质上，Megatron-FSDP 是把 Megatron 积累的通信优化经验（DistributedOptimizer、overlap 机制、TP 感知分片）提炼成一个**框架无关的分布式训练库**，而不是绑定在 m-core 的建模体系上。
+本质上，Megatron-FSDP 是把 Megatron 积累的通信优化经验（DistributedOptimizer、overlap 机制、TP 感知分片）提炼成一个**框架无关的分布式训练库**，不再绑定在 m-core 的建模体系上。
 
+所以 mFSDP 更像是兼顾性能和易用性的方案，介于原生 FSDP 和 m-core 之间。
 
-所以 mfsdp 更像是一种兼容了性能和易用性的存在，介于原生fsdp 和 m-core 之间
 ---
 
 ## 二、整体架构
@@ -63,9 +60,7 @@ MegatronFSDP（torch.nn.Module 的包装层）
     └── post_backward： 归还参数、reduce-scatter 梯度
 ```
 
-入口函数为 `fully_shard_model()` / `fully_shard()`（`fully_shard.py`）：
-前者返回 `MegatronFSDP` 封装后的模型，后者还会原地 patch optimizer，
-返回 `(MegatronFSDP, optimizer)`。
+入口函数是 `fully_shard_model()` / `fully_shard()`（`fully_shard.py`）：前者返回 `MegatronFSDP` 封装后的模型，后者还会原地 patch optimizer，返回 `(MegatronFSDP, optimizer)`。
 
 ---
 
@@ -80,21 +75,19 @@ Megatron-FSDP 通过 `zero_dp_strategy` 参数映射到 ZeRO 的四个级别：
 | `optim_grads` (2) | ZeRO-2 | 分片梯度 + 优化器状态 |
 | `optim_grads_params` (3) | ZeRO-3 / Full FSDP | 分片参数 + 梯度 + 优化器状态 |
 
-默认策略是 `optim_grads_params`（ZeRO-3），即完全分片。
-但要真正获得 FSDP unit 粒度的释放和预取，还需要提供 `fsdp_unit_modules`；
-Megatron 适配层在 `optim_grads_params` 下默认使用 `[TransformerLayer]`，
+默认策略是 `optim_grads_params`（ZeRO-3），即完全分片。但要真正做到 FSDP unit 粒度的释放和预取，还得提供 `fsdp_unit_modules`；Megatron 适配层在 `optim_grads_params` 下默认使用 `[TransformerLayer]`。
 
 ---
 
 ## 四、Per-Module 分片：Megatron-FSDP 与 FSDP2 的核心差异
 
-这是理解 Megatron-FSDP 性能优势最关键的设计点，也是它与 PyTorch FSDP2 最根本的架构区别（出自 [NVIDIA PyTorch Conference PPT](https://static.sched.com/hosted_files/pytorchconference/93/%5BPytorch%20Conference%5D%20Megatron%20FSDP.pdf) Slide 11）。
+这是 Megatron-FSDP 性能优势的关键所在，也是它和 PyTorch FSDP2 最根本的架构区别（出自 [NVIDIA PyTorch Conference PPT](https://static.sched.com/hosted_files/pytorchconference/93/%5BPytorch%20Conference%5D%20Megatron%20FSDP.pdf) Slide 11）。
 
 ### 4.1 FSDP2：per-parameter 均匀分片
 
 FSDP2 的分片单位是**每个参数**（per-parameter）：每个参数独立按 DP size 均匀切分，每个 rank 持有大小相等的 shard。
 
-·但问题出在通信时：AllGather/ReduceScatter 需要一块 **连续的 per-module collective buffer**，而各参数的 shard 分散在各自的内存位置，必须先做 `remap_and_copy`（permute）将其重排到 `(Shard, Param)-Shaped` 的通信 buffer 中。这个 permute 步骤在 LM3 405B 训练中带来约 **10%** 的性能开销。
+问题出在通信上：AllGather/ReduceScatter 需要一块**连续的 per-module collective buffer**，而各参数的 shard 分散在各自的内存位置，所以必须先做 `remap_and_copy`（permute），把它们重排到 `(Shard, Param)-Shaped` 的通信 buffer 中。这个 permute 步骤在 LM3 405B 训练中带来约 **10%** 的性能开销。
 
 ![FSDP2 per-parameter sharding](/img/2026/04/12/fsdp2-per-module-sharding.png)
 
@@ -106,7 +99,7 @@ Megatron-FSDP 的分片单位是**每个 module**（per-module）：同一个 FS
 
 由于参数 shard 与通信 buffer 共享同一块内存，AllGather 的输入就是本地 shard，**无需 permute，实现 zero-copy**。
 
-代价是：各参数在不同 rank 上的 shard 大小并不相等（Non-Uniform Shards）——这正是 PPT 图示中想说明的：
+代价是各参数在不同 rank 上的 shard 大小不相等（Non-Uniform Shards），PPT 里这张图说的就是这件事：
 
 ![Megatron-FSDP per-module sharding](/img/2026/04/12/mfsdp-per-module-sharding.png)
 
@@ -150,10 +143,7 @@ rank 持有参数量 ≈ 原始参数量 / TP_size / DP_size
 
 ### 5.2 Bucket 大小
 
-`BucketingPolicy` 类本身的默认 `suggested_bucket_size` 是 `40_000_000`
-（4000万个元素，BF16 下约 80MB）。但在 Megatron 集成路径里，
-实际值来自 `ddp_config.bucket_size`；如果该值是 `None`，
-非 FSDP unit 参数不会因为 bucket size 被继续切分。
+`BucketingPolicy` 类本身的默认 `suggested_bucket_size` 是 `40_000_000`（4000 万个元素，BF16 下约 80MB）。但在 Megatron 集成路径里，实际值来自 `ddp_config.bucket_size`；如果该值是 `None`，非 FSDP unit 参数就不会再按 bucket size 切分。
 
 划分逻辑由 `_get_parameter_groups()` 和 `build_data_parallel_buffer_index()` 两层完成：
 - 先按 dtype、expert、requires_grad、FSDP unit 聚合参数；非 FSDP unit 的参数才会按 `suggested_bucket_size` 继续切 bucket
@@ -164,11 +154,9 @@ rank 持有参数量 ≈ 原始参数量 / TP_size / DP_size
 ### 5.3 chunk_size_factor
 
 对于 TP 场景，参数实际是 DTensor，需要保证 `size % chunk_size_factor == 0` 以便 DP ranks 之间平均切分。
-`chunk_size_factor` 来自同一个 bucket 中参数 `shape[1:].numel()` 的对齐要求：代码先按该值从大到小排序，再在必要时取 LCM。
-这样做是为了让 FSDP 的 `Shard(0)` 和 TP 的切分维度组合时仍能形成合法的 DTensor 分片布局。
+`chunk_size_factor` 来自同一个 bucket 中参数 `shape[1:].numel()` 的对齐要求：代码先按该值从大到小排序，必要时再取 LCM。这样 FSDP 的 `Shard(0)` 和 TP 的切分维度组合起来，仍然是合法的 DTensor 分片布局。
 
-如果某个参数不满足对齐要求，会在末尾填 padding，避免"不均匀分片"（uneven sharding）问题
-（这也是 `uneven_dtensor.py` 要解决的 DCP checkpoint 问题）。
+如果某个参数不满足对齐要求，就在末尾填 padding，避免"不均匀分片"（uneven sharding）问题（这也是 `uneven_dtensor.py` 要解决的 DCP checkpoint 问题）。
 
 ---
 
@@ -217,11 +205,7 @@ install_optimized_model_weights()
     → 把 main_weight_buffer (FP32) cast 回 model_weight_buffer (BF16/FP8)
 ```
 
-也就是说，前向/反向使用的是 `model_weight_buffer` 里的工作精度参数；
-`main_weight_buffer` 是优化器视角的高精度权重。优化器 step 后，
-`install_optimized_model_weights()` 再把主权重写回工作权重。
-这套流程借鉴了 Megatron DistributedOptimizer 的 FP32 主权重 + 低精度工作参数模式，
-但在 ZeRO-3 下额外管理参数 all-gather / release 生命周期。
+也就是说，前向/反向用的是 `model_weight_buffer` 里的工作精度参数，`main_weight_buffer` 则是优化器视角的高精度权重。优化器 step 之后，`install_optimized_model_weights()` 再把主权重写回工作权重。这套流程借鉴了 Megatron DistributedOptimizer 的"FP32 主权重 + 低精度工作参数"模式，只是在 ZeRO-3 下还要额外管理参数的 all-gather / release 生命周期。
 
 ---
 
@@ -251,7 +235,7 @@ ShardBucketIndex  # 当前 rank 的 shard 信息 (global_data_index, local_data_
 
 ### 7.1 Non-Uniform Sharding 的代码实现细节
 
-Per-module 非均匀分片的设计原理见第四节。在代码层面，"不均匀"带来两个需要处理的问题：
+Per-module 非均匀分片的设计原理见第四节。落到代码上，"不均匀"带来两个要处理的问题：
 
 - **对齐**：TP 场景下参数是 DTensor，FSDP 分片边界必须与 TP 的切分维度对齐，否则无法构成合法的 DTensor shard。`chunk_size_factor` 从参数的 `shape[1:].numel()` 推导，保证 `total_size % chunk_size_factor == 0`。
 - **Padding**：若某参数不满足对齐要求，在 bucket 末尾补 padding，避免"不均匀分片"导致 collective 出错。
@@ -281,16 +265,11 @@ ag_pipeline.all_gather_params(
 2. **Prefetch**：在计算当前 FSDP Unit 时，提前 all-gather 下一个 FSDP Unit 的参数
 3. **PrefetchOrder**：前向按 `FORWARD_PASS_ORDER`（模型层顺序），反向按 `BACKWARD_PASS_ORDER`（逆序）
 
-预取大小来自 `ddp_config.suggested_communication_unit_size`。如果没有显式设置，
-代码会根据 FSDP unit 平均参数量或 bucket size 推导，并用 `max(1_000_000_000, inferred_size)`
-给通信 unit size 设置下界，再把
-`suggested_AG_prefetch_size` 设为该值的一半；`AllGatherPipeline` 自身的兜底默认是
-`500_000_000` 个元素，不是固定的 250MB。
+预取大小来自 `ddp_config.suggested_communication_unit_size`。如果没有显式设置，代码会根据 FSDP unit 的平均参数量或 bucket size 推导，并用 `max(1_000_000_000, inferred_size)` 给通信 unit size 设一个下界，再把 `suggested_AG_prefetch_size` 设为该值的一半。`AllGatherPipeline` 自身的兜底默认值是 `500_000_000` 个元素，不是固定的 250MB。
 
 ### 8.2 临时 Buffer 分配器
 
-all-gather 的结果需要临时存储在 GPU 上，直到该 FSDP Unit 完成前向/反向。
-为了避免频繁 cudaMalloc，代码里设计了几种分配器：
+all-gather 的结果要临时放在 GPU 上，直到该 FSDP Unit 完成前向/反向。为了避免频繁 cudaMalloc，代码里设计了几种分配器：
 
 | 分配器 | 策略 | 适用场景 |
 |---|---|---|
@@ -307,19 +286,13 @@ all-gather 的结果需要临时存储在 GPU 上，直到该 FSDP Unit 完成�
 
 ### 8.3 懒释放（Lazy Release）
 
-在激活重计算（activation recomputation / gradient checkpointing）时，
-前向 post-hook 并不立即释放参数（`lazy=True`），
-而是把对应 key 标到 `bucket_can_be_released`。
-下一次 `async_bucket_gather()` 开始时会调用 `recycle_unused_buckets()`，
-把这些已经标记、且不再需要的 bucket 真正释放。
-这避免了 activation recompute 刚 gather 完参数又立刻释放，随后 backward 又重复 all-gather。
+开启激活重计算（activation recomputation / gradient checkpointing）时，前向 post-hook 不会立即释放参数（`lazy=True`），而是把对应 key 标到 `bucket_can_be_released`。下一次 `async_bucket_gather()` 开始时会调用 `recycle_unused_buckets()`，把这些已标记、且不再需要的 bucket 真正释放。这样就不会出现 activation recompute 刚 gather 完参数就立刻释放、随后 backward 又重复 all-gather 的情况。
 
 ---
 
 ## 九、GradReduce Pipeline：梯度 reduce-scatter 的流水线
 
-`GradReducePipeline` 管理梯度从"本地工作精度 grad"到 `main_grad_buffer`
-的规约过程；当 `grad_reduce_in_fp32=True` 时，`main_grad_buffer` 使用 FP32。
+`GradReducePipeline` 管理梯度从"本地工作精度 grad"到 `main_grad_buffer` 的规约过程；当 `grad_reduce_in_fp32=True` 时，`main_grad_buffer` 使用 FP32。
 
 ### 9.1 梯度积累（_grad_acc）
 
@@ -364,8 +337,7 @@ def wait_for_previous_grad_reduce(self, suggested_queue_size=1, suggested_queue_
         free_grad_bucket()   # 释放临时梯度 buffer
 ```
 
-双缓冲限制（`_enforce_double_buffer_limit`）确保同时在途的 reduce-scatter 不超过 2 个 FSDP Unit，
-避免显存中同时存在过多临时梯度 buffer。
+双缓冲限制（`_enforce_double_buffer_limit`）保证同时在途的 reduce-scatter 不超过 2 个 FSDP Unit，免得显存里同时堆着太多临时梯度 buffer。
 
 ### 9.4 梯度拷贝融合（Gradient Copy Fusion）
 
@@ -380,7 +352,7 @@ Megatron-FSDP：_grad_acc() 直接将 param.grad 写入 main_grad_buffer 中对�
                shard 位置（zero-copy），再 reduce-scatter
 ```
 
-由于 per-module 的 buffer 布局（见 7.1 节）保证参数 shard 与梯度 buffer 位置直接对应，梯度可以跳过 remap 步骤直接写入通信 buffer。这种"梯度直写"在实测中带来约 **2%** 的吞吐提升。
+per-module 的 buffer 布局（见 7.1 节）保证了参数 shard 与梯度 buffer 的位置直接对应，所以梯度可以跳过 remap，直接写入通信 buffer。这种"梯度直写"实测带来约 **2%** 的吞吐提升。
 
 ---
 
@@ -429,10 +401,7 @@ microbatch N (last): forward → backward → RS(async) → finish_grad_sync()
                                                          ↑ 统一等待所有 RS 完成
 ```
 
-这是性能最高的训练模式，但需要用户正确设置 `is_last_microbatch` 标志。
-如果通过 `fully_shard()` 这个独立 API 进入，`sync_model_each_microbatch` 默认是 `True`；
-直接构造 `MegatronFSDP` 时默认是 `False`。Megatron-LM 适配层走后者，
-再由 pipeline schedule 的 `no_sync_func` / `grad_sync_func` 控制同步点。
+这是性能最高的训练模式，但需要用户正确设置 `is_last_microbatch` 标志。通过 `fully_shard()` 这个独立 API 进入时，`sync_model_each_microbatch` 默认是 `True`；直接构造 `MegatronFSDP` 时默认是 `False`。Megatron-LM 适配层走的是后者，再由 pipeline schedule 的 `no_sync_func` / `grad_sync_func` 控制同步点。
 
 ---
 
@@ -527,15 +496,11 @@ def install_optimized_model_weights(self):
     param_and_grad_buffer.copy_main_weights_to_model_weights()
 ```
 
-对于 FP8，这里会调用 `fp8_quantize()` 把 FP32 量化回 FP8，
-并通过 `all_reduce(amax)` 在 DP group 内同步量化范围。
+对于 FP8，这里会调用 `fp8_quantize()` 把 FP32 量化回 FP8，并通过 `all_reduce(amax)` 在 DP group 内同步量化范围。
 
 ### 12.3 优化器参数替换
 
-`_replace_param_with_distributed_if_needed()` 把模型中的原始参数替换为
-`ParamAndGradBuffer.optimizer_named_parameters` 中的分布式参数。
-这些参数优先来自 `main_weight_buffer`；如果没有 FP32 主权重，则回退到
-`model_weight_buffer` 或原始参数。Adam/SGD 等优化器实际操作的是这组分布式参数。
+`_replace_param_with_distributed_if_needed()` 把模型中的原始参数替换为 `ParamAndGradBuffer.optimizer_named_parameters` 中的分布式参数。这些参数优先来自 `main_weight_buffer`；没有 FP32 主权重时，回退到 `model_weight_buffer` 或原始参数。Adam/SGD 等优化器实际操作的就是这组分布式参数。
 
 Weight tying（词嵌入权重共享）通过 `_reestablish_shared_weights()` 在替换后重新建立。
 
@@ -543,7 +508,7 @@ Weight tying（词嵌入权重共享）通过 `_reestablish_shared_weights()` �
 
 ## 十三、TP + FSDP 联合：Strided Sharding
 
-当同时使用 Tensor Parallel（TP）和 FSDP 时，需要特别处理分片之间的对应关系。
+Tensor Parallel（TP）和 FSDP 一起用时，要专门处理两种分片之间的对应关系。
 
 ### 13.1 DeviceMesh 配置
 
@@ -563,8 +528,7 @@ dist_index = FSDPDistributedIndex(
 
 ### 13.2 DTensor 与 Strided Sharding
 
-Megatron 的 TP 参数是 `DTensor`，其 placement 标记了参数在 TP 维度的切分方式
-（`Shard(0)` 表示沿第 0 维切，`Replicate` 表示复制）。
+Megatron 的 TP 参数是 `DTensor`，它的 placement 标记了参数在 TP 维度的切分方式（`Shard(0)` 表示沿第 0 维切，`Replicate` 表示复制）。
 
 FSDP 在此基础上对 TP 切片做 **二次展平分片**：
 
@@ -579,21 +543,17 @@ FSDP 分片后（DP=8）：
   → 该参数在内存中只有 H²/8 个元素
 ```
 
-TP 维度的信息通过 `get_mcore_tensor_parallel_partition_dim()` 获取，
-用于计算 `chunk_size_factor`，保证 FSDP 分片边界与 TP 分片对齐。
+TP 维度的信息通过 `get_mcore_tensor_parallel_partition_dim()` 获取，用来计算 `chunk_size_factor`，保证 FSDP 分片边界与 TP 分片对齐。
 
 ### 13.3 All-Gather 时的 DTensor 处理
 
-All-gather 的输入是 DTensor 的 local tensor（通过 `to_local_if_dtensor(p)`）。
-gather 完成后，代码把 DTensor 的 `_local_tensor.data` 指向临时完整 bucket 中的对应切片；
-参数对象仍保留原有 DTensor 外壳和 TP placement，只是 local tensor 变成了可计算的完整 FSDP bucket view。
+All-gather 的输入是 DTensor 的 local tensor（通过 `to_local_if_dtensor(p)` 取得）。gather 完成后，代码把 DTensor 的 `_local_tensor.data` 指向临时完整 bucket 中的对应切片。参数对象还是原来的 DTensor 外壳，TP placement 也不变，只是 local tensor 换成了可以直接计算的完整 FSDP bucket view。
 
 ---
 
 ## 十四、Hybrid FSDP (HSDP)：多级分片
 
-HSDP（Hybrid Sharded Data Parallel）支持"内层全分片 + 外层复制或分片"的混合策略，
-适合超大规模集群（如 128 GPU 节点）。
+HSDP（Hybrid Sharded Data Parallel）支持"内层全分片 + 外层复制或分片"的混合策略，适合超大规模集群（如 128 GPU 节点）。
 
 ```
 HSDP 拓扑（dp_outer=4, dp_shard=8, TP=1）：
@@ -610,10 +570,7 @@ HSDP 拓扑（dp_outer=4, dp_shard=8, TP=1）：
   - `no_shard`：外层仅复制，梯度做 all-reduce（类 DDP）
   - `optim`：外层也分片优化器状态，梯度 reduce-scatter 到 dp_outer group
 
-HSDP 的通信策略：梯度分片策略下，每个 backward 都会在 inner FSDP group 内 reduce-scatter；
-outer group 的梯度通信只在 `is_last_microbatch` 或 `model_auto_sync=True` 时触发，
-`outer_dp_sharding_strategy="no_shard"` 时是 all-reduce，`"optim"` 时是 reduce-scatter。
-通过 `outer_fsdp_group_grad_reduce` 标志控制。
+HSDP 的通信策略是：梯度分片策略下，每个 backward 都会在 inner FSDP group 内 reduce-scatter；outer group 的梯度通信只在 `is_last_microbatch` 或 `model_auto_sync=True` 时触发，`outer_dp_sharding_strategy="no_shard"` 时是 all-reduce，`"optim"` 时是 reduce-scatter，由 `outer_fsdp_group_grad_reduce` 标志控制。
 
 ### 14.1 HSDP 的 4 种集合通信
 
@@ -677,8 +634,7 @@ class FullyShardedDataParallel(_BaseDataParallel):
     scale_gradients = self.module.scale_gradients
 ```
 
-独立 `fully_shard()` API 会 patch optimizer，因此 `optimizer.step()` 可以自动调用
-`finish_grad_sync()` 和 `install_optimized_model_weights()`：
+独立的 `fully_shard()` API 会 patch optimizer，所以 `optimizer.step()` 能自动调用 `finish_grad_sync()` 和 `install_optimized_model_weights()`：
 
 ```python
 # 前向 + 反向（支持梯度累积）
@@ -696,10 +652,7 @@ optimizer.step()
 optimizer.zero_grad(zero_grad_buffer=True)
 ```
 
-在 Megatron-LM 训练框架内，`FullyShardedDataParallel` 与 `DistributedOptimizer`
-进一步集成：schedule 负责在最后一个 microbatch 退出 `no_sync()` 或调用
-`grad_sync_func`，`DistributedOptimizer._copy_main_params_to_model_params()` 会在 step
-后调用 `param_and_grad_buffer.copy_main_weights_to_model_weights()`。
+在 Megatron-LM 训练框架内，`FullyShardedDataParallel` 与 `DistributedOptimizer` 集成得更紧：schedule 负责在最后一个 microbatch 退出 `no_sync()` 或调用 `grad_sync_func`，`DistributedOptimizer._copy_main_params_to_model_params()` 会在 step 后调用 `param_and_grad_buffer.copy_main_weights_to_model_weights()`。
 
 ---
 
@@ -757,9 +710,4 @@ optimizer.zero_grad(zero_grad_buffer=True)
 | **NCCL UB** | 无 | 支持，MoE 多组注册（+5-8% 提升） |
 | **ZeRO 级别** | ZeRO-3 | ZeRO-1/2/3 可选 |
 
-Megatron-FSDP 的核心价值在于：**在 Megatron-LM 的多维并行体系内，
-以最高的通信效率和最细粒度的内存控制实现参数分片**，
-而不是提供一个通用的 FSDP 框架。
-这种专一性使它能够在工程细节上做出 PyTorch FSDP2 难以做到的优化：
-双 stream 精细调度、FSDP Unit 粒度的双缓冲、TP 感知的 strided sharding、
-以及与 TransformerEngine FP8 的深度集成。
+Megatron-FSDP 的核心价值不在于做一个通用的 FSDP 框架，而在于**在 Megatron-LM 的多维并行体系内，以最高的通信效率和最细粒度的内存控制实现参数分片**。正因为目标专一，它才能在工程细节上做到 PyTorch FSDP2 难以做到的优化：双 stream 精细调度、FSDP Unit 粒度的双缓冲、TP 感知的 strided sharding，以及与 TransformerEngine FP8 的深度集成。

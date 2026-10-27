@@ -111,7 +111,7 @@ if graph_kwargs.get("cudagraphs") is None:
 
 ### 2.2 编译期检查（哪些情况会 skip）
 
-在 `fx_codegen_and_compile` 阶段，结果存入 `CompiledFxGraph.disabled_cudagraphs_reason`，
+这些检查在 `fx_codegen_and_compile` 阶段完成，skip 原因存入 `CompiledFxGraph.disabled_cudagraphs_reason`，
 随编译产物一起缓存：
 
 | 检查项 | 触发条件 |
@@ -233,7 +233,7 @@ def cudagraphify_impl(model, inputs, static_input_idxs, *args, **kwargs):
 
 ## 4. CUDAGraphTreeManager
 
-每个 device 一个实例，存在 thread-local 的 `TreeManagerContainer` 里。
+每个 device 一个实例，存放在 thread-local 的 `TreeManagerContainer` 里。
 
 ### 4.1 初始化：创建共享内存池
 
