@@ -1,0 +1,2336 @@
+1
+00:00:03,040 --> 00:00:04,800
+Going into the 1990s,  
+
+2
+00:00:04,800 --> 00:00:10,080
+running a big beefy enterprise server 
+meant UNIX software on RISC hardware.
+
+3
+00:00:10,080 --> 00:00:17,440
+Then came Intel. And upon its silicon horse rode 
+two powerful operating systems. One was Windows,  
+
+4
+00:00:17,440 --> 00:00:20,720
+which everyone first thought would win the market.
+
+5
+00:00:20,720 --> 00:00:23,520
+But then came this new, fast-moving thing  
+
+6
+00:00:23,520 --> 00:00:28,240
+written with the contributions of 
+thousands around the world. Linux.
+
+7
+00:00:28,240 --> 00:00:33,360
+In today's video, one of the most fascinating 
+industrial transitions in computer history:  
+
+8
+00:00:33,360 --> 00:00:38,960
+How Intel, Microsoft and Linux 
+came together to take down UNIX.
+
+9
+00:00:39,560 --> 00:00:41,280
+## Beginnings
+
+10
+00:00:43,200 --> 00:00:48,320
+It is the 1990s and Chipzilla is 
+seeking new worlds to conquer.
+
+11
+00:00:48,320 --> 00:00:52,240
+They had won the consumer PC 
+world by masterfully leveraging  
+
+12
+00:00:52,240 --> 00:00:58,080
+the PC's massive sales volumes. High 
+volume improves semiconductor yield.
+
+13
+00:00:58,080 --> 00:01:04,320
+Better yield reduces costs, raises profits, 
+and throws off more cash to invest back into  
+
+14
+00:01:04,320 --> 00:01:12,240
+better manufacturing. Intel grabbed a lead that 
+competitors like AMD and Cyrix cannot overcome.
+
+15
+00:01:12,240 --> 00:01:17,920
+Intel believed that it can run the same playbook 
+in the world of enterprise servers. Such servers  
+
+16
+00:01:17,920 --> 00:01:23,040
+are used by corporate clients to manage 
+and serve multiple “client” computers.
+
+17
+00:01:23,040 --> 00:01:27,600
+Sometimes, people group servers together 
+with workstations - which are more powerful  
+
+18
+00:01:27,600 --> 00:01:34,000
+desktop computers for intense tasks like 
+graphics or scientific applications. Such  
+
+19
+00:01:34,000 --> 00:01:40,000
+workstations can also serve a file or two 
+over a LAN - acting as a low-end server.
+
+20
+00:01:40,000 --> 00:01:46,880
+On the high end, there are big monolith 
+computers powered by many CPUs with support  
+
+21
+00:01:46,880 --> 00:01:53,520
+for 64-bit and virtual machine as well as lots 
+of memory. They run databases, file storage,  
+
+22
+00:01:53,520 --> 00:01:59,120
+and complex business applications - 
+providing beefy compute via network.
+
+23
+00:01:59,120 --> 00:02:04,240
+They can also serve websites - which 
+later became a massive market as the  
+
+24
+00:02:04,240 --> 00:02:09,736
+Internet craze expanded. Though you 
+don't need a high end machine for that.
+
+25
+00:02:09,736 --> 00:02:11,200
+## Vertically Integrated
+At the start of the decade,
+
+26
+00:02:11,200 --> 00:02:16,800
+this enterprise server market was dominated 
+by vertically-integrated system vendors.
+
+27
+00:02:16,800 --> 00:02:23,040
+Such vendors offered a closed, proprietary 
+system often based on RISC CPUs running a  
+
+28
+00:02:23,040 --> 00:02:27,920
+variant of the UNIX operating system. 
+The largest and most famous vendor  
+
+29
+00:02:27,920 --> 00:02:34,480
+was Sun Microsystem - which offered their 
+SPARC chips and Solaris operating system.
+
+30
+00:02:34,480 --> 00:02:40,640
+Others included IBM with their POWER RISC 
+chips running the AIX operating system.
+
+31
+00:02:40,640 --> 00:02:45,200
+And Hewlett-Packard, with their 
+PA-RISC chips running the HP-UX  
+
+32
+00:02:45,200 --> 00:02:49,040
+operating system. Silicon Graphics as well.
+
+33
+00:02:49,040 --> 00:02:54,960
+These systems were expensive - running into the 
+hundreds of thousands of dollars. What's more,  
+
+34
+00:02:54,960 --> 00:03:02,000
+their proprietary nature made switching 
+nigh impossible. Buy in, get locked in.
+
+35
+00:03:02,000 --> 00:03:02,080
+## Windows NT
+
+36
+00:03:02,080 --> 00:03:07,840
+But if Intel wanted to enter the server 
+market, it needed a strong software partner.
+
+37
+00:03:07,840 --> 00:03:13,200
+And where did this bring them? To 
+Microsoft ... and Windows NT. Released  
+
+38
+00:03:13,200 --> 00:03:20,400
+in 1993 by a team led by the legendary 
+Dave Cutler, NT is a proprietary OS for  
+
+39
+00:03:20,400 --> 00:03:26,480
+both workstations and servers separate 
+from the consumer-oriented Windows.
+
+40
+00:03:26,480 --> 00:03:30,880
+While Windows NT Server looks similar 
+to the consumer product and can run  
+
+41
+00:03:30,880 --> 00:03:35,120
+the same applications, they were 
+quite different beneath the hood.
+
+42
+00:03:35,120 --> 00:03:42,000
+Regular Windows is a graphical shell grotesquely 
+grafted on top of the MS-DOS operating system.  
+
+43
+00:03:42,000 --> 00:03:47,440
+It is said to be possible to clip through 
+into the horrors of the Backrooms beyond.
+
+44
+00:03:47,440 --> 00:03:52,640
+NT on the other hand was written from the 
+ground up for the enterprise. Microsoft  
+
+45
+00:03:52,640 --> 00:03:58,080
+marketed it as being more powerful, 
+reliable, and with enhanced security.
+
+46
+00:03:58,080 --> 00:04:04,320
+The first version of NT Server ran on 
+the Intel 386. It worked fine but it  
+
+47
+00:04:04,320 --> 00:04:10,960
+didn't exactly set the world ablaze. NT was 
+immature, missing features and capabilities  
+
+48
+00:04:10,960 --> 00:04:19,040
+that its competitors - like IBM's OS/2, 
+Novell's NetWare and the UNIX variants - had.
+
+49
+00:04:19,040 --> 00:04:26,560
+And it required rather powerful hardware 
+(for the time): 16 megabytes of RAM. In 1993,  
+
+50
+00:04:26,560 --> 00:04:31,760
+NT Server sold about 30,000 units 
+- undoubtedly a disappointment.
+
+51
+00:04:31,760 --> 00:04:38,480
+But Microsoft is like the Terminator or sequels 
+to Air Bud: They just keep on coming. Redmond  
+
+52
+00:04:38,480 --> 00:04:44,080
+stayed in the market - adding new features 
+and sending the UNIX vendors scrambling.
+
+53
+00:04:44,080 --> 00:04:50,880
+In 1994, Microsoft sold about 
+115,000 NT licenses. An improvement,  
+
+54
+00:04:50,880 --> 00:04:57,505
+though sales still lagged that of even its 
+Workstation sibling. But they were growing.
+
+55
+00:04:57,505 --> 00:04:57,520
+## Pentium Pro
+
+56
+00:04:57,520 --> 00:05:01,840
+In late 1995, Intel presented 
+the first chip they really felt  
+
+57
+00:05:01,840 --> 00:05:06,560
+could take them to the server 
+space: the 32-bit Pentium Pro.
+
+58
+00:05:06,560 --> 00:05:08,800
+I mentioned the Pentium Pro before.  
+
+59
+00:05:08,800 --> 00:05:15,360
+It had 5.5 million transistors and ran 
+at about 150-200 megahertz - a great  
+
+60
+00:05:15,360 --> 00:05:22,240
+leap over the original Pentium's 3.1 
+million transistors and 60 megahertz.
+
+61
+00:05:22,240 --> 00:05:25,600
+The Pentium Pro slightly outperformed the fastest  
+
+62
+00:05:25,600 --> 00:05:31,680
+RISC chips in certain integer benchmarks. 
+Which took the community by surprise.
+
+63
+00:05:31,680 --> 00:05:38,720
+While faster RISC chips like the MIPS R10000 
+quickly matched afterwards, the Pro reset  
+
+64
+00:05:38,720 --> 00:05:44,880
+the perceived performance limits of what was 
+previously deemed a mere "desktop" architecture.  
+
+65
+00:05:44,880 --> 00:05:51,360
+The Pentium Pro thusly gave Intel the performance 
+wedge it needed to invade the server world.
+
+66
+00:05:51,360 --> 00:05:57,040
+Vendors found that it together with the next 
+major version of Windows NT - version 4.0,  
+
+67
+00:05:57,600 --> 00:06:02,240
+released earlier that same year - produced 
+a ready-made server standard that can  
+
+68
+00:06:02,240 --> 00:06:08,960
+match the performance of some RISC-based 
+integrated systems at a far lower price.
+
+69
+00:06:08,960 --> 00:06:16,240
+In mid-1995 Intel started circulating example 
+boards of what they called "Standard High Volume  
+
+70
+00:06:16,240 --> 00:06:22,720
+Servers". These are basic reference models that 
+partners can adopt to accelerate time-to-market.
+
+71
+00:06:22,720 --> 00:06:27,600
+The first generation boards 
+can support 1-4 Pentium Pros,  
+
+72
+00:06:27,600 --> 00:06:33,040
+1-2 gigabytes of working memory, and 
+hundreds of gigabytes of storage. Intel  
+
+73
+00:06:33,040 --> 00:06:38,880
+said that these servers can handle 
+up to 2,000 transactions per second.
+
+74
+00:06:38,880 --> 00:06:43,040
+During the release presentation in 
+November, Intel announced Pentium  
+
+75
+00:06:43,040 --> 00:06:52,000
+Pro-powered computers ranging from a 
+$2,600 workstation to a $20,000 server.
+
+76
+00:06:52,000 --> 00:06:59,840
+In 1996, sales of Windows NT 4.0 
+grew by 85% - reaching 27% market  
+
+77
+00:06:59,840 --> 00:07:04,720
+share according to IDC. The 
+competition remained strong,  
+
+78
+00:07:04,720 --> 00:07:11,660
+but Wintel was building up a strong base in 
+servers, like what they have done in consumer.
+
+79
+00:07:11,660 --> 00:07:11,680
+## Border Skirmishes
+
+80
+00:07:11,680 --> 00:07:17,360
+However, Intel knew there were risks in 
+chaining its enterprise future to Microsoft.
+
+81
+00:07:17,360 --> 00:07:22,880
+While on the whole Microsoft and Intel 
+cooperated to grow the PC ecosystem,  
+
+82
+00:07:22,880 --> 00:07:29,840
+breakouts still happened. Most infamously, in 
+1995 Intel introduced a multimedia software  
+
+83
+00:07:29,840 --> 00:07:34,720
+standard they called "native 
+signal processing" or NSP.
+
+84
+00:07:34,720 --> 00:07:40,400
+NSP was Intel’s effort to offload some 
+demanding audio and video compute to the  
+
+85
+00:07:40,400 --> 00:07:48,480
+CPU via software and APIs. Their thinking was 
+simple: Get people to buy faster processors.
+
+86
+00:07:48,480 --> 00:07:56,000
+But Microsoft saw NSP as a "middleware" that 
+bypassed the OS and so stepped into Windows’ turf.  
+
+87
+00:07:56,000 --> 00:08:02,240
+Microsoft executives made it extremely clear to 
+Intel that they had issues and publicly announced  
+
+88
+00:08:02,240 --> 00:08:10,320
+that they will not support it. CEO Bill Gates sent 
+an email to Andy Grove to express his irritation.
+
+89
+00:08:10,320 --> 00:08:15,280
+The NSP Affair was not the only border 
+skirmish to occur during this time,  
+
+90
+00:08:15,280 --> 00:08:19,760
+but it is the most well known. Mostly 
+because it came out during Microsoft's  
+
+91
+00:08:19,760 --> 00:08:24,880
+anti-trust lawsuit as an example 
+of its anti-competitive behavior.
+
+92
+00:08:24,880 --> 00:08:27,680
+And when it came out, the 
+two parties pooh-poohed it,  
+
+93
+00:08:27,680 --> 00:08:34,320
+emphasizing that everything was alright. 
+But NSP reminded Intel that their partner  
+
+94
+00:08:34,320 --> 00:08:39,040
+was more than willing to exercise its 
+leverage to kill things it didn’t like.
+
+95
+00:08:39,920 --> 00:08:46,080
+Unlike the consumer versions of Windows, Windows 
+NT was built from the ground-up to be portable.  
+
+96
+00:08:46,080 --> 00:08:53,680
+While most instances of NT ran on x86, it also 
+works on other hardwares like DEC's Alpha CPU,  
+
+97
+00:08:53,680 --> 00:08:58,800
+IBM and Apple's PowerPC, and the RISC design MIPS.
+
+98
+00:08:58,800 --> 00:09:03,360
+Microsoft continued to seal more chip 
+support deals - skillfully flanking  
+
+99
+00:09:03,360 --> 00:09:08,960
+Intel right in front of it. A thought 
+emerged. If NT corners the market,  
+
+100
+00:09:08,960 --> 00:09:17,187
+can Microsoft turn x86 and Intel into just 
+another hardware architecture amongst many?
+
+101
+00:09:17,187 --> 00:09:17,200
+## Mismatches
+
+102
+00:09:17,200 --> 00:09:21,520
+Even if that does not happen, there 
+still remained the performance issues.
+
+103
+00:09:21,520 --> 00:09:26,720
+With Moore's Law, Intel gets a new, 
+faster, better chip every two years.  
+
+104
+00:09:26,720 --> 00:09:31,440
+But Microsoft puts out a new Windows 
+roughly every three to five years.  
+
+105
+00:09:31,440 --> 00:09:36,720
+And that Windows doesn't always use 
+everything that Intel's chips had to offer.
+
+106
+00:09:36,720 --> 00:09:44,640
+Most infamously, Intel first released a 
+32-bit chip in 1985 - the 386 processor.  
+
+107
+00:09:44,640 --> 00:09:51,040
+Microsoft didn't bring out a 32-bit 
+consumer OS until 1995 - Windows 95,  
+
+108
+00:09:51,040 --> 00:09:54,960
+in case you were wondering. Ten years later!
+
+109
+00:09:54,960 --> 00:09:59,040
+Another one occurred during the 
+Pentium Pro development process,  
+
+110
+00:09:59,040 --> 00:10:03,360
+recounted by Bob Colwell in his 
+book the Pentium Chronicles.
+
+111
+00:10:03,360 --> 00:10:09,120
+Microsoft told Intel in many meetings that 
+Windows 95 (then known as "Chicago") was  
+
+112
+00:10:09,120 --> 00:10:14,480
+going to be 32-bit only with all the 
+legacy 16-bit code to be removed. This  
+
+113
+00:10:14,480 --> 00:10:20,080
+gave Intel the assurance to optimize 
+Pentium Pro for 32-bit performance.
+
+114
+00:10:20,640 --> 00:10:27,600
+So imagine how much constructive confrontation was 
+forthcoming when Microsoft publicly announced in  
+
+115
+00:10:27,600 --> 00:10:36,320
+1994 that Chicago's graphics display interface 
+- a key piece of the OS - will remain 16-bits.
+
+116
+00:10:36,320 --> 00:10:40,800
+It was too late in the development cycle 
+for Intel to change the Pentium Pro,  
+
+117
+00:10:40,800 --> 00:10:46,400
+so the show went on. And then when it came out, 
+Intel got dinged in the press for the chip’s  
+
+118
+00:10:46,400 --> 00:10:53,440
+subpar graphics performance on consumer 
+desktops. Fortunately not a dealbreaker.
+
+119
+00:10:53,440 --> 00:10:59,200
+And specifically regarding NT and the 
+server world, Intel felt that NT 4.0's  
+
+120
+00:10:59,200 --> 00:11:05,360
+limits of 4-8 processors per OS instance 
+imposed a performance ceiling that kept it  
+
+121
+00:11:05,360 --> 00:11:12,800
+out of the high end. To compare, some UNIX 
+variants can handle up to 64 processors.
+
+122
+00:11:12,800 --> 00:11:18,880
+This mismatch ties back to the two’s different 
+growth models, Intel's growth depends on them  
+
+123
+00:11:18,880 --> 00:11:24,400
+selling people the newest chip. So 
+they want software that helps do that.
+
+124
+00:11:24,400 --> 00:11:29,840
+Microsoft on the other hand prioritizes 
+servicing their whole install base. So  
+
+125
+00:11:29,840 --> 00:11:36,240
+they are going to take it slow - emphasizing 
+backwards compatibility and the whole ecosystem.
+
+126
+00:11:36,240 --> 00:11:41,040
+And it is not like they don't invest - 
+developing a new Windows involves thousands  
+
+127
+00:11:41,040 --> 00:11:46,880
+of employees and might cost billions 
+of dollars. It's just how software is.
+
+128
+00:11:46,880 --> 00:11:52,480
+So Intel and Microsoft suffer that tension. 
+But what choice does Intel have with regards to  
+
+129
+00:11:52,480 --> 00:12:00,160
+alternatives? In the late 1990s, one very strong 
+new candidate appeared on their radar: Linux.
+
+130
+00:12:00,160 --> 00:12:00,240
+# Stallman
+
+131
+00:12:00,240 --> 00:12:08,480
+In January 1984, a programmer at MIT named Richard 
+Stallman formally began a project to replace UNIX.
+
+132
+00:12:08,480 --> 00:12:11,120
+Stallman hailed from the MIT AI Lab,  
+
+133
+00:12:11,120 --> 00:12:16,560
+which appeared in my video about Lisp 
+machines, AI, and expert systems.
+
+134
+00:12:16,560 --> 00:12:21,520
+Lisp began as an elegant research 
+tool for early AI research. But when  
+
+135
+00:12:21,520 --> 00:12:27,200
+businesspeople recognized that Lisp and 
+the AI it powers can be a big industry,  
+
+136
+00:12:27,200 --> 00:12:33,120
+the Lab split apart into two companies, 
+Symbolics and Lisp Machines Inc.
+
+137
+00:12:33,120 --> 00:12:38,000
+Symbolics raised millions to try and 
+become the Nvidia of its day - hiring  
+
+138
+00:12:38,000 --> 00:12:44,160
+away the Lab's top hackers and leaving it a 
+shell of itself. Stallman never forgave this.  
+
+139
+00:12:44,160 --> 00:12:47,040
+"Everything's dying" he would later say.
+
+140
+00:12:47,040 --> 00:12:50,880
+Motivated by deep feelings of 
+loss over his hacker community,  
+
+141
+00:12:50,880 --> 00:12:56,720
+he decided to start a new one - founded 
+on top of the concept of free software.
+
+142
+00:12:56,720 --> 00:13:01,600
+Thusly in late 1983, he embarked on 
+a project to build a free operating  
+
+143
+00:13:01,600 --> 00:13:06,240
+system that followed UNIX's design 
+principles - like its modularity and  
+
+144
+00:13:06,240 --> 00:13:11,600
+portability across hardware - without 
+copying it for trade secret reasons.
+
+145
+00:13:11,600 --> 00:13:17,360
+The thing was called GNU - which he said 
+to mean "GNU's Not UNIX". Stallman didn't  
+
+146
+00:13:17,360 --> 00:13:22,720
+know if he would ever finish it, but with such 
+things you will never know if you don’t start.
+
+147
+00:13:22,720 --> 00:13:26,800
+Over the next few years, Stallman and his new 
+community built out the various bits of the  
+
+148
+00:13:26,800 --> 00:13:32,720
+toolchain. But there was one thing missing: 
+The kernel, which suffered incessant delays.
+
+149
+00:13:32,720 --> 00:13:37,600
+This was a pretty major piece. The 
+kernel bridges the OS and the hardware.  
+
+150
+00:13:37,600 --> 00:13:42,080
+It manages memory, how much CPU 
+time a process gets, disk space,  
+
+151
+00:13:42,080 --> 00:13:49,342
+and more. Even the name sounds important. It sits 
+at the very heart of the whole operating system.
+
+152
+00:13:49,342 --> 00:13:49,360
+## Linus and Linux
+
+153
+00:13:49,360 --> 00:13:53,760
+That kernel finally arrived thanks to the 
+work of a 21-year old Finnish undergraduate  
+
+154
+00:13:53,760 --> 00:14:01,360
+named Linus Torvalds, who was inspired by 
+an educational UNIX-based OS called MINIX.
+
+155
+00:14:01,360 --> 00:14:05,840
+Very famous story. You probably 
+heard it before. In August 1991,  
+
+156
+00:14:05,840 --> 00:14:11,760
+he posted on the MINIX Usenet group that he was 
+making a free hobbyist OS and requested feature  
+
+157
+00:14:11,760 --> 00:14:19,280
+ideas. It drew contributors from that ecosystem 
+and eventually spun off into its own: Linux.
+
+158
+00:14:19,280 --> 00:14:25,040
+Linus's role in the Linux project soon changes 
+from coder to that of a leader who reviews  
+
+159
+00:14:25,040 --> 00:14:30,640
+other people’s contributions and merges them 
+into the code base. This approach - famously  
+
+160
+00:14:30,640 --> 00:14:36,720
+described as like a bazaar - lets Linux 
+ship new code faster than companies can.
+
+161
+00:14:36,720 --> 00:14:42,960
+The first workable version of Linux 
+released in October 1991. Then in 1992,  
+
+162
+00:14:42,960 --> 00:14:51,200
+version 0.12 adopted Stallman's license, GPL. 
+This allowed anyone to read and modify Linux’s  
+
+163
+00:14:51,200 --> 00:14:57,040
+code so long as those modifications 
+are also open sourced, if distributed.
+
+164
+00:14:57,040 --> 00:15:00,720
+So GPL prevented companies from taking the code,  
+
+165
+00:15:00,720 --> 00:15:05,840
+adding some salt on top and re-selling 
+the result as a competing closed-source  
+
+166
+00:15:05,840 --> 00:15:12,800
+product - thereby saving the Linux kernel from 
+the same fragmentation issues that afflicted UNIX.
+
+167
+00:15:12,800 --> 00:15:18,720
+It also assured companies that any work they did 
+to improve the kernel would help everyone and not  
+
+168
+00:15:18,720 --> 00:15:24,480
+get locked away. Companies as large as IBM would 
+have hundreds of their employees contributing  
+
+169
+00:15:24,480 --> 00:15:31,897
+code. Torvalds would later famously say that 
+going GPL was the best thing that he ever did.
+
+170
+00:15:31,897 --> 00:15:31,920
+## Distros and Red Hat
+
+171
+00:15:31,920 --> 00:15:36,960
+The GPL also made possible the 
+business of commercial distribution.
+
+172
+00:15:36,960 --> 00:15:40,560
+Linux is a kernel - a car engine. Very important,  
+
+173
+00:15:40,560 --> 00:15:45,680
+but you still kinda need the rest of the 
+car. That might be fine for early adopters,  
+
+174
+00:15:45,680 --> 00:15:51,040
+it is not practical to ask ordinary users 
+to build their car before driving it.
+
+175
+00:15:51,040 --> 00:15:56,800
+So people started doing distributions 
+or "distros". Distributions package the  
+
+176
+00:15:56,800 --> 00:16:01,520
+Linux kernel along with utilities from 
+the GNU Project or other free software  
+
+177
+00:16:01,520 --> 00:16:06,800
+to produce an OS bundle that is 
+slightly more convenient to use.
+
+178
+00:16:06,800 --> 00:16:13,520
+It is like those mixtapes we senior citizens 
+used to pass around to each other in high school.
+
+179
+00:16:13,520 --> 00:16:18,400
+Good distros became popular enough to 
+monetize. Someone likened the business  
+
+180
+00:16:18,400 --> 00:16:23,840
+model to selling bottled water. Different 
+packaging, same water ... unless you are  
+
+181
+00:16:23,840 --> 00:16:30,160
+a Nongfu Water extremist and really into 
+the "natural over purified" water thing.
+
+182
+00:16:30,160 --> 00:16:36,240
+Anyway. Notable early distributions of this 
+GNU/Linux operating system - which I must shorten  
+
+183
+00:16:36,240 --> 00:16:41,836
+to Linux for the sake of brevity but let us not 
+forget GNU - include Slackware and Debian ...
+
+184
+00:16:41,836 --> 00:16:49,600
+... and Red Hat, which was first set up by 
+Marc Ewing in 1993. Ewing adopted Linux early,  
+
+185
+00:16:49,600 --> 00:16:54,000
+but after some time realized that he was 
+spending more time managing his Linux  
+
+186
+00:16:54,000 --> 00:16:58,640
+box than actually developing 
+software. I know the feeling.
+
+187
+00:16:58,640 --> 00:17:03,920
+So he made a distribution called Red Hat in 
+the spare bedroom of his apartment near Duke  
+
+188
+00:17:03,920 --> 00:17:09,040
+University. Named to memorialize a red 
+and white striped lacrosse cap he used  
+
+189
+00:17:09,040 --> 00:17:15,680
+to wear in college. Though the logo looks 
+more like a fedora or a trilby, M’lady.
+
+190
+00:17:15,680 --> 00:17:20,320
+Red Hat provided things around Linux 
+to make it a more professional product.
+
+191
+00:17:20,320 --> 00:17:26,000
+Like for example, the Red Hat Package 
+Manager utility, which helps users add,  
+
+192
+00:17:26,000 --> 00:17:31,200
+remove, or update software packages 
+that do stuff like Web or FTP.
+
+193
+00:17:31,200 --> 00:17:38,000
+The Red Hat distribution can then be put 
+on a CD and sold in retail shops. In 1995,  
+
+194
+00:17:38,000 --> 00:17:43,360
+Marc Ewing and colleague Robert Young founded Red 
+Hat the company, which earned revenue from selling  
+
+195
+00:17:43,360 --> 00:17:49,680
+those CDs as well as accompanying training, 
+education and customer support services.
+
+196
+00:17:49,680 --> 00:17:54,160
+In its first years, Linux was something 
+for highly technical hackers and broke  
+
+197
+00:17:54,160 --> 00:17:59,040
+college students. The rise of Red Hat 
+and other commercial distributions like  
+
+198
+00:17:59,040 --> 00:18:05,654
+Caldera helped usher Linux out of that early 
+space and into the corporate mainstream.
+
+199
+00:18:05,654 --> 00:18:05,680
+## An OS With Opportunity
+
+200
+00:18:05,680 --> 00:18:10,160
+Linux adoption started small 
+but grew fast. By mid-1997,  
+
+201
+00:18:10,160 --> 00:18:15,840
+its worldwide user base was conservatively 
+estimated at around 3-5 million.
+
+202
+00:18:15,840 --> 00:18:21,760
+Yeah sure that far lags Windows' 100 
+million users and Apple Macintosh’s 50+  
+
+203
+00:18:21,760 --> 00:18:30,160
+million. But in early 1992, Linux had maybe a 
+few hundred users. And 1996, maybe 1-2 million.
+
+204
+00:18:30,160 --> 00:18:35,680
+What was driving all this uptake? It was more 
+than just price, though price of course played  
+
+205
+00:18:35,680 --> 00:18:42,240
+a factor. A Red Hat disc and box retailed 
+at about $50. Windows NT licenses on the  
+
+206
+00:18:42,240 --> 00:18:48,400
+other hand might sell for anywhere from $150 
+for a single upgrade to $1100 for a 10-seat  
+
+207
+00:18:48,400 --> 00:18:56,720
+package. And UNIX systems with hardware and 
+software will cost $25,000 to $250,000 or more.
+
+208
+00:18:56,720 --> 00:19:01,600
+Byte Magazine ran a story in 1997 
+mentioning a systems consultant for  
+
+209
+00:19:01,600 --> 00:19:07,200
+Eastman Kodak installing Linux to aid in 
+some project for their Photo CD product,  
+
+210
+00:19:07,200 --> 00:19:12,960
+and saving the company $10,000 by not 
+getting a high-priced UNIX alternative.
+
+211
+00:19:12,960 --> 00:19:17,600
+Considering how the Photo CD 
+ended up, good savings indeed.
+
+212
+00:19:17,600 --> 00:19:23,440
+But interestingly, companies and organizations 
+did not adopt Linux just because it was cheap.  
+
+213
+00:19:23,440 --> 00:19:28,240
+A significant Linux advantage was 
+its reliability. One user said that  
+
+214
+00:19:28,240 --> 00:19:32,720
+it was almost "crash-proof", which 
+translates to better productivity.
+
+215
+00:19:32,720 --> 00:19:37,200
+And for sophisticated users, they loved that 
+they can access its source code - something  
+
+216
+00:19:37,200 --> 00:19:42,000
+Microsoft would never let anyone do with 
+Windows. So people can customize their  
+
+217
+00:19:42,000 --> 00:19:47,120
+Linux to do things on the fly. People 
+tweaked Linux to run on a Palm Pilot.  
+
+218
+00:19:47,120 --> 00:19:54,640
+Researchers at Los Alamos used Linux to network 
+together 68 PCs to simulate atomic shock waves.
+
+219
+00:19:54,640 --> 00:20:00,320
+On the other hand, it was true that Linux also 
+had glaring shortcomings. First and foremost,  
+
+220
+00:20:00,320 --> 00:20:05,760
+it had nowhere near as many applications 
+as Windows or Mac. There was no good Linux  
+
+221
+00:20:05,760 --> 00:20:10,960
+version of Microsoft Office, Visual 
+Basic, or other business software.
+
+222
+00:20:10,960 --> 00:20:16,320
+I like how Byte said all that, then added right 
+afterwards that Linux did include lots of tools  
+
+223
+00:20:16,320 --> 00:20:22,800
+that you can use to create your own applications. 
+That is the kind of audience, I reckon.
+
+224
+00:20:22,800 --> 00:20:26,160
+Another issue is getting 
+support. If something goes wrong,  
+
+225
+00:20:26,160 --> 00:20:30,800
+what documentation can you consult. And 
+who can you call? Though that is where  
+
+226
+00:20:30,800 --> 00:20:36,080
+companies like Red Hat and Caldera 
+can step in, providing tech support.
+
+227
+00:20:36,080 --> 00:20:41,520
+One last issue about Linux was its reputation. 
+Despite not sharing a direct lineage, it is  
+
+228
+00:20:41,520 --> 00:20:49,120
+often associated with UNIX - which means receiving 
+UNIX's aura of being inscrutable and hard to use.
+
+229
+00:20:49,120 --> 00:20:53,040
+And despite the fast growth, all 
+the prestigious names adopting it,  
+
+230
+00:20:53,040 --> 00:20:58,320
+and the real price-performance benefits, there 
+still remained a negative bias amongst company  
+
+231
+00:20:58,320 --> 00:21:05,040
+executives. A manager might often ask "How can 
+you possibly consider it for a critical server?"
+
+232
+00:21:06,160 --> 00:21:12,000
+Yet even as they ask that, Linux probably was 
+already running somewhere in their company.  
+
+233
+00:21:12,000 --> 00:21:17,200
+One anonymous system administrator 
+told the SF Chronicle in 1998:
+
+234
+00:21:17,200 --> 00:21:23,120
+> "Many management types distrust Linux because 
+it is free. But they put me in charge of running  
+
+235
+00:21:23,120 --> 00:21:28,760
+their servers and I am going to use what 
+works best. What works best is Linux".
+
+236
+00:21:28,760 --> 00:21:30,400
+## Meet Intel
+
+237
+00:21:31,280 --> 00:21:36,640
+In early 1998, Intel started receiving these 
+strange requests from across the country.
+
+238
+00:21:36,640 --> 00:21:39,520
+Engineers and researchers at places like US's  
+
+239
+00:21:39,520 --> 00:21:45,520
+Fermi National Lab were asking Intel 
+to port its math libraries to Linux.
+
+240
+00:21:45,520 --> 00:21:51,360
+Prior to this, Intel had minimal involvement 
+with Linux - maybe fixing a bug or two.  
+
+241
+00:21:51,360 --> 00:21:56,960
+However, checks with OEMs making white-label 
+computer servers for customers like small  
+
+242
+00:21:56,960 --> 00:22:02,640
+Internet Service Providers showed them 
+that Linux growth was exploding upwards.
+
+243
+00:22:02,640 --> 00:22:08,640
+Almost 20% of public web servers ran it - an 
+unexpectedly high market share considering  
+
+244
+00:22:08,640 --> 00:22:14,000
+that the OS had little to no presence on 
+the desktop. Still doesn't, by the way.
+
+245
+00:22:14,640 --> 00:22:19,040
+This news went straight up to Andy Grove, 
+who remarked in rather colorful language  
+
+246
+00:22:19,040 --> 00:22:23,760
+that they should be doing something about 
+this. So Intel executives reached out to  
+
+247
+00:22:23,760 --> 00:22:29,440
+Red Hat and in a series of meetings, tried 
+to learn about how this company worked.
+
+248
+00:22:29,440 --> 00:22:35,600
+And it sort of baffled them. Red Hat doesn't 
+own the underlying IP behind its core software  
+
+249
+00:22:35,600 --> 00:22:42,080
+product, which anyone can get for free. How 
+does that make money? How’s this investable?
+
+250
+00:22:42,720 --> 00:22:49,200
+But the guys at Red Hat kept talking. CEO 
+Robert Young liked to use this ketchup metaphor:  
+
+251
+00:22:49,200 --> 00:22:56,080
+Anyone with tomatoes, sugar and vinegar can make 
+ketchup, yet Heinz owns 80% of that market. And  
+
+252
+00:22:56,080 --> 00:23:02,560
+Linux advocates inside Intel shared data points 
+of what they learned on ISP adoption. In the end,  
+
+253
+00:23:02,560 --> 00:23:07,680
+Intel management was convinced and the two 
+companies started talking about partnerships.
+
+254
+00:23:08,240 --> 00:23:14,960
+As I mentioned earlier, Intel increasingly felt 
+that it would be risky to rely on just Windows NT.  
+
+255
+00:23:14,960 --> 00:23:20,960
+They were working on a new chip called "Merced", 
+the first implementation of their 64-bit IA-64  
+
+256
+00:23:20,960 --> 00:23:27,440
+server architecture. It shall later be branded 
+as Itanium, and was said to be blazingly fast.
+
+257
+00:23:27,440 --> 00:23:31,600
+But worries lingered that NT would 
+shackle its full power - same as how  
+
+258
+00:23:31,600 --> 00:23:36,560
+things went with 32-bit for literally a 
+decade. Perhaps reinforcing those fears,  
+
+259
+00:23:36,560 --> 00:23:41,280
+Microsoft's next version of NT - 
+then called NT 5.0 - was delayed  
+
+260
+00:23:41,280 --> 00:23:51,040
+from 1998 to 1999. After yet further delays, 
+Microsoft renamed NT 5.0 to Windows 2000.
+
+261
+00:23:51,040 --> 00:23:57,360
+Now Intel can support and contribute to Linux 
+development - tuning it to take advantage  
+
+262
+00:23:57,360 --> 00:24:03,680
+of Intel's latest and greatest silicon - and 
+make it a compelling alternative to Windows.
+
+263
+00:24:03,680 --> 00:24:03,840
+## Summer of Linux
+
+264
+00:24:03,840 --> 00:24:09,040
+The summer of 1998 saw multiple big 
+companies making Linux announcements.
+
+265
+00:24:09,040 --> 00:24:13,920
+In June 1998, IBM - one of the most 
+conservative companies out there - said  
+
+266
+00:24:13,920 --> 00:24:18,720
+that it will include an open source web 
+server software called Apache in its suite  
+
+267
+00:24:18,720 --> 00:24:25,680
+of e-commerce tools. Apache isn't Linux, 
+but most Apache server instances run on it.
+
+268
+00:24:25,680 --> 00:24:30,880
+IBM first encountered Apache back in 1996 
+when they selected it for the website of  
+
+269
+00:24:30,880 --> 00:24:35,440
+the Atlanta Summer Olympics. Now they 
+were giving it their stamp of approval,  
+
+270
+00:24:35,440 --> 00:24:40,480
+officially giving open source its 
+first foothold into the enterprise.
+
+271
+00:24:40,480 --> 00:24:44,640
+Another famous adopter was 
+Oracle. On July 6th 1998,  
+
+272
+00:24:44,640 --> 00:24:49,840
+InfoWorld published an article titled 
+"Linux not yet critical mass". In it,  
+
+273
+00:24:49,840 --> 00:24:54,560
+Oracle - plus Sybase and Informix - said 
+they had no intentions of releasing their  
+
+274
+00:24:54,560 --> 00:25:00,960
+DB software for Linux. A rep said they weren’t 
+seeing a big demand from customers for it.
+
+275
+00:25:00,960 --> 00:25:04,720
+Three days later, Oracle announced 
+that they were porting their Oracle8  
+
+276
+00:25:04,720 --> 00:25:09,440
+database to Linux. A major reason 
+for this abrupt turnaround was a  
+
+277
+00:25:09,440 --> 00:25:15,760
+panel discussion held at Santa Clara in 
+July 1998 called "the Future of Linux".
+
+278
+00:25:15,760 --> 00:25:21,120
+Over 900 or so people came to see Torvalds 
+and others. In the panel, they discussed  
+
+279
+00:25:21,120 --> 00:25:28,640
+whether open source was a fad, urged users to push 
+application vendors to port to Linux, and more.
+
+280
+00:25:28,640 --> 00:25:34,800
+People later identify that panel as a major 
+turning point. By September 1998, several large  
+
+281
+00:25:34,800 --> 00:25:40,160
+companies had Linux ports including the enterprise 
+systems company Computer Associates, software  
+
+282
+00:25:40,160 --> 00:25:46,680
+maker Corel, and database company Informix. The 
+trend would continue in the subsequent years.
+
+283
+00:25:46,680 --> 00:25:48,074
+## Intel and Red Hat
+
+284
+00:25:48,074 --> 00:25:51,360
+Intel was also at that July 
+"Future of Linux" panel.
+
+285
+00:25:51,360 --> 00:25:56,320
+Intel's Sunil Saxena gave a presentation 
+saying that Linux was becoming the OS of  
+
+286
+00:25:56,320 --> 00:26:01,360
+choice for Internet Service Providers while 
+also noting some of its weaknesses - like  
+
+287
+00:26:01,360 --> 00:26:06,320
+scalability, drivers for high end 
+hardware, and large memory support.
+
+288
+00:26:06,880 --> 00:26:12,080
+He emphasized that Intel wanted to support 
+Linux. And those words were soon backed with  
+
+289
+00:26:12,080 --> 00:26:17,440
+action on September 29th when Intel announced 
+that it - along with the web browser company  
+
+290
+00:26:17,440 --> 00:26:22,800
+Netscape and VC firms Benchmark and 
+Greylock - would invest in Red Hat.
+
+291
+00:26:22,800 --> 00:26:27,760
+Now, Intel was saying they wanted Intel 
+silicon to run Linux as well as it did  
+
+292
+00:26:27,760 --> 00:26:32,400
+Windows NT and everything else. They 
+will work with Red Hat - providing  
+
+293
+00:26:32,400 --> 00:26:38,880
+technical contribution plus a dedicated Intel 
+engineering liaison for the Linux community.
+
+294
+00:26:38,880 --> 00:26:43,200
+Cherry on top, Intel also said they 
+will join Linux International - an  
+
+295
+00:26:43,200 --> 00:26:47,520
+early worldwide Linux advocacy organization.
+
+296
+00:26:47,520 --> 00:26:52,000
+After the announcement, another 
+critical but underrated domino falls.  
+
+297
+00:26:52,000 --> 00:26:57,200
+One Benchmark partner was also a board 
+member at Dell, and through him Red Hat  
+
+298
+00:26:57,200 --> 00:27:02,480
+got in front of Michael Dell. They started 
+talking about Linux's growth on the server,  
+
+299
+00:27:02,480 --> 00:27:07,520
+how the market might shape up, and 
+if Linux can ever win the desktop.
+
+300
+00:27:07,520 --> 00:27:12,160
+Dell eventually invested into Red Hat. And 
+more importantly, they later announce in  
+
+301
+00:27:12,160 --> 00:27:18,640
+early 1999 that they will start preinstalling 
+Linux on workstations and servers - the first  
+
+302
+00:27:18,640 --> 00:27:26,067
+major vendor to do this. Suddenly Linux is 
+on the same pedestal as Windows and Novell.
+
+303
+00:27:26,067 --> 00:27:26,080
+## Microsoft
+
+304
+00:27:26,080 --> 00:27:30,800
+When news of Intel's Red Hat investment 
+came out, the tech media went into a  
+
+305
+00:27:30,800 --> 00:27:36,720
+frenzy speculating what this might mean 
+for the Intel-Microsoft relationship.
+
+306
+00:27:36,720 --> 00:27:40,480
+Red Hat's executives recounted in 
+the book "Under the Radar" that  
+
+307
+00:27:40,480 --> 00:27:45,280
+Microsoft "went ballistic" after Intel 
+announced their investment. That weekend,  
+
+308
+00:27:45,280 --> 00:27:50,240
+Intel executives took multiple angry 
+calls from their Microsoft counterparts.
+
+309
+00:27:50,240 --> 00:27:56,560
+Prior to 1998, Microsoft maybe could have nixed 
+the Intel investment. But in May that year,  
+
+310
+00:27:56,560 --> 00:28:00,720
+the US government charged Microsoft 
+for monopolistic actions - particularly  
+
+311
+00:28:00,720 --> 00:28:06,480
+regarding how it bundled Internet Explorer 
+with Windows during the Browser Wars.
+
+312
+00:28:06,480 --> 00:28:09,520
+The trial and scrutiny meant that Microsoft had to  
+
+313
+00:28:09,520 --> 00:28:14,160
+temper its behavior. Publicly they 
+issued a statement citing Red Hat as  
+
+314
+00:28:14,160 --> 00:28:18,960
+evidence that Microsoft didn't actually 
+have a monopoly on operating systems.
+
+315
+00:28:19,760 --> 00:28:23,440
+Interestingly, Microsoft would later 
+invoke Linux as evidence that there  
+
+316
+00:28:23,440 --> 00:28:29,120
+remained enough competition in the OS market 
+that the government shouldn't break them up.
+
+317
+00:28:29,120 --> 00:28:33,120
+But internally, they were 
+concerned. In October 1998,  
+
+318
+00:28:33,120 --> 00:28:37,680
+a set of Microsoft memos - infamously 
+named the Halloween Memos - leaked,  
+
+319
+00:28:37,680 --> 00:28:43,520
+called the rise of free software like Linux 
+a long-term credible threat to Windows.
+
+320
+00:28:43,520 --> 00:28:47,360
+They then reportedly formed a "Linux 
+attack team" to convince customers  
+
+321
+00:28:47,360 --> 00:28:52,080
+that it was not ready. They posted 
+a web page called "Linux Myths",  
+
+322
+00:28:52,080 --> 00:28:56,320
+that tries to "step back from the 
+hype and look at the reality".
+
+323
+00:28:57,280 --> 00:29:02,400
+It then addresses various "myths" chanted 
+by the Linux faithful like "Linux performs  
+
+324
+00:29:02,400 --> 00:29:09,840
+better than Windows NT 4", and "Linux is more 
+reliable than Windows NT 4" and "Linux is free".
+
+325
+00:29:09,840 --> 00:29:14,800
+Infamously in April 1999, Microsoft 
+sponsored benchmark tests by a third  
+
+326
+00:29:14,800 --> 00:29:20,640
+party lab called Mindcraft that 
+showed NT outperforming Linux  
+
+327
+00:29:20,640 --> 00:29:27,262
+as a file server by 2.5 times 
+and web server by 3.7 times.
+
+328
+00:29:27,262 --> 00:29:27,280
+## Port of Choice
+
+329
+00:29:27,280 --> 00:29:32,080
+Intel dodged Gates’ fury by 
+declaring that it was OS neutral.
+
+330
+00:29:32,080 --> 00:29:37,680
+So Linux, Novell’s Netware, Sun’s 
+Solaris and Microsoft’s Windows 2000,  
+
+331
+00:29:37,680 --> 00:29:41,280
+Intel wanted all of them to 
+run well on its hardware.
+
+332
+00:29:41,280 --> 00:29:45,760
+Intel (along with twenty other companies) 
+even tried to unite the thirty or so UNIX  
+
+333
+00:29:45,760 --> 00:29:49,680
+variants out there using a thing 
+called Uniform Driver Initiative  
+
+334
+00:29:49,680 --> 00:29:55,120
+so that vendors can write drivers for 
+Intel hardware. It didn't end up so well.
+
+335
+00:29:55,120 --> 00:30:00,880
+Later in 2010, Intel would formalize this 
+Switzerland strategy as "Port of Choice",  
+
+336
+00:30:00,880 --> 00:30:07,680
+but CTO Pat Gelsinger called it a long-standing 
+strategy in 2001. And in the end, the OS  
+
+337
+00:30:07,680 --> 00:30:13,280
+makers had to accept it, because Intel 
+silicon then had no real alternatives.
+
+338
+00:30:13,280 --> 00:30:19,920
+In mid-1998, Intel brought out its follow-up to 
+the Pentium Pro: The powerful Pentium II Xeon.  
+
+339
+00:30:19,920 --> 00:30:25,600
+Intel designed this chip to tackle the mid-range 
+workstation and server markets with faster clock  
+
+340
+00:30:25,600 --> 00:30:32,480
+speeds and a large 512-kilobyte L2 cache that 
+made it more suitable for server platforms.
+
+341
+00:30:32,480 --> 00:30:38,720
+A few months later in March 1999, Intel 
+released the Pentium III Xeon - a fast,  
+
+342
+00:30:38,720 --> 00:30:44,960
+cheap CPU for web and e-commerce transactions. 
+While the speed boost over Pentium II Xeon was  
+
+343
+00:30:44,960 --> 00:30:51,840
+small, the successor did feature support for 
+8-way systems via something called Profusion.
+
+344
+00:30:51,840 --> 00:30:56,960
+This means vendors can build servers with 
+eight symmetrical processors - essentially  
+
+345
+00:30:56,960 --> 00:31:02,240
+gluing eight CPUs together inside 
+one box. This broke through a prior  
+
+346
+00:31:02,240 --> 00:31:08,080
+4-way system ceiling that was then causing 
+performance issues in existing data centers.
+
+347
+00:31:08,080 --> 00:31:12,880
+To note, this 4-way and 8-way systems 
+feature did require the OS to support  
+
+348
+00:31:12,880 --> 00:31:20,240
+it. This was something that Windows NT/2000 
+can do, and Linux then had issues with.
+
+349
+00:31:20,240 --> 00:31:24,000
+High end UNIX servers still 
+retained key advantages. Namely,  
+
+350
+00:31:24,000 --> 00:31:28,480
+certain software like large-scale 
+databases, data warehouses and CAD  
+
+351
+00:31:28,480 --> 00:31:34,800
+systems required far more main memory than 
+what x86's 32-bit architecture can allow.
+
+352
+00:31:35,360 --> 00:31:37,760
+But thanks to this pair of Pentiums,  
+
+353
+00:31:37,760 --> 00:31:44,378
+the low to middle ground of UNIX servers 
+found its flanks open to massive competition.
+
+354
+00:31:44,378 --> 00:31:44,400
+## The Web Scales Out
+
+355
+00:31:44,400 --> 00:31:49,760
+Sun initially welcomed the Linux revolution. It 
+was in line with their motto of being "open".
+
+356
+00:31:49,760 --> 00:31:54,560
+So they ported their Java Development Kit 
+to Linux, and released a Linux port of  
+
+357
+00:31:54,560 --> 00:31:58,880
+workstation hardware. The general 
+impression they gave was that Sun  
+
+358
+00:31:58,880 --> 00:32:04,800
+doesn't care whether a box runs Linux or 
+Solaris - it just has to be a SPARC box.
+
+359
+00:32:04,800 --> 00:32:10,560
+But that turned out to be a problem. It didn't 
+have to be a SPARC box. Serving websites,  
+
+360
+00:32:10,560 --> 00:32:16,560
+email hosting, firewall and other stuff are 
+not like running DB or analytics software.
+
+361
+00:32:16,560 --> 00:32:20,960
+Companies realized that scaling out 
+with nodes of Intel silicon running  
+
+362
+00:32:20,960 --> 00:32:27,280
+Linux made more financial sense than 
+scaling up a big honking UNIX server.
+
+363
+00:32:27,280 --> 00:32:32,640
+This trend suddenly accelerated after the 
+Dotcom stock bubble exploded. Venture money  
+
+364
+00:32:32,640 --> 00:32:37,680
+dried up and startups started dying. With 
+frugality the word of the day, companies  
+
+365
+00:32:37,680 --> 00:32:43,840
+saved money by buying second-hand equipment 
+bought from liquidated failures or Linux.
+
+366
+00:32:43,840 --> 00:32:47,520
+Amazon did a major Linux transition in 2001,  
+
+367
+00:32:47,520 --> 00:32:51,840
+mentioning in their quarterly SEC filing 
+that it cut their costs by an estimated  
+
+368
+00:32:51,840 --> 00:32:56,960
+$17 million per quarter. When asked about 
+what they did, an Amazon spokesman said:
+
+369
+00:32:56,960 --> 00:33:02,560
+> "We've always been pretty closed-mouthed about 
+technology on the back-end stuff, partly because  
+
+370
+00:33:02,560 --> 00:33:07,840
+it's pretty steep tuition and we don't want 
+other people going to school on our tuition"
+
+371
+00:33:09,280 --> 00:33:16,320
+The online broker Etrade published a fascinating 
+2006 case study. It compared a Sun 4500 Enterprise  
+
+372
+00:33:16,320 --> 00:33:25,680
+Server that costs $250,000 and can serve about 300 
+to 400 users to a Linux-Intel box that costs just  
+
+373
+00:33:25,680 --> 00:33:33,200
+$4,000 but serves only 180 people. 
+How to fix the gap? Get two boxes.
+
+374
+00:33:33,200 --> 00:33:39,120
+Starting in 2001, Linux boxes with Intel silicon 
+got good enough to steadily replace Sun's in  
+
+375
+00:33:39,120 --> 00:33:45,600
+everything from airline fare to commodities 
+contracts trading to financial calculations.
+
+376
+00:33:45,600 --> 00:33:52,240
+Sun tried their own scale-out web play with 
+the Netra. The 2001 Netra X1 model cost as  
+
+377
+00:33:52,240 --> 00:33:58,640
+little as $1,000, but commodity x86 still 
+provided better performance for the dollar.  
+
+378
+00:33:58,640 --> 00:34:01,040
+The company never really formulated a proper  
+
+379
+00:34:01,040 --> 00:34:07,503
+response to this transition from 
+Solaris on SPARC to Linux on Intel.
+
+380
+00:34:07,503 --> 00:34:07,520
+## Going Upscale
+
+381
+00:34:07,520 --> 00:34:12,160
+After winning the low-end game, Linux 
+now turned its sights to scaling up.
+
+382
+00:34:12,160 --> 00:34:17,120
+In late 2000, IBM's CEO Lou Gerstner 
+- believing that Linux will change the  
+
+383
+00:34:17,120 --> 00:34:21,440
+world in the same way as the Internet 
+- announced a massive Linux effort,  
+
+384
+00:34:21,440 --> 00:34:26,080
+investing $1 billion and 
+dedicating 1,500 employees.
+
+385
+00:34:26,080 --> 00:34:31,520
+January 2001 saw the release of Linux 
+2.4. Red Hat quickly adopted it for a  
+
+386
+00:34:31,520 --> 00:34:37,360
+subsequent release. It arrived a year 
+late, but Linux 2.4 delivered the goods  
+
+387
+00:34:37,360 --> 00:34:43,920
+in terms of closing some major performance 
+gaps with high-end UNIX servers and NT.
+
+388
+00:34:43,920 --> 00:34:48,480
+A major flashpoint during the 1999 
+Mindcraft tests a few years prior  
+
+389
+00:34:48,480 --> 00:34:54,160
+involved Linux's support of multiprocessor 
+boxes. That test - confirmed in subsequent  
+
+390
+00:34:54,160 --> 00:35:01,760
+tests - showed that Linux 2.2 did not scale 
+very well beyond two CPUs in a single system.
+
+391
+00:35:01,760 --> 00:35:06,640
+Windows NT 4.0 and 2000 if 
+you recall did have that 4,  
+
+392
+00:35:06,640 --> 00:35:12,720
+8, and even 32-way processor support. 
+So not having it was a major weakness.
+
+393
+00:35:12,720 --> 00:35:17,360
+So Torvalds and company rolled up 
+their sleeves and worked on it. 2.4  
+
+394
+00:35:17,360 --> 00:35:23,280
+addressed issues like spin locks - allowing 
+Linux to use 16 or even 32 processors with some  
+
+395
+00:35:23,280 --> 00:35:29,440
+effectiveness. Though I’m not sure how well 
+it actually ran with that high of a number.
+
+396
+00:35:29,440 --> 00:35:33,920
+It didn't make Linux a challenger to 
+high end UNIX machines overnight. But  
+
+397
+00:35:33,920 --> 00:35:39,840
+the ability to capably support at least 4 
+or 8 CPUs cleared a path for Linux on Intel,  
+
+398
+00:35:40,720 --> 00:35:45,120
+or Lintel, to surge into the 
+middle ground of compute tasks.
+
+399
+00:35:45,120 --> 00:35:49,200
+The economics of Lintel suddenly got 
+very compelling. A Dell server with  
+
+400
+00:35:49,200 --> 00:35:53,120
+four Xeons running Red Hat Linux at $24,000 costs  
+
+401
+00:35:53,120 --> 00:35:58,800
+half as much as a comparable Sun Fire 
+UNIX box but performs just as well.
+
+402
+00:35:58,800 --> 00:36:04,720
+Red Hat and IBM immediately began targeting 
+Sun's Solaris customer base. Hewlett-Packard  
+
+403
+00:36:04,720 --> 00:36:09,760
+and SGI started offering their customers 
+running proprietary hardware the option to  
+
+404
+00:36:09,760 --> 00:36:16,480
+move to a Linux solution - reasoning that it is 
+better to maintain that customer relationship.
+
+405
+00:36:16,480 --> 00:36:20,640
+2002 was a hard year for the server 
+market, but Linux boxes still grew  
+
+406
+00:36:20,640 --> 00:36:26,240
+swimmingly at the expense of RISC based 
+systems. Gartner reported that in 2002,  
+
+407
+00:36:26,240 --> 00:36:32,640
+Linux server hardware revenue grew 63% 
+while UNIX revenue hardware fell 11%.
+
+408
+00:36:33,280 --> 00:36:39,440
+UNIX hardware was still larger revenue-wise 
+- $17 billion in 2002 compared to Linux's $2  
+
+409
+00:36:39,440 --> 00:36:43,840
+billion - just because these are high end 
+machines that cost more. But the pressure  
+
+410
+00:36:43,840 --> 00:36:56,480
+was there. By 2004, the average selling price of a 
+Sun server had fallen 31% from $22,920 to $15,860.
+
+411
+00:36:56,480 --> 00:36:57,200
+## Opteron and x86-64
+
+412
+00:36:57,200 --> 00:37:01,840
+One major effort that Intel wanted 
+for Linux early on was 64-bit support,  
+
+413
+00:37:01,840 --> 00:37:05,040
+meaning for IA-64 or Itanium.
+
+414
+00:37:05,040 --> 00:37:11,200
+In April 1999, Intel spun up Project Trillian, a 
+consortium of companies that would confidentially  
+
+415
+00:37:11,200 --> 00:37:16,720
+receive Itanium prototypes so they can 
+develop a Linux port. And in February 2000,  
+
+416
+00:37:16,720 --> 00:37:21,920
+the project released the IA-64 Linux 
+source code early to the community.
+
+417
+00:37:21,920 --> 00:37:27,120
+Trillian was a milestone in open source 
+software development history. That being said,  
+
+418
+00:37:27,120 --> 00:37:31,840
+Itanium didn't end up replacing 
+the 32-bit version of x86, though  
+
+419
+00:37:31,840 --> 00:37:37,440
+HP did adopt it to replace the processors 
+using their proprietary flavors of UNIX.
+
+420
+00:37:37,440 --> 00:37:42,960
+As we all know, it would be AMD not Intel 
+that kicked off the 64-bit transition  
+
+421
+00:37:42,960 --> 00:37:49,680
+with their groundbreaking Opteron series of 
+chips in mid-2003. Some time later in 2004,  
+
+422
+00:37:49,680 --> 00:37:57,440
+Intel released the Nocona Xeon, adopting 
+AMD's backwards compatible 64-bit extension.
+
+423
+00:37:57,440 --> 00:38:02,000
+64-bit had been one of the last things 
+that higher-end UNIX systems still had  
+
+424
+00:38:02,000 --> 00:38:08,640
+over x86. A 32-bit x86 computer addresses 
+about 4 gigabytes of RAM - far less than  
+
+425
+00:38:08,640 --> 00:38:14,720
+what high end applications like databases or 
+scientific simulations need to hold in memory.
+
+426
+00:38:14,720 --> 00:38:20,320
+After going 64-bit, an x86 system can now 
+address dozens or even hundreds of gigabytes of  
+
+427
+00:38:20,320 --> 00:38:26,560
+RAM - removing one of the last major architectural 
+barriers from switching away from UNIX.
+
+428
+00:38:26,560 --> 00:38:31,760
+Some initially felt that the way Intel 
+adopted 64-bit was a bit of a kludge or  
+
+429
+00:38:31,760 --> 00:38:38,880
+only a stopgap towards Itanium. Eh, 
+the results are undeniable. x86-64  
+
+430
+00:38:38,880 --> 00:38:45,669
+bludgeoned the last walls surrounding UNIX. 
+The Lintel barbarians were now in the castle.
+
+431
+00:38:45,669 --> 00:38:45,680
+## Windows
+
+432
+00:38:45,680 --> 00:38:52,880
+Then in late 2003, you had the release of Linux 
+2.6 - which turned out to be a very iconic kernel.
+
+433
+00:38:52,880 --> 00:38:58,240
+Everything about it was improved - speed, 
+networking, support for up to 64 processors,  
+
+434
+00:38:58,240 --> 00:39:03,280
+and more. You might consider it the 
+first "enterprise-ready" Linux kernel.
+
+435
+00:39:03,280 --> 00:39:09,120
+Moreover, it arrived just as users of the 
+now-antiquated Windows NT 4.0 began their  
+
+436
+00:39:09,120 --> 00:39:14,160
+upgrade cycles. They were single and 
+ready to mingle. IBM, Hewlett-Packard,  
+
+437
+00:39:14,160 --> 00:39:19,840
+Dell and the other sirens sang their 
+lungs out to woo customers to Linux.
+
+438
+00:39:19,840 --> 00:39:24,640
+IBM in particular led the charge - 
+training thousands of people in Linux,  
+
+439
+00:39:24,640 --> 00:39:28,720
+helping developers rewrite their 
+apps for Linux and providing massive  
+
+440
+00:39:28,720 --> 00:39:33,040
+marketing dollars and discounted 
+machines to potential switchers.
+
+441
+00:39:33,040 --> 00:39:37,840
+How do you fight something that anyone can 
+download for free?Microsoft's general pitch  
+
+442
+00:39:37,840 --> 00:39:42,320
+was that everyone is already using Office, 
+so it would be expensive and troublesome  
+
+443
+00:39:42,320 --> 00:39:47,200
+to switch to Linux than it would be 
+to just buy Windows Server licenses.
+
+444
+00:39:47,200 --> 00:39:52,240
+In 2004, Microsoft ran a "Get the facts" 
+marketing campaign sharing research purporting  
+
+445
+00:39:52,240 --> 00:39:57,840
+to show Windows in a better light compared 
+to Linux. The website collected controversy  
+
+446
+00:39:57,840 --> 00:40:03,120
+as those studies were accused as not being 
+very "impartial" and potentially misleading.
+
+447
+00:40:03,680 --> 00:40:08,000
+A method that I think worked far better 
+was the deep lock-in afforded by a product  
+
+448
+00:40:08,000 --> 00:40:12,080
+called Active Directory - which Ben 
+Thompson of Stratechery has since  
+
+449
+00:40:12,080 --> 00:40:17,280
+called "one of the most valuable free 
+products of all time". What is that?
+
+450
+00:40:17,280 --> 00:40:21,920
+Released as part of Windows 2000, 
+Active Directory authenticates and  
+
+451
+00:40:21,920 --> 00:40:27,440
+authorizes all the users and assets inside 
+a Windows network. It lets you push updates,  
+
+452
+00:40:27,440 --> 00:40:32,720
+assign security rights to groups per the 
+org chart, and validates authentication.
+
+453
+00:40:32,720 --> 00:40:38,640
+So with AD, an administrator can onboard a 
+new manager, verify their credentials and  
+
+454
+00:40:38,640 --> 00:40:44,080
+give them access to the right tools. And users 
+can log in to various things with one set of  
+
+455
+00:40:44,080 --> 00:40:51,280
+credentials. It turns a bunch of random Windows 
+machines into a single manage-able organization.
+
+456
+00:40:51,280 --> 00:40:55,360
+As Ben points out, it also gave 
+Microsoft ownership of individual  
+
+457
+00:40:55,360 --> 00:40:59,840
+identity. And since identity reached 
+so deeply into the organization,  
+
+458
+00:40:59,840 --> 00:41:05,120
+it raised the cost of switching to a 
+level far beyond "just" an OS swap.
+
+459
+00:41:05,120 --> 00:41:09,440
+So in defiance of the people predicting 
+that Linux would take down Microsoft,  
+
+460
+00:41:09,440 --> 00:41:12,880
+Windows Server sales kept growing. In 2005,  
+
+461
+00:41:12,880 --> 00:41:18,560
+Windows matched UNIX revenue for the first time 
+ever. The next year, they would surpass it.
+
+462
+00:41:19,120 --> 00:41:23,760
+Linux kept growing, but that growth was 
+less from eating Windows and more from  
+
+463
+00:41:23,760 --> 00:41:30,080
+eating UNIX or growing in brand new markets where 
+Windows never got a foothold - supercomputing,  
+
+464
+00:41:30,080 --> 00:41:35,506
+high performance compute, 
+web, and in the 2010s, cloud.
+
+465
+00:41:35,506 --> 00:41:37,680
+## Conclusion
+UNIX server sales would slowly decline in
+
+466
+00:41:37,680 --> 00:41:40,960
+the following years. But it 
+has not completely died out!
+
+467
+00:41:40,960 --> 00:41:46,560
+Even today, there remain some 
+customers on Solaris, HP-UX or AIX.  
+
+468
+00:41:46,560 --> 00:41:50,480
+Many such laggard applications 
+- usually centered in banking or  
+
+469
+00:41:50,480 --> 00:41:55,840
+healthcare - are for one reason or another 
+too challenging or risky to port to Linux.
+
+470
+00:41:55,840 --> 00:42:00,400
+So why did UNIX lose? I might propose 
+that it had less to do with technology  
+
+471
+00:42:00,400 --> 00:42:04,960
+than business model. These vertically 
+integrated kingdoms worked fine years  
+
+472
+00:42:04,960 --> 00:42:09,760
+ago until Intel arrived with 
+its high volume economics.
+
+473
+00:42:09,760 --> 00:42:16,000
+First, it was Windows NT who hit UNIX hard. 
+But Linux would go at them even harder - being  
+
+474
+00:42:16,000 --> 00:42:22,480
+able to offer customers everything that UNIX had 
+without the lock-in. Once Linux got good enough,  
+
+475
+00:42:22,480 --> 00:42:27,200
+the UNIX vendors had no choice 
+but to make the switch themselves.
+

@@ -1,0 +1,475 @@
+[00:00:03,040] Going into the 1990s,
+[00:00:04,800] running a big beefy enterprise server meant UNIX software on RISC hardware.
+[00:00:10,080] Then came Intel. And upon its silicon horse rode two powerful operating systems. One was Windows,
+[00:00:17,440] which everyone first thought would win the market.
+[00:00:20,720] But then came this new, fast-moving thing
+[00:00:23,520] written with the contributions of thousands around the world. Linux.
+[00:00:28,240] In today's video, one of the most fascinating industrial transitions in computer history:
+[00:00:33,360] How Intel, Microsoft and Linux came together to take down UNIX.
+[00:00:39,560] ## Beginnings
+[00:00:43,200] It is the 1990s and Chipzilla is seeking new worlds to conquer.
+[00:00:48,320] They had won the consumer PC world by masterfully leveraging
+[00:00:52,240] the PC's massive sales volumes. High volume improves semiconductor yield.
+[00:00:58,080] Better yield reduces costs, raises profits, and throws off more cash to invest back into
+[00:01:04,320] better manufacturing. Intel grabbed a lead that competitors like AMD and Cyrix cannot overcome.
+[00:01:12,240] Intel believed that it can run the same playbook in the world of enterprise servers. Such servers
+[00:01:17,920] are used by corporate clients to manage and serve multiple “client” computers.
+[00:01:23,040] Sometimes, people group servers together with workstations - which are more powerful
+[00:01:27,600] desktop computers for intense tasks like graphics or scientific applications. Such
+[00:01:34,000] workstations can also serve a file or two over a LAN - acting as a low-end server.
+[00:01:40,000] On the high end, there are big monolith computers powered by many CPUs with support
+[00:01:46,880] for 64-bit and virtual machine as well as lots of memory. They run databases, file storage,
+[00:01:53,520] and complex business applications - providing beefy compute via network.
+[00:01:59,120] They can also serve websites - which later became a massive market as the
+[00:02:04,240] Internet craze expanded. Though you don't need a high end machine for that.
+[00:02:09,736] ## Vertically Integrated At the start of the decade,
+[00:02:11,200] this enterprise server market was dominated by vertically-integrated system vendors.
+[00:02:16,800] Such vendors offered a closed, proprietary system often based on RISC CPUs running a
+[00:02:23,040] variant of the UNIX operating system. The largest and most famous vendor
+[00:02:27,920] was Sun Microsystem - which offered their SPARC chips and Solaris operating system.
+[00:02:34,480] Others included IBM with their POWER RISC chips running the AIX operating system.
+[00:02:40,640] And Hewlett-Packard, with their PA-RISC chips running the HP-UX
+[00:02:45,200] operating system. Silicon Graphics as well.
+[00:02:49,040] These systems were expensive - running into the hundreds of thousands of dollars. What's more,
+[00:02:54,960] their proprietary nature made switching nigh impossible. Buy in, get locked in.
+[00:03:02,000] ## Windows NT
+[00:03:02,080] But if Intel wanted to enter the server market, it needed a strong software partner.
+[00:03:07,840] And where did this bring them? To Microsoft ... and Windows NT. Released
+[00:03:13,200] in 1993 by a team led by the legendary Dave Cutler, NT is a proprietary OS for
+[00:03:20,400] both workstations and servers separate from the consumer-oriented Windows.
+[00:03:26,480] While Windows NT Server looks similar to the consumer product and can run
+[00:03:30,880] the same applications, they were quite different beneath the hood.
+[00:03:35,120] Regular Windows is a graphical shell grotesquely grafted on top of the MS-DOS operating system.
+[00:03:42,000] It is said to be possible to clip through into the horrors of the Backrooms beyond.
+[00:03:47,440] NT on the other hand was written from the ground up for the enterprise. Microsoft
+[00:03:52,640] marketed it as being more powerful, reliable, and with enhanced security.
+[00:03:58,080] The first version of NT Server ran on the Intel 386. It worked fine but it
+[00:04:04,320] didn't exactly set the world ablaze. NT was immature, missing features and capabilities
+[00:04:10,960] that its competitors - like IBM's OS/2, Novell's NetWare and the UNIX variants - had.
+[00:04:19,040] And it required rather powerful hardware (for the time): 16 megabytes of RAM. In 1993,
+[00:04:26,560] NT Server sold about 30,000 units - undoubtedly a disappointment.
+[00:04:31,760] But Microsoft is like the Terminator or sequels to Air Bud: They just keep on coming. Redmond
+[00:04:38,480] stayed in the market - adding new features and sending the UNIX vendors scrambling.
+[00:04:44,080] In 1994, Microsoft sold about 115,000 NT licenses. An improvement,
+[00:04:50,880] though sales still lagged that of even its Workstation sibling. But they were growing.
+[00:04:57,505] ## Pentium Pro
+[00:04:57,520] In late 1995, Intel presented the first chip they really felt
+[00:05:01,840] could take them to the server space: the 32-bit Pentium Pro.
+[00:05:06,560] I mentioned the Pentium Pro before.
+[00:05:08,800] It had 5.5 million transistors and ran at about 150-200 megahertz - a great
+[00:05:15,360] leap over the original Pentium's 3.1 million transistors and 60 megahertz.
+[00:05:22,240] The Pentium Pro slightly outperformed the fastest
+[00:05:25,600] RISC chips in certain integer benchmarks. Which took the community by surprise.
+[00:05:31,680] While faster RISC chips like the MIPS R10000 quickly matched afterwards, the Pro reset
+[00:05:38,720] the perceived performance limits of what was previously deemed a mere "desktop" architecture.
+[00:05:44,880] The Pentium Pro thusly gave Intel the performance wedge it needed to invade the server world.
+[00:05:51,360] Vendors found that it together with the next major version of Windows NT - version 4.0,
+[00:05:57,600] released earlier that same year - produced a ready-made server standard that can
+[00:06:02,240] match the performance of some RISC-based integrated systems at a far lower price.
+[00:06:08,960] In mid-1995 Intel started circulating example boards of what they called "Standard High Volume
+[00:06:16,240] Servers". These are basic reference models that partners can adopt to accelerate time-to-market.
+[00:06:22,720] The first generation boards can support 1-4 Pentium Pros,
+[00:06:27,600] 1-2 gigabytes of working memory, and hundreds of gigabytes of storage. Intel
+[00:06:33,040] said that these servers can handle up to 2,000 transactions per second.
+[00:06:38,880] During the release presentation in November, Intel announced Pentium
+[00:06:43,040] Pro-powered computers ranging from a $2,600 workstation to a $20,000 server.
+[00:06:52,000] In 1996, sales of Windows NT 4.0 grew by 85% - reaching 27% market
+[00:06:59,840] share according to IDC. The competition remained strong,
+[00:07:04,720] but Wintel was building up a strong base in servers, like what they have done in consumer.
+[00:07:11,660] ## Border Skirmishes
+[00:07:11,680] However, Intel knew there were risks in chaining its enterprise future to Microsoft.
+[00:07:17,360] While on the whole Microsoft and Intel cooperated to grow the PC ecosystem,
+[00:07:22,880] breakouts still happened. Most infamously, in 1995 Intel introduced a multimedia software
+[00:07:29,840] standard they called "native signal processing" or NSP.
+[00:07:34,720] NSP was Intel’s effort to offload some demanding audio and video compute to the
+[00:07:40,400] CPU via software and APIs. Their thinking was simple: Get people to buy faster processors.
+[00:07:48,480] But Microsoft saw NSP as a "middleware" that bypassed the OS and so stepped into Windows’ turf.
+[00:07:56,000] Microsoft executives made it extremely clear to Intel that they had issues and publicly announced
+[00:08:02,240] that they will not support it. CEO Bill Gates sent an email to Andy Grove to express his irritation.
+[00:08:10,320] The NSP Affair was not the only border skirmish to occur during this time,
+[00:08:15,280] but it is the most well known. Mostly because it came out during Microsoft's
+[00:08:19,760] anti-trust lawsuit as an example of its anti-competitive behavior.
+[00:08:24,880] And when it came out, the two parties pooh-poohed it,
+[00:08:27,680] emphasizing that everything was alright. But NSP reminded Intel that their partner
+[00:08:34,320] was more than willing to exercise its leverage to kill things it didn’t like.
+[00:08:39,920] Unlike the consumer versions of Windows, Windows NT was built from the ground-up to be portable.
+[00:08:46,080] While most instances of NT ran on x86, it also works on other hardwares like DEC's Alpha CPU,
+[00:08:53,680] IBM and Apple's PowerPC, and the RISC design MIPS.
+[00:08:58,800] Microsoft continued to seal more chip support deals - skillfully flanking
+[00:09:03,360] Intel right in front of it. A thought emerged. If NT corners the market,
+[00:09:08,960] can Microsoft turn x86 and Intel into just another hardware architecture amongst many?
+[00:09:17,187] ## Mismatches
+[00:09:17,200] Even if that does not happen, there still remained the performance issues.
+[00:09:21,520] With Moore's Law, Intel gets a new, faster, better chip every two years.
+[00:09:26,720] But Microsoft puts out a new Windows roughly every three to five years.
+[00:09:31,440] And that Windows doesn't always use everything that Intel's chips had to offer.
+[00:09:36,720] Most infamously, Intel first released a 32-bit chip in 1985 - the 386 processor.
+[00:09:44,640] Microsoft didn't bring out a 32-bit consumer OS until 1995 - Windows 95,
+[00:09:51,040] in case you were wondering. Ten years later!
+[00:09:54,960] Another one occurred during the Pentium Pro development process,
+[00:09:59,040] recounted by Bob Colwell in his book the Pentium Chronicles.
+[00:10:03,360] Microsoft told Intel in many meetings that Windows 95 (then known as "Chicago") was
+[00:10:09,120] going to be 32-bit only with all the legacy 16-bit code to be removed. This
+[00:10:14,480] gave Intel the assurance to optimize Pentium Pro for 32-bit performance.
+[00:10:20,640] So imagine how much constructive confrontation was forthcoming when Microsoft publicly announced in
+[00:10:27,600] 1994 that Chicago's graphics display interface - a key piece of the OS - will remain 16-bits.
+[00:10:36,320] It was too late in the development cycle for Intel to change the Pentium Pro,
+[00:10:40,800] so the show went on. And then when it came out, Intel got dinged in the press for the chip’s
+[00:10:46,400] subpar graphics performance on consumer desktops. Fortunately not a dealbreaker.
+[00:10:53,440] And specifically regarding NT and the server world, Intel felt that NT 4.0's
+[00:10:59,200] limits of 4-8 processors per OS instance imposed a performance ceiling that kept it
+[00:11:05,360] out of the high end. To compare, some UNIX variants can handle up to 64 processors.
+[00:11:12,800] This mismatch ties back to the two’s different growth models, Intel's growth depends on them
+[00:11:18,880] selling people the newest chip. So they want software that helps do that.
+[00:11:24,400] Microsoft on the other hand prioritizes servicing their whole install base. So
+[00:11:29,840] they are going to take it slow - emphasizing backwards compatibility and the whole ecosystem.
+[00:11:36,240] And it is not like they don't invest - developing a new Windows involves thousands
+[00:11:41,040] of employees and might cost billions of dollars. It's just how software is.
+[00:11:46,880] So Intel and Microsoft suffer that tension. But what choice does Intel have with regards to
+[00:11:52,480] alternatives? In the late 1990s, one very strong new candidate appeared on their radar: Linux.
+[00:12:00,160] # Stallman
+[00:12:00,240] In January 1984, a programmer at MIT named Richard Stallman formally began a project to replace UNIX.
+[00:12:08,480] Stallman hailed from the MIT AI Lab,
+[00:12:11,120] which appeared in my video about Lisp machines, AI, and expert systems.
+[00:12:16,560] Lisp began as an elegant research tool for early AI research. But when
+[00:12:21,520] businesspeople recognized that Lisp and the AI it powers can be a big industry,
+[00:12:27,200] the Lab split apart into two companies, Symbolics and Lisp Machines Inc.
+[00:12:33,120] Symbolics raised millions to try and become the Nvidia of its day - hiring
+[00:12:38,000] away the Lab's top hackers and leaving it a shell of itself. Stallman never forgave this.
+[00:12:44,160] "Everything's dying" he would later say.
+[00:12:47,040] Motivated by deep feelings of loss over his hacker community,
+[00:12:50,880] he decided to start a new one - founded on top of the concept of free software.
+[00:12:56,720] Thusly in late 1983, he embarked on a project to build a free operating
+[00:13:01,600] system that followed UNIX's design principles - like its modularity and
+[00:13:06,240] portability across hardware - without copying it for trade secret reasons.
+[00:13:11,600] The thing was called GNU - which he said to mean "GNU's Not UNIX". Stallman didn't
+[00:13:17,360] know if he would ever finish it, but with such things you will never know if you don’t start.
+[00:13:22,720] Over the next few years, Stallman and his new community built out the various bits of the
+[00:13:26,800] toolchain. But there was one thing missing: The kernel, which suffered incessant delays.
+[00:13:32,720] This was a pretty major piece. The kernel bridges the OS and the hardware.
+[00:13:37,600] It manages memory, how much CPU time a process gets, disk space,
+[00:13:42,080] and more. Even the name sounds important. It sits at the very heart of the whole operating system.
+[00:13:49,342] ## Linus and Linux
+[00:13:49,360] That kernel finally arrived thanks to the work of a 21-year old Finnish undergraduate
+[00:13:53,760] named Linus Torvalds, who was inspired by an educational UNIX-based OS called MINIX.
+[00:14:01,360] Very famous story. You probably heard it before. In August 1991,
+[00:14:05,840] he posted on the MINIX Usenet group that he was making a free hobbyist OS and requested feature
+[00:14:11,760] ideas. It drew contributors from that ecosystem and eventually spun off into its own: Linux.
+[00:14:19,280] Linus's role in the Linux project soon changes from coder to that of a leader who reviews
+[00:14:25,040] other people’s contributions and merges them into the code base. This approach - famously
+[00:14:30,640] described as like a bazaar - lets Linux ship new code faster than companies can.
+[00:14:36,720] The first workable version of Linux released in October 1991. Then in 1992,
+[00:14:42,960] version 0.12 adopted Stallman's license, GPL. This allowed anyone to read and modify Linux’s
+[00:14:51,200] code so long as those modifications are also open sourced, if distributed.
+[00:14:57,040] So GPL prevented companies from taking the code,
+[00:15:00,720] adding some salt on top and re-selling the result as a competing closed-source
+[00:15:05,840] product - thereby saving the Linux kernel from the same fragmentation issues that afflicted UNIX.
+[00:15:12,800] It also assured companies that any work they did to improve the kernel would help everyone and not
+[00:15:18,720] get locked away. Companies as large as IBM would have hundreds of their employees contributing
+[00:15:24,480] code. Torvalds would later famously say that going GPL was the best thing that he ever did.
+[00:15:31,897] ## Distros and Red Hat
+[00:15:31,920] The GPL also made possible the business of commercial distribution.
+[00:15:36,960] Linux is a kernel - a car engine. Very important,
+[00:15:40,560] but you still kinda need the rest of the car. That might be fine for early adopters,
+[00:15:45,680] it is not practical to ask ordinary users to build their car before driving it.
+[00:15:51,040] So people started doing distributions or "distros". Distributions package the
+[00:15:56,800] Linux kernel along with utilities from the GNU Project or other free software
+[00:16:01,520] to produce an OS bundle that is slightly more convenient to use.
+[00:16:06,800] It is like those mixtapes we senior citizens used to pass around to each other in high school.
+[00:16:13,520] Good distros became popular enough to monetize. Someone likened the business
+[00:16:18,400] model to selling bottled water. Different packaging, same water ... unless you are
+[00:16:23,840] a Nongfu Water extremist and really into the "natural over purified" water thing.
+[00:16:30,160] Anyway. Notable early distributions of this GNU/Linux operating system - which I must shorten
+[00:16:36,240] to Linux for the sake of brevity but let us not forget GNU - include Slackware and Debian ...
+[00:16:41,836] ... and Red Hat, which was first set up by Marc Ewing in 1993. Ewing adopted Linux early,
+[00:16:49,600] but after some time realized that he was spending more time managing his Linux
+[00:16:54,000] box than actually developing software. I know the feeling.
+[00:16:58,640] So he made a distribution called Red Hat in the spare bedroom of his apartment near Duke
+[00:17:03,920] University. Named to memorialize a red and white striped lacrosse cap he used
+[00:17:09,040] to wear in college. Though the logo looks more like a fedora or a trilby, M’lady.
+[00:17:15,680] Red Hat provided things around Linux to make it a more professional product.
+[00:17:20,320] Like for example, the Red Hat Package Manager utility, which helps users add,
+[00:17:26,000] remove, or update software packages that do stuff like Web or FTP.
+[00:17:31,200] The Red Hat distribution can then be put on a CD and sold in retail shops. In 1995,
+[00:17:38,000] Marc Ewing and colleague Robert Young founded Red Hat the company, which earned revenue from selling
+[00:17:43,360] those CDs as well as accompanying training, education and customer support services.
+[00:17:49,680] In its first years, Linux was something for highly technical hackers and broke
+[00:17:54,160] college students. The rise of Red Hat and other commercial distributions like
+[00:17:59,040] Caldera helped usher Linux out of that early space and into the corporate mainstream.
+[00:18:05,654] ## An OS With Opportunity
+[00:18:05,680] Linux adoption started small but grew fast. By mid-1997,
+[00:18:10,160] its worldwide user base was conservatively estimated at around 3-5 million.
+[00:18:15,840] Yeah sure that far lags Windows' 100 million users and Apple Macintosh’s 50+
+[00:18:21,760] million. But in early 1992, Linux had maybe a few hundred users. And 1996, maybe 1-2 million.
+[00:18:30,160] What was driving all this uptake? It was more than just price, though price of course played
+[00:18:35,680] a factor. A Red Hat disc and box retailed at about $50. Windows NT licenses on the
+[00:18:42,240] other hand might sell for anywhere from $150 for a single upgrade to $1100 for a 10-seat
+[00:18:48,400] package. And UNIX systems with hardware and software will cost $25,000 to $250,000 or more.
+[00:18:56,720] Byte Magazine ran a story in 1997 mentioning a systems consultant for
+[00:19:01,600] Eastman Kodak installing Linux to aid in some project for their Photo CD product,
+[00:19:07,200] and saving the company $10,000 by not getting a high-priced UNIX alternative.
+[00:19:12,960] Considering how the Photo CD ended up, good savings indeed.
+[00:19:17,600] But interestingly, companies and organizations did not adopt Linux just because it was cheap.
+[00:19:23,440] A significant Linux advantage was its reliability. One user said that
+[00:19:28,240] it was almost "crash-proof", which translates to better productivity.
+[00:19:32,720] And for sophisticated users, they loved that they can access its source code - something
+[00:19:37,200] Microsoft would never let anyone do with Windows. So people can customize their
+[00:19:42,000] Linux to do things on the fly. People tweaked Linux to run on a Palm Pilot.
+[00:19:47,120] Researchers at Los Alamos used Linux to network together 68 PCs to simulate atomic shock waves.
+[00:19:54,640] On the other hand, it was true that Linux also had glaring shortcomings. First and foremost,
+[00:20:00,320] it had nowhere near as many applications as Windows or Mac. There was no good Linux
+[00:20:05,760] version of Microsoft Office, Visual Basic, or other business software.
+[00:20:10,960] I like how Byte said all that, then added right afterwards that Linux did include lots of tools
+[00:20:16,320] that you can use to create your own applications. That is the kind of audience, I reckon.
+[00:20:22,800] Another issue is getting support. If something goes wrong,
+[00:20:26,160] what documentation can you consult. And who can you call? Though that is where
+[00:20:30,800] companies like Red Hat and Caldera can step in, providing tech support.
+[00:20:36,080] One last issue about Linux was its reputation. Despite not sharing a direct lineage, it is
+[00:20:41,520] often associated with UNIX - which means receiving UNIX's aura of being inscrutable and hard to use.
+[00:20:49,120] And despite the fast growth, all the prestigious names adopting it,
+[00:20:53,040] and the real price-performance benefits, there still remained a negative bias amongst company
+[00:20:58,320] executives. A manager might often ask "How can you possibly consider it for a critical server?"
+[00:21:06,160] Yet even as they ask that, Linux probably was already running somewhere in their company.
+[00:21:12,000] One anonymous system administrator told the SF Chronicle in 1998:
+[00:21:17,200] > "Many management types distrust Linux because it is free. But they put me in charge of running
+[00:21:23,120] their servers and I am going to use what works best. What works best is Linux".
+[00:21:28,760] ## Meet Intel
+[00:21:31,280] In early 1998, Intel started receiving these strange requests from across the country.
+[00:21:36,640] Engineers and researchers at places like US's
+[00:21:39,520] Fermi National Lab were asking Intel to port its math libraries to Linux.
+[00:21:45,520] Prior to this, Intel had minimal involvement with Linux - maybe fixing a bug or two.
+[00:21:51,360] However, checks with OEMs making white-label computer servers for customers like small
+[00:21:56,960] Internet Service Providers showed them that Linux growth was exploding upwards.
+[00:22:02,640] Almost 20% of public web servers ran it - an unexpectedly high market share considering
+[00:22:08,640] that the OS had little to no presence on the desktop. Still doesn't, by the way.
+[00:22:14,640] This news went straight up to Andy Grove, who remarked in rather colorful language
+[00:22:19,040] that they should be doing something about this. So Intel executives reached out to
+[00:22:23,760] Red Hat and in a series of meetings, tried to learn about how this company worked.
+[00:22:29,440] And it sort of baffled them. Red Hat doesn't own the underlying IP behind its core software
+[00:22:35,600] product, which anyone can get for free. How does that make money? How’s this investable?
+[00:22:42,720] But the guys at Red Hat kept talking. CEO Robert Young liked to use this ketchup metaphor:
+[00:22:49,200] Anyone with tomatoes, sugar and vinegar can make ketchup, yet Heinz owns 80% of that market. And
+[00:22:56,080] Linux advocates inside Intel shared data points of what they learned on ISP adoption. In the end,
+[00:23:02,560] Intel management was convinced and the two companies started talking about partnerships.
+[00:23:08,240] As I mentioned earlier, Intel increasingly felt that it would be risky to rely on just Windows NT.
+[00:23:14,960] They were working on a new chip called "Merced", the first implementation of their 64-bit IA-64
+[00:23:20,960] server architecture. It shall later be branded as Itanium, and was said to be blazingly fast.
+[00:23:27,440] But worries lingered that NT would shackle its full power - same as how
+[00:23:31,600] things went with 32-bit for literally a decade. Perhaps reinforcing those fears,
+[00:23:36,560] Microsoft's next version of NT - then called NT 5.0 - was delayed
+[00:23:41,280] from 1998 to 1999. After yet further delays, Microsoft renamed NT 5.0 to Windows 2000.
+[00:23:51,040] Now Intel can support and contribute to Linux development - tuning it to take advantage
+[00:23:57,360] of Intel's latest and greatest silicon - and make it a compelling alternative to Windows.
+[00:24:03,680] ## Summer of Linux
+[00:24:03,840] The summer of 1998 saw multiple big companies making Linux announcements.
+[00:24:09,040] In June 1998, IBM - one of the most conservative companies out there - said
+[00:24:13,920] that it will include an open source web server software called Apache in its suite
+[00:24:18,720] of e-commerce tools. Apache isn't Linux, but most Apache server instances run on it.
+[00:24:25,680] IBM first encountered Apache back in 1996 when they selected it for the website of
+[00:24:30,880] the Atlanta Summer Olympics. Now they were giving it their stamp of approval,
+[00:24:35,440] officially giving open source its first foothold into the enterprise.
+[00:24:40,480] Another famous adopter was Oracle. On July 6th 1998,
+[00:24:44,640] InfoWorld published an article titled "Linux not yet critical mass". In it,
+[00:24:49,840] Oracle - plus Sybase and Informix - said they had no intentions of releasing their
+[00:24:54,560] DB software for Linux. A rep said they weren’t seeing a big demand from customers for it.
+[00:25:00,960] Three days later, Oracle announced that they were porting their Oracle8
+[00:25:04,720] database to Linux. A major reason for this abrupt turnaround was a
+[00:25:09,440] panel discussion held at Santa Clara in July 1998 called "the Future of Linux".
+[00:25:15,760] Over 900 or so people came to see Torvalds and others. In the panel, they discussed
+[00:25:21,120] whether open source was a fad, urged users to push application vendors to port to Linux, and more.
+[00:25:28,640] People later identify that panel as a major turning point. By September 1998, several large
+[00:25:34,800] companies had Linux ports including the enterprise systems company Computer Associates, software
+[00:25:40,160] maker Corel, and database company Informix. The trend would continue in the subsequent years.
+[00:25:46,680] ## Intel and Red Hat
+[00:25:48,074] Intel was also at that July "Future of Linux" panel.
+[00:25:51,360] Intel's Sunil Saxena gave a presentation saying that Linux was becoming the OS of
+[00:25:56,320] choice for Internet Service Providers while also noting some of its weaknesses - like
+[00:26:01,360] scalability, drivers for high end hardware, and large memory support.
+[00:26:06,880] He emphasized that Intel wanted to support Linux. And those words were soon backed with
+[00:26:12,080] action on September 29th when Intel announced that it - along with the web browser company
+[00:26:17,440] Netscape and VC firms Benchmark and Greylock - would invest in Red Hat.
+[00:26:22,800] Now, Intel was saying they wanted Intel silicon to run Linux as well as it did
+[00:26:27,760] Windows NT and everything else. They will work with Red Hat - providing
+[00:26:32,400] technical contribution plus a dedicated Intel engineering liaison for the Linux community.
+[00:26:38,880] Cherry on top, Intel also said they will join Linux International - an
+[00:26:43,200] early worldwide Linux advocacy organization.
+[00:26:47,520] After the announcement, another critical but underrated domino falls.
+[00:26:52,000] One Benchmark partner was also a board member at Dell, and through him Red Hat
+[00:26:57,200] got in front of Michael Dell. They started talking about Linux's growth on the server,
+[00:27:02,480] how the market might shape up, and if Linux can ever win the desktop.
+[00:27:07,520] Dell eventually invested into Red Hat. And more importantly, they later announce in
+[00:27:12,160] early 1999 that they will start preinstalling Linux on workstations and servers - the first
+[00:27:18,640] major vendor to do this. Suddenly Linux is on the same pedestal as Windows and Novell.
+[00:27:26,067] ## Microsoft
+[00:27:26,080] When news of Intel's Red Hat investment came out, the tech media went into a
+[00:27:30,800] frenzy speculating what this might mean for the Intel-Microsoft relationship.
+[00:27:36,720] Red Hat's executives recounted in the book "Under the Radar" that
+[00:27:40,480] Microsoft "went ballistic" after Intel announced their investment. That weekend,
+[00:27:45,280] Intel executives took multiple angry calls from their Microsoft counterparts.
+[00:27:50,240] Prior to 1998, Microsoft maybe could have nixed the Intel investment. But in May that year,
+[00:27:56,560] the US government charged Microsoft for monopolistic actions - particularly
+[00:28:00,720] regarding how it bundled Internet Explorer with Windows during the Browser Wars.
+[00:28:06,480] The trial and scrutiny meant that Microsoft had to
+[00:28:09,520] temper its behavior. Publicly they issued a statement citing Red Hat as
+[00:28:14,160] evidence that Microsoft didn't actually have a monopoly on operating systems.
+[00:28:19,760] Interestingly, Microsoft would later invoke Linux as evidence that there
+[00:28:23,440] remained enough competition in the OS market that the government shouldn't break them up.
+[00:28:29,120] But internally, they were concerned. In October 1998,
+[00:28:33,120] a set of Microsoft memos - infamously named the Halloween Memos - leaked,
+[00:28:37,680] called the rise of free software like Linux a long-term credible threat to Windows.
+[00:28:43,520] They then reportedly formed a "Linux attack team" to convince customers
+[00:28:47,360] that it was not ready. They posted a web page called "Linux Myths",
+[00:28:52,080] that tries to "step back from the hype and look at the reality".
+[00:28:57,280] It then addresses various "myths" chanted by the Linux faithful like "Linux performs
+[00:29:02,400] better than Windows NT 4", and "Linux is more reliable than Windows NT 4" and "Linux is free".
+[00:29:09,840] Infamously in April 1999, Microsoft sponsored benchmark tests by a third
+[00:29:14,800] party lab called Mindcraft that showed NT outperforming Linux
+[00:29:20,640] as a file server by 2.5 times and web server by 3.7 times.
+[00:29:27,262] ## Port of Choice
+[00:29:27,280] Intel dodged Gates’ fury by declaring that it was OS neutral.
+[00:29:32,080] So Linux, Novell’s Netware, Sun’s Solaris and Microsoft’s Windows 2000,
+[00:29:37,680] Intel wanted all of them to run well on its hardware.
+[00:29:41,280] Intel (along with twenty other companies) even tried to unite the thirty or so UNIX
+[00:29:45,760] variants out there using a thing called Uniform Driver Initiative
+[00:29:49,680] so that vendors can write drivers for Intel hardware. It didn't end up so well.
+[00:29:55,120] Later in 2010, Intel would formalize this Switzerland strategy as "Port of Choice",
+[00:30:00,880] but CTO Pat Gelsinger called it a long-standing strategy in 2001. And in the end, the OS
+[00:30:07,680] makers had to accept it, because Intel silicon then had no real alternatives.
+[00:30:13,280] In mid-1998, Intel brought out its follow-up to the Pentium Pro: The powerful Pentium II Xeon.
+[00:30:19,920] Intel designed this chip to tackle the mid-range workstation and server markets with faster clock
+[00:30:25,600] speeds and a large 512-kilobyte L2 cache that made it more suitable for server platforms.
+[00:30:32,480] A few months later in March 1999, Intel released the Pentium III Xeon - a fast,
+[00:30:38,720] cheap CPU for web and e-commerce transactions. While the speed boost over Pentium II Xeon was
+[00:30:44,960] small, the successor did feature support for 8-way systems via something called Profusion.
+[00:30:51,840] This means vendors can build servers with eight symmetrical processors - essentially
+[00:30:56,960] gluing eight CPUs together inside one box. This broke through a prior
+[00:31:02,240] 4-way system ceiling that was then causing performance issues in existing data centers.
+[00:31:08,080] To note, this 4-way and 8-way systems feature did require the OS to support
+[00:31:12,880] it. This was something that Windows NT/2000 can do, and Linux then had issues with.
+[00:31:20,240] High end UNIX servers still retained key advantages. Namely,
+[00:31:24,000] certain software like large-scale databases, data warehouses and CAD
+[00:31:28,480] systems required far more main memory than what x86's 32-bit architecture can allow.
+[00:31:35,360] But thanks to this pair of Pentiums,
+[00:31:37,760] the low to middle ground of UNIX servers found its flanks open to massive competition.
+[00:31:44,378] ## The Web Scales Out
+[00:31:44,400] Sun initially welcomed the Linux revolution. It was in line with their motto of being "open".
+[00:31:49,760] So they ported their Java Development Kit to Linux, and released a Linux port of
+[00:31:54,560] workstation hardware. The general impression they gave was that Sun
+[00:31:58,880] doesn't care whether a box runs Linux or Solaris - it just has to be a SPARC box.
+[00:32:04,800] But that turned out to be a problem. It didn't have to be a SPARC box. Serving websites,
+[00:32:10,560] email hosting, firewall and other stuff are not like running DB or analytics software.
+[00:32:16,560] Companies realized that scaling out with nodes of Intel silicon running
+[00:32:20,960] Linux made more financial sense than scaling up a big honking UNIX server.
+[00:32:27,280] This trend suddenly accelerated after the Dotcom stock bubble exploded. Venture money
+[00:32:32,640] dried up and startups started dying. With frugality the word of the day, companies
+[00:32:37,680] saved money by buying second-hand equipment bought from liquidated failures or Linux.
+[00:32:43,840] Amazon did a major Linux transition in 2001,
+[00:32:47,520] mentioning in their quarterly SEC filing that it cut their costs by an estimated
+[00:32:51,840] $17 million per quarter. When asked about what they did, an Amazon spokesman said:
+[00:32:56,960] > "We've always been pretty closed-mouthed about technology on the back-end stuff, partly because
+[00:33:02,560] it's pretty steep tuition and we don't want other people going to school on our tuition"
+[00:33:09,280] The online broker Etrade published a fascinating 2006 case study. It compared a Sun 4500 Enterprise
+[00:33:16,320] Server that costs $250,000 and can serve about 300 to 400 users to a Linux-Intel box that costs just
+[00:33:25,680] $4,000 but serves only 180 people. How to fix the gap? Get two boxes.
+[00:33:33,200] Starting in 2001, Linux boxes with Intel silicon got good enough to steadily replace Sun's in
+[00:33:39,120] everything from airline fare to commodities contracts trading to financial calculations.
+[00:33:45,600] Sun tried their own scale-out web play with the Netra. The 2001 Netra X1 model cost as
+[00:33:52,240] little as $1,000, but commodity x86 still provided better performance for the dollar.
+[00:33:58,640] The company never really formulated a proper
+[00:34:01,040] response to this transition from Solaris on SPARC to Linux on Intel.
+[00:34:07,503] ## Going Upscale
+[00:34:07,520] After winning the low-end game, Linux now turned its sights to scaling up.
+[00:34:12,160] In late 2000, IBM's CEO Lou Gerstner - believing that Linux will change the
+[00:34:17,120] world in the same way as the Internet - announced a massive Linux effort,
+[00:34:21,440] investing $1 billion and dedicating 1,500 employees.
+[00:34:26,080] January 2001 saw the release of Linux 2.4. Red Hat quickly adopted it for a
+[00:34:31,520] subsequent release. It arrived a year late, but Linux 2.4 delivered the goods
+[00:34:37,360] in terms of closing some major performance gaps with high-end UNIX servers and NT.
+[00:34:43,920] A major flashpoint during the 1999 Mindcraft tests a few years prior
+[00:34:48,480] involved Linux's support of multiprocessor boxes. That test - confirmed in subsequent
+[00:34:54,160] tests - showed that Linux 2.2 did not scale very well beyond two CPUs in a single system.
+[00:35:01,760] Windows NT 4.0 and 2000 if you recall did have that 4,
+[00:35:06,640] 8, and even 32-way processor support. So not having it was a major weakness.
+[00:35:12,720] So Torvalds and company rolled up their sleeves and worked on it. 2.4
+[00:35:17,360] addressed issues like spin locks - allowing Linux to use 16 or even 32 processors with some
+[00:35:23,280] effectiveness. Though I’m not sure how well it actually ran with that high of a number.
+[00:35:29,440] It didn't make Linux a challenger to high end UNIX machines overnight. But
+[00:35:33,920] the ability to capably support at least 4 or 8 CPUs cleared a path for Linux on Intel,
+[00:35:40,720] or Lintel, to surge into the middle ground of compute tasks.
+[00:35:45,120] The economics of Lintel suddenly got very compelling. A Dell server with
+[00:35:49,200] four Xeons running Red Hat Linux at $24,000 costs
+[00:35:53,120] half as much as a comparable Sun Fire UNIX box but performs just as well.
+[00:35:58,800] Red Hat and IBM immediately began targeting Sun's Solaris customer base. Hewlett-Packard
+[00:36:04,720] and SGI started offering their customers running proprietary hardware the option to
+[00:36:09,760] move to a Linux solution - reasoning that it is better to maintain that customer relationship.
+[00:36:16,480] 2002 was a hard year for the server market, but Linux boxes still grew
+[00:36:20,640] swimmingly at the expense of RISC based systems. Gartner reported that in 2002,
+[00:36:26,240] Linux server hardware revenue grew 63% while UNIX revenue hardware fell 11%.
+[00:36:33,280] UNIX hardware was still larger revenue-wise - $17 billion in 2002 compared to Linux's $2
+[00:36:39,440] billion - just because these are high end machines that cost more. But the pressure
+[00:36:43,840] was there. By 2004, the average selling price of a Sun server had fallen 31% from $22,920 to $15,860.
+[00:36:56,480] ## Opteron and x86-64
+[00:36:57,200] One major effort that Intel wanted for Linux early on was 64-bit support,
+[00:37:01,840] meaning for IA-64 or Itanium.
+[00:37:05,040] In April 1999, Intel spun up Project Trillian, a consortium of companies that would confidentially
+[00:37:11,200] receive Itanium prototypes so they can develop a Linux port. And in February 2000,
+[00:37:16,720] the project released the IA-64 Linux source code early to the community.
+[00:37:21,920] Trillian was a milestone in open source software development history. That being said,
+[00:37:27,120] Itanium didn't end up replacing the 32-bit version of x86, though
+[00:37:31,840] HP did adopt it to replace the processors using their proprietary flavors of UNIX.
+[00:37:37,440] As we all know, it would be AMD not Intel that kicked off the 64-bit transition
+[00:37:42,960] with their groundbreaking Opteron series of chips in mid-2003. Some time later in 2004,
+[00:37:49,680] Intel released the Nocona Xeon, adopting AMD's backwards compatible 64-bit extension.
+[00:37:57,440] 64-bit had been one of the last things that higher-end UNIX systems still had
+[00:38:02,000] over x86. A 32-bit x86 computer addresses about 4 gigabytes of RAM - far less than
+[00:38:08,640] what high end applications like databases or scientific simulations need to hold in memory.
+[00:38:14,720] After going 64-bit, an x86 system can now address dozens or even hundreds of gigabytes of
+[00:38:20,320] RAM - removing one of the last major architectural barriers from switching away from UNIX.
+[00:38:26,560] Some initially felt that the way Intel adopted 64-bit was a bit of a kludge or
+[00:38:31,760] only a stopgap towards Itanium. Eh, the results are undeniable. x86-64
+[00:38:38,880] bludgeoned the last walls surrounding UNIX. The Lintel barbarians were now in the castle.
+[00:38:45,669] ## Windows
+[00:38:45,680] Then in late 2003, you had the release of Linux 2.6 - which turned out to be a very iconic kernel.
+[00:38:52,880] Everything about it was improved - speed, networking, support for up to 64 processors,
+[00:38:58,240] and more. You might consider it the first "enterprise-ready" Linux kernel.
+[00:39:03,280] Moreover, it arrived just as users of the now-antiquated Windows NT 4.0 began their
+[00:39:09,120] upgrade cycles. They were single and ready to mingle. IBM, Hewlett-Packard,
+[00:39:14,160] Dell and the other sirens sang their lungs out to woo customers to Linux.
+[00:39:19,840] IBM in particular led the charge - training thousands of people in Linux,
+[00:39:24,640] helping developers rewrite their apps for Linux and providing massive
+[00:39:28,720] marketing dollars and discounted machines to potential switchers.
+[00:39:33,040] How do you fight something that anyone can download for free?Microsoft's general pitch
+[00:39:37,840] was that everyone is already using Office, so it would be expensive and troublesome
+[00:39:42,320] to switch to Linux than it would be to just buy Windows Server licenses.
+[00:39:47,200] In 2004, Microsoft ran a "Get the facts" marketing campaign sharing research purporting
+[00:39:52,240] to show Windows in a better light compared to Linux. The website collected controversy
+[00:39:57,840] as those studies were accused as not being very "impartial" and potentially misleading.
+[00:40:03,680] A method that I think worked far better was the deep lock-in afforded by a product
+[00:40:08,000] called Active Directory - which Ben Thompson of Stratechery has since
+[00:40:12,080] called "one of the most valuable free products of all time". What is that?
+[00:40:17,280] Released as part of Windows 2000, Active Directory authenticates and
+[00:40:21,920] authorizes all the users and assets inside a Windows network. It lets you push updates,
+[00:40:27,440] assign security rights to groups per the org chart, and validates authentication.
+[00:40:32,720] So with AD, an administrator can onboard a new manager, verify their credentials and
+[00:40:38,640] give them access to the right tools. And users can log in to various things with one set of
+[00:40:44,080] credentials. It turns a bunch of random Windows machines into a single manage-able organization.
+[00:40:51,280] As Ben points out, it also gave Microsoft ownership of individual
+[00:40:55,360] identity. And since identity reached so deeply into the organization,
+[00:40:59,840] it raised the cost of switching to a level far beyond "just" an OS swap.
+[00:41:05,120] So in defiance of the people predicting that Linux would take down Microsoft,
+[00:41:09,440] Windows Server sales kept growing. In 2005,
+[00:41:12,880] Windows matched UNIX revenue for the first time ever. The next year, they would surpass it.
+[00:41:19,120] Linux kept growing, but that growth was less from eating Windows and more from
+[00:41:23,760] eating UNIX or growing in brand new markets where Windows never got a foothold - supercomputing,
+[00:41:30,080] high performance compute, web, and in the 2010s, cloud.
+[00:41:35,506] ## Conclusion UNIX server sales would slowly decline in
+[00:41:37,680] the following years. But it has not completely died out!
+[00:41:40,960] Even today, there remain some customers on Solaris, HP-UX or AIX.
+[00:41:46,560] Many such laggard applications - usually centered in banking or
+[00:41:50,480] healthcare - are for one reason or another too challenging or risky to port to Linux.
+[00:41:55,840] So why did UNIX lose? I might propose that it had less to do with technology
+[00:42:00,400] than business model. These vertically integrated kingdoms worked fine years
+[00:42:04,960] ago until Intel arrived with its high volume economics.
+[00:42:09,760] First, it was Windows NT who hit UNIX hard. But Linux would go at them even harder - being
+[00:42:16,000] able to offer customers everything that UNIX had without the lock-in. Once Linux got good enough,
+[00:42:22,480] the UNIX vendors had no choice but to make the switch themselves.

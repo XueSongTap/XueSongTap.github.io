@@ -1,0 +1,1059 @@
+\documentclass[a4paper]{article}
+
+% Basic packages
+\usepackage[fontset=fandol]{ctex}
+\usepackage{amsmath, amssymb}
+\usepackage{graphicx}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage[most]{tcolorbox}
+\usepackage{etoolbox}
+\usepackage{listings}
+\usepackage{hyperref}
+\hypersetup{hidelinks}
+\usepackage{booktabs}
+\usepackage{subcaption}
+\usepackage{float}
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\IfFileExists{pgfplots.sty}{
+    \usepackage{pgfplots}
+    \pgfplotsset{compat=1.18}
+}{}
+
+% Highlight boxes
+\newtcolorbox{knowledgebox}[1]{
+    enhanced, breakable, colback=blue!5!white, colframe=blue!75!black, colbacktitle=blue!75!black,
+    coltitle=white, fonttitle=\bfseries, title=#1, attach boxed title to top left={yshift=-2mm, xshift=2mm},
+    boxrule=1pt, sharp corners
+}
+
+\newtcolorbox{importantbox}[1]{
+    enhanced, breakable, colback=yellow!10!white, colframe=yellow!80!black, colbacktitle=yellow!80!black,
+    coltitle=black, fonttitle=\bfseries, title=#1, sharp corners
+}
+
+\newtcolorbox{warningbox}[1]{
+    enhanced, breakable, colback=red!5!white, colframe=red!75!black, colbacktitle=red!75!black,
+    coltitle=white, fonttitle=\bfseries, title=#1, sharp corners
+}
+
+\newtcolorbox{dialoguebox}[1]{
+    enhanced, breakable, colback=green!4!white, colframe=green!45!black, colbacktitle=green!45!black,
+    coltitle=white, fonttitle=\bfseries, title=#1, sharp corners
+}
+
+% Listings
+\lstset{
+    language=Python,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue},
+    stringstyle=\color{red!60!black},
+    commentstyle=\color{green!60!black},
+    breaklines=true,
+    frame=single,
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    captionpos=b,
+    extendedchars=false
+}
+
+% Front-page metadata
+\newcommand{\notetitle}{Lintel 征服 UNIX：Intel、微软与 Linux\\如何拆掉垂直整合的服务器王国}
+\newcommand{\noteauthors}{五道口纳什 \& Codex}
+\newcommand{\notedate}{\today}
+\newcommand{\videochannel}{Asianometry}
+\newcommand{\videopublishdate}{2026 年 10 月 25 日}
+\newcommand{\videoduration}{42 分 35 秒}
+\newcommand{\videourl}{https://www.youtube.com/watch?v=ksx5g5WvAIw}
+\newcommand{\videocoverpath}{source.jpg}
+
+\begin{document}
+
+\begin{titlepage}
+\centering
+\vspace{1.2cm}
+{\huge\bfseries \notetitle\par}
+\vspace{0.8cm}
+{\large \noteauthors\par}
+\vspace{0.3cm}
+{\large \notedate\par}
+\vspace{1.2cm}
+
+\ifdefempty{\videocoverpath}{
+{\small 请在生成笔记时填入视频封面图的本地路径。\par}
+}{
+\includegraphics[width=0.82\textwidth,height=0.45\textheight,keepaspectratio]{\videocoverpath}\par
+}
+
+\vfill
+\begin{tcolorbox}[width=0.9\textwidth, colback=black!2!white, colframe=black!60, sharp corners]
+\textbf{视频作者/频道}：\videochannel\par
+\textbf{发布日期}：\videopublishdate\par
+\textbf{视频时长}：\videoduration\par
+\textbf{视频链接}：
+\ifdefempty{\videourl}{
+未填写
+}{
+\href{\videourl}{\nolinkurl{\videourl}}
+}
+\par\textbf{PDF制作Skill}：\href{https://github.com/wdkns/wdkns-skills}{\nolinkurl{https://github.com/wdkns/wdkns-skills}}
+\end{tcolorbox}
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+%% --- 正文内容开始 --- %%
+
+\section{引言：一场被忽略的产业更替}
+
+1990 年代初，如果你想给公司买一台能干重活的服务器，答案几乎是唯一的：一台装着 UNIX 操作系统、跑在 RISC 处理器上的专有整机。Sun 的 SPARC 加 Solaris、IBM 的 POWER 加 AIX、惠普的 PA-RISC 加 HP-UX——每一套都是软硬件打包出售的封闭体系。整套系统动辄数十万美元，而且一旦买进去，就很难再换出来。
+
+到了 2000 年代中期，同一类负载的主流选择变成了 x86 服务器加 Linux。这个转变之所以值得单独讲一遍，是因为它并不是某一次技术突破造成的。CPU 性能不是一夜之间超过 RISC 的，Linux 也不是某天突然变得完善。真正发生的事情是：三个原本各自为战的角色——Intel 的芯片、微软的 Windows NT、以及来自自由软件社区的 Linux——在同一个方向上推动了十几年，最后把一套以垂直整合为核心的商业模式挤出了主流市场。
+
+视频作者用了很形象的称呼：\textbf{Lintel}，即 Linux + Intel。这个合成词背后的意思是，一个原本被视作“PC 玩具”的芯片架构，配上一个没有所属公司的操作系统，最终承接了原本属于昂贵 UNIX 机器的负载。
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.92\textwidth]{figures/fig-gen-timeline.pdf}
+\caption{从 GNU 项目启动到 Windows Server 收入追平 UNIX 的主要节点。图中时间取自视频正文的叙述。}
+\end{figure}
+
+这份讲义按照“问题—方案—机制—证据—结论”的顺序重述视频内容，并补充了一些视频里一带而过、但对理解机制很重要的细节。阅读时建议抓住三条并行的线索：
+
+\begin{enumerate}
+\item \textbf{成本结构}：Intel 靠 PC 的高销量摊薄了芯片成本，这是它能把服务器芯片做便宜的底层原因；
+\item \textbf{软件生态}：Windows NT 提供了企业级特性，但它的发布节奏和可移植性策略又处处与 Intel 的利益相左；
+\item \textbf{许可证治理}：GPL 让 Linux 既能吸收大公司的贡献，又不会被某家公司切成碎片。
+\end{enumerate}
+
+之后我们会看到，UNIX 阵营输掉这场竞争的原因，主要不在技术指标，而在于商业模型。
+
+\subsection{本章小结}
+1990 年代的企业服务器市场由垂直整合的 UNIX 体系主导，价格高昂且切换成本极高。Intel、微软与 Linux 三股力量从不同方向侵蚀这套体系，最终形成了 “Lintel” 这一新的主流组合。理解这个过程的关键，是把技术演进放回成本结构和商业模式的背景里看。
+
+\section{1990 年代初的企业服务器：垂直整合的 UNIX 王国}
+
+\subsection{服务器的分层}
+
+在讨论竞争之前，先要把“服务器”这个词拆开。视频里给出了一个大致的三层结构，这三层对性能、可靠性和价格的要求完全不同，也因此成为后来不同技术路线的战场。
+
+\begin{knowledgebox}{三层服务器市场}
+\begin{itemize}
+\item \textbf{工作站}：性能较强的桌面机，用于图形、科学计算等重负载任务。它可以顺便在局域网里提供一两个文件服务，算是低端服务器。
+\item \textbf{中端服务器}：由多颗 CPU 组成的机箱级系统，运行数据库、文件存储、复杂业务应用，通过网络向大量客户端提供算力。
+\item \textbf{高端大型机}：多 CPU、64 位寻址、虚拟化、大容量内存，服务于最核心的事务处理。
+\end{itemize}
+这里的划分不是绝对的，但它决定了一件事：不同层级的客户对“什么算够用”的容忍度不同，而这正好给了后来者从下层切入、逐层向上打的路径。
+\end{knowledgebox}
+
+到 1990 年代中后期，这些机器还多了一个用途：托管网站。随着互联网热潮扩张，网站托管成了一个巨大的市场。虽然跑一个网站并不需要高端大型机，但当时的默认做法仍然是买 UNIX 服务器——这为后来的替代留下了空间。
+
+\subsection{三家代表与它们的共同结构}
+
+这一时期的企业服务器市场，被几家垂直整合的系统厂商瓜分。所谓垂直整合，是指同一家公司同时提供处理器、操作系统、编译器和整机，客户买到的是一整套封闭系统。视频点名了四家：
+
+\begin{itemize}
+\item \textbf{Sun Microsystems}：SPARC 处理器 + Solaris 操作系统；
+\item \textbf{IBM}：POWER 系列 RISC 处理器 + AIX 操作系统；
+\item \textbf{Hewlett-Packard}：PA-RISC 处理器 + HP-UX 操作系统；
+\item \textbf{Silicon Graphics}：面向图形工作站起家的另一套专有体系。
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.66\textwidth]{figures/fig02-vendor-vertical.jpg}
+\caption{惠普的 PA-RISC 处理器（左）与运行 HP-UX 的工作站（右）。芯片、操作系统、整机来自同一家供应商，这正是“垂直整合”的具体形态。\protect\footnotemark}
+\end{figure}
+\footnotetext{视频画面时间区间：00:02:40--00:02:45。}
+
+这些系统的价格从数十万美元起步。更关键的是它们的封闭性：编译器、驱动、系统库、技术支持合同全部绑定在同一个供应商身上。客户一旦把业务系统搭在某个平台上，迁移就意味着重写、重测和重新培训。
+
+视频里用一句话概括了这种关系：\textbf{buy in, get locked in}（买进去，就被锁死）。
+
+\begin{warningbox}{锁定不是合同条款，而是技术债}
+很多人把“锁定”理解成法律意义上的排他协议。实际上 UNIX 厂商的锁定主要来自技术层面：私有编译器行为、非标准的系统调用扩展、与特定硬件绑定的驱动，以及只有原厂工程师才熟悉的运维知识。这些东西叠加起来，会让一次平台迁移的隐性成本远超硬件本身的差价。
+\end{warningbox}
+
+\subsection{本章小结}
+1990 年代初的服务器市场是一个典型的垂直整合市场：四家厂商各自掌握从芯片到操作系统的完整栈，靠封闭性和切换成本维持高毛利。这套结构在技术上没有明显缺陷，真正的问题在于它无法享受通用计算的高销量带来的成本下降——而这正是 Intel 的强项。
+
+\section{Intel 的算盘与 Windows NT 的登场}
+
+\subsection{高销量经济学：Intel 的底层飞轮}
+
+要理解 Intel 为什么敢进服务器市场，得先理解它在 PC 市场是怎么赢的。视频把它拆成一个自我强化的循环：
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[every node/.style={font=\small},
+  box/.style={draw=blue!55!black, rounded corners, fill=blue!7, minimum width=2.9cm,
+              minimum height=0.9cm, align=center, inner sep=4pt}]
+\node[box] (vol)    at ( 90:3.7) {高销量\\（PC 市场规模）};
+\node[box] (yield)  at ( 18:3.7) {更高良率\\（同样晶圆出更多好芯片）};
+\node[box] (cost)   at (-54:3.7) {更低单位成本};
+\node[box] (profit) at (-126:3.7){更高利润与现金流};
+\node[box] (invest) at (162:3.7) {再投资：更先进制程};
+\draw[->, thick, blue!70!black] (vol) to[bend left=12] (yield);
+\draw[->, thick, blue!70!black] (yield) to[bend left=12] (cost);
+\draw[->, thick, blue!70!black] (cost) to[bend left=12] (profit);
+\draw[->, thick, blue!70!black] (profit) to[bend left=12] (invest);
+\draw[->, thick, blue!70!black] (invest) to[bend left=12] (vol);
+\end{tikzpicture}
+\caption{Intel 在 PC 市场的高销量飞轮。销量不仅摊薄了固定成本，还通过良率学习曲线压低了单位成本，释放出的现金流又被投入更先进的制程。}
+\end{figure}
+
+这个循环的直接后果是：AMD、Cyrix 这类竞争者即使设计出相近的产品，也很难在成本上追上，因为它们的出货量小得多，良率学习的速度也慢得多。Intel 由此在 PC 市场建立了难以逾越的领先。
+
+于是问题变成：这套玩法能不能搬到企业服务器市场？答案取决于能否找到一个足够强的软件伙伴——因为服务器客户买的不是芯片，而是能跑业务系统的平台。
+
+\subsection{Windows NT：一个真正的企业级操作系统}
+
+这个伙伴是微软。1993 年，由 Dave Cutler 领导的团队发布了 Windows NT。这里的 “NT” 官方解释是 “New Technology”。理解 NT 的关键，是把它和消费级 Windows 严格区分开。
+
+视频里有一个很形象的对比：普通的 Windows（当时是 Windows 3.x）本质上是一个\textbf{粗暴嫁接在 MS-DOS 之上的图形外壳}；而 NT 是从零开始为企业环境重写的操作系统。
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.58\textwidth]{figures/fig03-nt-sales-9394.jpg}
+\caption{IDC 统计的 Windows NT 工作站版与服务器版销量（单位：千套）。1993 年服务器版仅约 3 万套，1994 年升至 11.5 万套。\protect\footnotemark}
+\end{figure}
+\footnotetext{视频画面时间区间：00:04:44--00:04:51。}
+
+两者的差别体现在几个具体的地方：
+
+\begin{itemize}
+\item 内存保护与抢占式多任务：一个用户进程崩溃不会拖垮整个系统；
+\item 可移植性：内核被设计成可以在多种处理器架构上编译，而不是死绑 x86；
+\item 面向企业的安全模型：用户、组、权限的概念从内核层就存在。
+\end{itemize}
+
+微软对外宣传的重点也正是这三点：更强大、更可靠、更安全。
+
+\subsection{早期并不成功}
+
+不过 NT 的第一个版本并没有一炮而红。视频给了几个具体数字和原因：
+
+\begin{itemize}
+\item 首发版本运行在 Intel 386 上，功能可用，但缺少竞争对手（IBM 的 OS/2、Novell 的 NetWare、各种 UNIX）已经具备的能力；
+\item 对当时的硬件要求偏高：需要 16 MB 内存；
+\item 1993 年 NT Server 大约只卖出 3 万套。
+\end{itemize}
+
+1994 年情况好转，微软卖出了约 11.5 万份 NT 许可证。虽然仍落后于同代的工作站版本，但增长趋势已经明确。视频在这里开了个玩笑，说微软像“终结者”或者《Air Bud》的续集——不管怎样都会一直出下去。这个比喻背后是一个真实的商业事实：微软有能力在一个尚未盈利的品类里持续投入多年，直到产品成熟。
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.58\textwidth]{figures/fig04-nt-sales-9396.jpg}
+\caption{同一统计口径延长到 1996 年：服务器版销量从 1993 年的 3 万套增长到 1996 年的约 67 万套（其中 1996 年为估计值）。\protect\footnotemark}
+\end{figure}
+\footnotetext{视频画面时间区间：00:07:04--00:07:11。}
+
+\subsection{本章小结}
+Intel 在 PC 市场建立的“高销量—高良率—低成本—再投资”飞轮，是它进军服务器的底气。但服务器客户买的是完整平台，因此 Intel 需要一个企业级操作系统作为搭档，这个角色由微软的 Windows NT 承担。NT 在 1993 年起步艰难，但它具备消费级 Windows 所没有的内存保护、抢占式多任务和可移植性，这三点决定了它后来能撑起“Wintel”的服务器路线。
+
+\section{Pentium Pro 与“标准高容量服务器”}
+
+\subsection{一颗改变了性能预期的芯片}
+
+1995 年底，Intel 推出了它认为真正能打进服务器市场的第一颗芯片：32 位的 Pentium Pro。视频给出的规格对比很直观：
+
+\begin{table}[H]
+\centering
+\caption{Pentium 与 Pentium Pro 的规格对比}
+\begin{tabular}{lcc}
+\toprule
+ & Pentium & Pentium Pro \\
+\midrule
+晶体管数 & 310 万 & 550 万 \\
+主频 & 约 60 MHz & 约 150--200 MHz \\
+发布年份 & 1993 & 1995 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+真正让业界震动的不是频率，而是基准测试结果。在某些整数基准上，Pentium Pro 小幅超过了当时最快的 RISC 芯片。虽然后来 MIPS R10000 这类更快的 RISC 芯片很快又追了上来，但这次测试改变了一个长期存在的认知：x86 不再只是“桌面架构”。
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.78\textwidth]{figures/fig05-spec-benchmark.jpg}
+\caption{1995 年的 SPECint95 / SPECfp95 对比。Pentium Pro 在整数测试上已能与同期 RISC 芯片同场竞争，但在浮点上仍明显落后。\protect\footnotemark}
+\end{figure}
+\footnotetext{视频画面时间区间：00:05:25--00:05:31。}
+
+\begin{importantbox}{性能楔子的作用是“够用”，不是“最快”}
+视频作者特意指出，Pentium Pro 在浮点性能上仍然落后于最好的 RISC 芯片。这在当时并不是致命的：企业服务器上跑的多数负载（数据库事务、文件服务、Web 服务）以整数和内存访问为主。真正关键的是“性价比”——只要性能够用而价格低一个数量级，客户就会重新计算。
+\end{importantbox}
+
+\subsection{把芯片变成“标准产品”}
+
+仅仅有芯片还不够。服务器客户买的是整机，而整机的集成工作琐碎且耗时。1995 年中，Intel 开始向合作伙伴分发所谓“标准高容量服务器”（Standard High Volume Server，SHV）的参考设计板。
+
+这些参考设计的具体规格是：
+
+\begin{itemize}
+\item 支持 1--4 颗 Pentium Pro；
+\item 1--2 GB 工作内存；
+\item 数百 GB 存储；
+\item Intel 宣称可处理每秒 2000 笔事务。
+\end{itemize}
+
+Hewlett-Packard、Dell、Compaq、Gateway 2000 等 OEM 可以直接采用这套设计，把产品上市时间压缩到几个月。在 1995 年 11 月的发布会上，Intel 宣布基于 Pentium Pro 的整机价格区间从 2600 美元的工作站到 2 万美元的服务器。
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.62\textwidth]{figures/fig06-shv-p6.jpg}
+\caption{1995 年 5 月 InfoWorld 的报道：Intel 向 OEM 推出完整的 P6 服务器系统方案。\protect\footnotemark}
+\end{figure}
+\footnotetext{视频画面时间区间：00:06:09--00:06:16。}
+
+注意这里发生的事情：Intel 把自己从“卖芯片”变成了“卖整机参考方案”。这一招绕开了传统服务器厂商的系统集成能力，让一批原本只做 PC 的 OEM 也能快速进入服务器市场。等到这些 OEM 成长起来，UNIX 厂商面对的就不再是 Intel 一家，而是一整个以 PC 供应链为基础的产业群。
+
+\subsection{1996 年的转折}
+
+配合 1996 年发布的 Windows NT 4.0，这套组合开始见效。IDC 的数据显示，1996 年 NT 4.0 的销售额增长了 85\%，市场份额达到 27\%。竞争依然激烈，但 Wintel 在服务器市场已经建立起了类似它在 PC 市场的根据地。
+
+\subsection{本章小结}
+Pentium Pro 用“整数性能追平 RISC、价格低一个数量级”的方式，为 x86 打开了服务器市场的大门。SHV 参考设计则把芯片变成了 OEM 可以直接组装的标准化产品，绕过了传统服务器厂商的系统集成壁垒。到 1996 年，Wintel 在服务器市场已经站稳，UNIX 厂商开始感到压力。
+
+\section{联盟的裂缝：NSP、节奏错配与 SMP 天花板}
+
+Wintel 是一个利益共同体，但不是利益完全一致的共同体。这一章讲的是两者之间的结构性摩擦——这些摩擦在当时看起来只是商业纠纷，事后回看却是 Intel 最终转向 Linux 的直接原因。
+
+\subsection{NSP 事件：谁拥有操作系统之上的那一层}
+
+1995 年，Intel 推出了一个叫“原生信号处理”（Native Signal Processing，NSP）的多媒体软件标准。它的思路很直接：把一部分音频和视频计算从专用芯片搬到 CPU 上，用软件和 API 实现。对 Intel 来说，这既能让用户感受到“新 CPU 更快”，也能扩大 x86 的应用面。
+
+微软的反应极为强烈。在微软看来，NSP 是一种“中间件”，它绕过了操作系统直接接触硬件和应用，等于侵入了 Windows 的地盘。微软高管明确表示不会支持 NSP，比尔·盖茨还专门给安迪·格鲁夫发邮件表达不满。
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.78\textwidth]{figures/fig07-nsp.jpg}
+\caption{1995 年 10 月 PC Magazine 的报道：在与微软的争执之后，Intel 大幅调整了 NSP 参考平台。\protect\footnotemark}
+\end{figure}
+\footnotetext{视频画面时间区间：00:07:17--00:07:23。}
+
+事情最终以 Intel 退让收场。NSP 事件后来因为微软的反垄断诉讼而被公开，成为微软利用平台地位打压合作方的例证之一。两家公司对外都淡化处理，但这件事给 Intel 留下了一个清晰的信号：\textbf{它的“伙伴”随时有能力用平台权力否决它的战略。}
+
+\subsection{NT 的可移植性：一把双刃剑}
+
+第二个摩擦点更隐蔽，但影响更深远。与消费级 Windows 不同，Windows NT 从设计之初就是可移植的。虽然绝大多数 NT 实例跑在 x86 上，但它同样支持 DEC 的 Alpha、IBM 与 Apple 的 PowerPC，以及 MIPS 架构。
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.42\textwidth]{figures/fig08-nec-nt-portable.jpg}
+\caption{1993 年 NEC 在 InfoWorld 上投放的广告，标题是“The brains behind Windows NT”，宣传其 MIPS R4400 芯片可以运行 NT。\protect\footnotemark}
+\end{figure}
+\footnotetext{视频画面时间区间：00:08:40--00:08:46。}
+
+对客户来说，这是好事：买 NT 不会被绑在某一种芯片上。对 Intel 来说，这是一个战略隐患。微软还在不断签署新的芯片支持协议，等于在 Intel 身边布下了一圈“备胎”。于是一个问题浮出水面：
+
+\begin{importantbox}{Intel 的核心恐惧}
+如果 NT 成为服务器操作系统的事实标准，那么微软完全有能力把 x86 降格为“众多硬件架构之一”。到那时，Intel 在 PC 市场积累的规模优势，就会被稀释到一个多架构竞争的市场里。这相当于把 Intel 最重要的护城河交给合作伙伴来决定。
+\end{importantbox}
+
+\subsection{节奏错配：摩尔定律遇上三年一版的 Windows}
+
+就算不考虑战略博弈，两家公司的产品节奏也天然不同。
+
+Intel 遵循摩尔定律，大约每两年就能推出更快、更好的芯片。微软则大约每三到五年才发布一个新版 Windows，而且新系统未必会立刻用满新芯片的能力。
+
+视频给了两个非常有说服力的例子：
+
+\textbf{第一个例子：32 位。} Intel 在 1985 年就推出了 32 位的 386 处理器。微软直到 1995 年的 Windows 95 才拿出面向消费者的 32 位操作系统——整整晚了十年。
+
+\textbf{第二个例子：Chicago 的图形层。} 在 Pentium Pro 的开发过程中，微软在多次会议上告诉 Intel，下一代 Windows（代号 Chicago，即后来的 Windows 95）将是纯 32 位、去掉全部遗留的 16 位代码。Intel 据此把 Pentium Pro 的优化重点放在了 32 位性能上。结果 1994 年微软公开宣布，Chicago 的图形显示接口——操作系统的关键部分——仍将保留 16 位。
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{figures/fig09-pentiumpro-16bit.jpg}
+\caption{1995 年 11 月《Daily Record》的报道标题：“Pentium Pro sets PC standard — But Intel's speedy new chip lags on older 16-bit software”。\protect\footnotemark}
+\end{figure}
+\footnotetext{视频画面时间区间：00:10:36--00:10:41。}
+
+此时 Pentium Pro 已经进入开发后期，改设计来不及了。结果芯片上市后，媒体在消费级桌面场景下测出了糟糕的图形性能，Intel 替微软的设计决策背了锅。
+
+\subsection{SMP 天花板：4--8 路对 64 路}
+
+第三个矛盾出现在服务器场景的核心指标上：多处理器扩展能力。
+
+NT 4.0 单个操作系统实例最多支持 4--8 颗处理器，而当时一些 UNIX 变体可以支持到 64 颗。这意味着 NT 在架构上被挡在了高端市场之外——客户如果要在单机里跑大型数据库，仍然只能选 UNIX。
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.92\textwidth]{figures/fig-gen-smp.pdf}
+\caption{单个操作系统实例支持的处理器数对比（数据取自视频正文）。NT 4.0 的上限、Linux 2.2 的上限，以及随后两代 Linux 内核的改进构成了后来竞争的关键变量。}
+\end{figure}
+
+\subsection{两种增长模型}
+
+为什么会出现这种错配？视频给出了一个很有洞察力的解释：两家公司的增长模型不同。
+
+\begin{table}[H]
+\centering
+\caption{Intel 与微软的增长模型对比}
+\begin{tabular}{p{0.2\textwidth}p{0.34\textwidth}p{0.34\textwidth}}
+\toprule
+ & Intel & Microsoft \\
+\midrule
+收入来源 & 卖最新的芯片 & 服务整个已安装基础 \\
+对软件的要求 & 需要能吃掉新算力的软件 & 需要向后兼容、覆盖尽可能多用户 \\
+发布节奏 & 约每两年一代 & 约三到五年一版 \\
+对旧平台的态度 & 希望用户尽快换新 & 必须照顾存量客户 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+微软并非不愿意投入——开发一个新版 Windows 需要数千名员工、可能耗资数十亿美元。问题在于软件本身的属性决定了它必须照顾存量。这两种模型各有道理，但放在一起就会持续产生摩擦。
+
+那么 Intel 有什么选择？视频在这里点题：1990 年代后期，一个非常有力的新候选出现在了 Intel 的雷达上——Linux。
+
+\subsection{本章小结}
+Wintel 联盟内部存在三重结构性矛盾：NSP 事件表明微软会用平台权力否决 Intel 的越界；NT 的可移植性意味着微软可以把 x86 降格为普通架构；产品节奏与 SMP 上限的错配则让 Intel 的新芯片无法在服务器市场充分变现。这些矛盾共同构成了 Intel 寻找“第二操作系统”的动机。
+
+\section{GNU 与 Linux：一个没有所有者的替代品}
+
+在讲 Intel 如何发现 Linux 之前，需要先讲清楚 Linux 是怎么来的。视频把这段历史压缩在几分钟里，但其中的每个环节都直接影响 Linux 后来的治理结构。
+
+\subsection{Stallman 的动机：一个被杀死的社区}
+
+1984 年 1 月，麻省理工学院（MIT）的程序员 Richard Stallman 正式启动了一个替换 UNIX 的项目。要理解他为什么这么做，得回到 MIT 人工智能实验室的那段历史。
+
+Lisp 最初是早期人工智能研究中的优雅工具。当商人意识到 Lisp 和它所支撑的 AI 可以成为一个大产业时，实验室分裂成了两家公司：Symbolics 和 Lisp Machines Inc.。Symbolics 融了数百万美元，试图成为“那个时代的英伟达”，把实验室里最顶尖的黑客全部挖走，只留下一个空壳。
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.72\textwidth]{figures/fig10-symbolics-lmi.jpg}
+\caption{Symbolics 与 Lisp Machines Inc.（LMI）的标志，这两家公司由 MIT AI 实验室分裂而来。\protect\footnotemark}
+\end{figure}
+\footnotetext{视频画面时间区间：00:12:27--00:12:33。}
+
+Stallman 始终没有原谅这件事。他后来说的一句话被视频引用：“Everything's dying.”（一切都在死去。）出于对黑客社区消亡的失落，他决定建立一个新的社区，而它的基础是“自由软件”这个概念。
+
+\subsection{GNU：零件齐全，只缺内核}
+
+1983 年底，Stallman 启动了一个构建自由操作系统的项目，它遵循 UNIX 的设计原则——模块化、可移植——但不复制 UNIX 的代码，以避免商业秘密问题。这个项目叫 GNU，递归缩写为 “GNU's Not UNIX”。
+
+接下来的几年里，Stallman 和社区把工具链的各个部分都做了出来：编辑器、编译器、shell、各种工具程序。整个系统只缺一样东西：\textbf{内核}。
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.66\textwidth]{figures/fig11-kernel-diagram.jpg}
+\caption{内核在系统中的位置：它位于应用与硬件之间，负责内存管理、CPU 时间分配、磁盘与设备访问。视频在此处特别强调，内核是操作系统真正的心脏。\protect\footnotemark}
+\end{figure}
+\footnotetext{视频画面时间区间：00:13:33--00:13:38。}
+
+视频在这里特意解释了一下内核的重要性，因为这是理解后面所有事情的前提。内核负责内存怎么分配、每个进程能分到多少 CPU 时间、磁盘空间怎么管理。它把操作系统的其余部分与硬件隔开。缺了它，GNU 只是一套漂亮但没有心脏的工具。
+
+\subsection{Linus 与集市模式}
+
+内核最终由一个 21 岁的芬兰本科生补上了。Linus Torvalds 受到教学用 UNIX 系统 MINIX 的启发，在 1991 年 8 月于 MINIX 的 Usenet 新闻组发帖，说自己正在做一个自由的操作系统，并征求功能建议。帖子吸引了 MINIX 生态的贡献者，最终演化成了自己的项目：Linux。
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.78\textwidth]{figures/fig12-gpl-defining.jpg}
+\caption{2021 年 CIO 的采访标题：“Linus Torvalds says GPL was defining factor in Linux's success”。Torvalds 在采访中反复强调，GPL 防止了碎片化。\protect\footnotemark}
+\end{figure}
+\footnotetext{视频画面时间区间：00:15:13--00:15:19。}
+
+Linus 的角色很快从写代码转变为审阅别人的贡献并合并进代码库。这种被后来概括为“集市”的模式，让 Linux 能以比公司更快的速度交付新代码。1991 年 10 月，第一个可用版本发布；1992 年，0.12 版采用了 Stallman 的 GPL 许可证。
+
+\subsection{GPL 的制度设计}
+
+GPL 的具体条款值得单独说明，因为它解释了 Linux 为什么没有重蹈 UNIX 的覆辙。
+
+GPL 要求：任何人都可以阅读和修改代码，但只要分发修改后的版本，就必须同样以开源方式发布。用更直白的话说：
+
+\begin{importantbox}{GPL 解决了两个具体问题}
+\textbf{防止碎片化}：公司不能把 Linux 内核拿过去，加点自己的东西，再作为闭源的竞争产品卖出去。这避免了 UNIX 当年分裂成三十多个互不兼容变体的命运。\\
+\textbf{保证贡献回流}：任何公司对内核做的改进都会惠及所有人，不会被人锁进私有分支。这让大公司愿意投入——IBM 后来有数百名员工为内核贡献代码。\\
+Torvalds 后来多次表示，选择 GPL 是他做过的最正确的决定。
+\end{importantbox}
+
+这里有一个容易被忽略的因果关系：Linux 之所以能被大公司接纳，是因为 GPL 让它们确信自己的投入不会被竞争对手独占。许可证在这里起到了产业治理工具的作用。
+
+\subsection{本章小结}
+GNU 提供了完整的工具链但缺少内核，Linux 补上了这块拼图，而 GPL 则从制度上保证了内核不会被碎片化、贡献不会被私有化。三者结合，产生了一个不属于任何公司、却能被所有公司使用的操作系统。这个治理结构是 Linux 后来能承接企业级负载的根本原因。
+
+\section{发行版与 Red Hat：把内核变成产品}
+
+\subsection{内核是引擎，发行版是整车}
+
+Linux 只是一个内核。视频用了一个很贴切的比喻：内核是汽车引擎，非常重要，但你还得需要整辆车的其余部分。
+
+对早期极客来说，自己组装系统是可以接受的。但让普通用户先“造一辆车”再开，显然不现实。于是出现了\textbf{发行版}（distribution，简称 distro）：把 Linux 内核与 GNU 项目或其他自由软件的实用工具打包在一起，形成一套稍微方便一些的操作系统套件。
+
+视频还打了个比方：这就像高中时代大家互相传递的混音带（mixtape）——把喜欢的歌按某种顺序组合起来。好的发行版能流行到可以变现，其商业模式被形容为“卖瓶装水”：包装不同，水是同一份。
+
+\subsection{Red Hat 的起点}
+
+早期有代表性的发行版包括 Slackware、Debian，以及后来最重要的 Red Hat。
+
+Red Hat 由 Marc Ewing 在 1993 年创立。Ewing 很早就开始用 Linux，但用了一段时间后发现，自己花在管理 Linux 机器上的时间比写代码还多。于是他做了一个发行版，放在他公寓的备用卧室里——那间公寓靠近杜克大学。名字来自他在大学时戴的一顶红白条纹长曲棍球帽。
+
+Red Hat 做的事情，是把 Linux 变成一个更专业的产品。最典型的例子是 Red Hat Package Manager（RPM）：它让用户可以方便地安装、删除、更新软件包，比如 Web 服务或 FTP 服务。
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.46\textwidth]{figures/fig13-redhat-box.jpg}
+\caption{Red Hat Linux 6.1 的零售包装盒。发行版可以刻成光盘、装盒、在零售店销售——这是 Linux 走向主流用户的具体形态。\protect\footnotemark}
+\end{figure}
+\footnotetext{视频画面时间区间：00:18:31--00:18:36。}
+
+1995 年，Ewing 和同事 Robert Young 成立了 Red Hat 公司，收入来自销售光盘，以及配套的培训、教育和客户支持服务。
+
+\subsection{把 Linux 带出极客圈}
+
+在最初的几年，Linux 的用户群体是技术水平很高的黑客和穷学生。Red Hat 以及其他商业发行版（如 Caldera）的崛起，把这个系统带出了那个小圈子，进入了企业主流视野。
+
+这个转变的意义在于：企业客户买的从来不是“内核”，而是“一套有支持合同的、可运维的系统”。发行版公司恰好填补了这个空缺。
+
+\subsection{本章小结}
+内核需要有人把它包装成可安装、可维护、可支持的产品，发行版承担了这个角色。Red Hat 通过 RPM 包管理、光盘零售和技术支持服务，把 Linux 从黑客的玩具变成了企业可以采购的商品。这一步是 Linux 进入商业世界的前提。
+
+\section{Linux 的早期市场：价格只是入场券}
+
+\subsection{用户增长曲线}
+
+Linux 的采用起步很小，但增长很快。视频给出了几个时间点的估计：
+
+\begin{itemize}
+\item 1992 年初：可能只有几百名用户；
+\item 1996 年：大约 100 万到 200 万；
+\item 1997 年中：全球用户保守估计在 300 万到 500 万之间。
+\end{itemize}
+
+相比之下，同期 Windows 约有 1 亿用户，Macintosh 有 5000 万以上。Linux 的绝对规模仍然很小，但增长速度完全不同。
+
+\subsection{价格差距有多大}
+
+价格当然是因素之一，而且差距极大。
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/fig-gen-price-ladder.pdf}
+\caption{同一台服务器上操作系统的价格对比（数据取自视频正文，对数刻度）。}
+\end{figure}
+
+\begin{itemize}
+\item 一张 Red Hat 光盘加包装盒在零售店卖约 50 美元；
+\item Windows NT 许可证从单份升级的约 150 美元，到 10 个座位的约 1100 美元不等；
+\item 包含软硬件的 UNIX 系统则要 2.5 万到 25 万美元甚至更多。
+\end{itemize}
+
+视频引用了一个具体案例：1997 年《Byte》杂志报道，伊士曼柯达的一位系统顾问在某个 Photo CD 相关项目中安装了 Linux，因为不必购买高价 UNIX 替代方案，公司省下了 1 万美元。
+
+\subsection{不只是便宜}
+
+但真正有意思的是，企业和机构采用 Linux 并不完全是因为便宜。视频列出了几个更实质的原因：
+
+\textbf{可靠性。} 一位用户形容 Linux 几乎“不会崩溃”（crash-proof），这直接转化为更高的生产力。
+
+\textbf{源代码可访问。} 对高级用户来说，能读到源代码是 Windows 永远给不了的。这意味着可以按需改造系统。有人把 Linux 移植到 Palm Pilot 上；洛斯阿拉莫斯的研究人员用 Linux 把 68 台 PC 联网，用来模拟原子冲击波。
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.72\textwidth]{figures/fig14-linux-price-clip.jpg}
+\caption{1996 年 5 月《Philadelphia Inquirer》的报道，讨论 Linux 的低成本与可获得性。文中提到“最好的 Linux 来源是一家叫 Red Hat 的公司”。\protect\footnotemark}
+\end{figure}
+\footnotetext{视频画面时间区间：00:17:50--00:17:54。}
+
+\subsection{短板与偏见}
+
+视频没有回避 Linux 当时的明显短板：
+
+\begin{itemize}
+\item \textbf{应用太少}：没有像样的 Microsoft Office、Visual Basic 或其他商业软件。视频对这个问题的评论颇有意思：《Byte》在指出这一点之后，紧接着补了一句“Linux 确实包含大量可以用来自己写应用的工具”——这恰好说明了当时 Linux 读者的画像。
+\item \textbf{支持困难}：出了问题该查什么文档、该打给谁？这正是 Red Hat、Caldera 这类公司能介入的地方。
+\item \textbf{声誉问题}：尽管 Linux 与 UNIX 没有直接血缘，它仍常被与 UNIX 联系在一起，因而继承了 UNIX“晦涩难用”的名声。
+\end{itemize}
+
+\begin{warningbox}{管理层的偏见是一种真实的市场摩擦}
+视频提到，即便 Linux 增长很快、有不少知名机构采用、性价比也确实明显，公司高管层中仍然存在负面偏见。一位经理可能会问：“你怎么能把关键服务器交给它？”\\
+而与此同时，Linux 很可能已经在他公司某台机器上跑着了。一位匿名系统管理员 1998 年对《旧金山纪事报》说的话很能代表这种张力：\\
+“很多管理层不信任 Linux，因为它是免费的。但他们让我负责运行服务器，那我就用最有效的。最有效的是 Linux。”
+\end{warningbox}
+
+\subsection{本章小结}
+Linux 的早期增长由价格优势启动，但真正让它站稳的是可靠性、源代码可访问性和可定制性。它的短板（应用生态、技术支持、声誉）真实存在，也因此给发行版公司和后来的商业生态留下了空间。管理层偏见与技术人员的实际选择之间的张力，预示了 Linux 接下来会以“自下而上”的方式进入企业。
+
+\section{1998：Intel 发现 Linux}
+
+\subsection{来自国家实验室的请求}
+
+1998 年初，Intel 开始收到来自全国各地的奇怪请求。费米国家加速器实验室（Fermi National Accelerator Lab）等机构的工程师和研究人员，要求 Intel 把它的数学库移植到 Linux 上。
+
+在此之前，Intel 与 Linux 几乎没有什么交集，最多修过一两个 bug。这些请求促使 Intel 去核查情况。他们向为小型 ISP 等客户生产白牌服务器的 OEM 打听，得到的反馈是：Linux 的增长正在加速向上。
+
+具体数字很有冲击力：\textbf{大约 20\% 的公共 Web 服务器运行 Linux}。考虑到这个操作系统在桌面上几乎没有任何存在感，这个份额出乎意料地高。
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.72\textwidth]{figures/fig15-oracle-linux.jpg}
+\caption{1998 年 7 月 CNET 的短讯：“Oracle offers Linux”。数据库厂商的移植决定，是那个夏天一系列转向的标志性事件之一。\protect\footnotemark}
+\end{figure}
+\footnotetext{视频画面时间区间：00:25:05--00:25:09。}
+
+这个消息一路传到了安迪·格鲁夫那里。据视频描述，他用相当“丰富多彩”的语言表示，他们应该对此做点什么。
+
+\subsection{看不懂的商业模式}
+
+于是 Intel 高管联系了 Red Hat，在系列会议中试图了解这家公司是怎么运作的。结果他们有点被搞糊涂了：Red Hat 并不拥有其核心软件产品背后的知识产权，而任何人都可以免费获得这份软件。这怎么赚钱？这怎么投资？
+
+Red Hat 的人继续解释。CEO Robert Young 喜欢用番茄酱作比喻：任何有番茄、糖和醋的人都能做番茄酱，但亨氏（Heinz）占据了这个市场 80\% 的份额。言下之意是：产品本身可以复制，但品牌、渠道、支持和服务构成的商业位置不容易复制。
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.42\textwidth]{figures/fig16-future-of-linux.jpg}
+\caption{1998 年 7 月 14 日在圣克拉拉举行的“Linux 的未来”座谈会记录。主办方预计到场人数远超预期，约 700--900 人到场。\protect\footnotemark}
+\end{figure}
+\footnotetext{视频画面时间区间：00:25:16--00:25:21。}
+
+同时，Intel 内部的 Linux 支持者也在分享他们从 ISP 渠道了解到的采用数据。最终，Intel 管理层被说服了，两家公司开始讨论合作。
+
+\subsection{Merced 的焦虑}
+
+Intel 此时还有一个更具体的动机。他们在开发一款叫 Merced 的新芯片，这是其 64 位 IA-64 服务器架构的第一个实现，后来被命名为 Itanium，据说速度极快。
+
+但担忧一直存在：NT 可能会捆住它的全部能力——就像 32 位时代那样，整整耽误了十年。这种担忧还有新的佐证：微软的下一代 NT（当时叫 NT 5.0）从 1998 年推迟到 1999 年，之后又经历更多延期，最终被改名为 Windows 2000。
+
+\begin{importantbox}{Intel 的真实诉求}
+Intel 想要的不只是“多一个操作系统能跑在 x86 上”。它想要的是一个\textbf{可以被自己深度参与优化}的操作系统——一个能及时吃掉最新芯片能力、并且不会被某个伙伴卡住的操作系统。Linux 恰好满足这两点：代码开放，且没有一个能对它行使否决权的所有者。
+\end{importantbox}
+
+\subsection{本章小结}
+1998 年，来自科研机构的移植请求和 ISP 渠道的数据让 Intel 意识到 Linux 在服务器侧的采用已经不可忽视。Red Hat 的“番茄酱”商业模式最终说服了 Intel 管理层，而 Merced/Itanium 的软件依赖焦虑则提供了更直接的动机。Intel 需要 Linux，不只是为了多一条产品线，而是为了摆脱对微软单一路径的依赖。
+
+\section{Linux 之夏与 Intel 的押注}
+
+\subsection{一连串的公开表态}
+
+1998 年夏天，多家大公司接连发布与 Linux 相关的公告。
+
+\textbf{6 月，IBM。} 这家以保守著称的公司宣布，将在其电子商务工具套件中纳入开源 Web 服务器 Apache。Apache 本身不是 Linux，但绝大多数 Apache 实例都跑在 Linux 上。IBM 早在 1996 年就选用了 Apache 为亚特兰大夏季奥运会官网提供支持，这次则是正式背书——开源软件第一次在企业市场获得立足点。
+
+\textbf{7 月 6 日，Oracle 说“不”。} 《InfoWorld》发表了一篇题为“Linux not yet critical mass”的文章，其中 Oracle 连同 Sybase、Informix 都表示没有计划为 Linux 发布数据库软件，理由是没看到客户有强烈需求。
+
+\textbf{7 月 9 日，Oracle 转向。} 仅仅三天后，Oracle 宣布将把 Oracle8 数据库移植到 Linux。导致这次急转弯的重要原因，是 7 月在圣克拉拉举行的一场名为“Linux 的未来”的座谈会。
+
+\textbf{7 月 14 日，座谈会。} 900 多人到场看 Torvalds 等人。会上讨论了开源是否只是一阵风、并敦促用户推动应用厂商移植到 Linux。后来人们把这场座谈会视为一个重要的转折点。
+
+\textbf{9 月，更多厂商跟进。} 到 1998 年 9 月，已经有多家大型公司提供 Linux 移植版本，包括企业系统公司 Computer Associates、软件公司 Corel 和数据库公司 Informix。这个趋势在随后几年持续。
+
+\subsection{Intel 的投资}
+
+Intel 也参加了 7 月那场座谈会。Intel 的 Sunil Saxena 在会上做报告，指出 Linux 正在成为 ISP 的首选操作系统，同时点出了它的几个弱点：可扩展性、高端硬件驱动、大内存支持。他强调 Intel 希望支持 Linux。
+
+这些话很快变成了行动。1998 年 9 月 29 日，Intel 宣布与浏览器公司 Netscape、风投 Benchmark 和 Greylock 一起投资 Red Hat。
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.34\textwidth]{figures/fig17-intel-pressrelease.jpg}
+\caption{Intel 1998 年 9 月 29 日的新闻稿，宣布在 ISPCON Fall '98 上推出一系列面向 ISP 的举措，其中包括对 Linux 社区的支持。\protect\footnotemark}
+\end{figure}
+\footnotetext{视频画面时间区间：00:26:23--00:26:28。}
+
+Intel 的表态包括几层含义：
+
+\begin{itemize}
+\item 希望 Intel 芯片运行 Linux 的效果，和运行 Windows NT 及其他系统一样好；
+\item 与 Red Hat 合作，提供技术贡献，并为 Linux 社区指派专职的 Intel 工程联络人；
+\item 加入 Linux International——一个早期的全球性 Linux 倡导组织。
+\end{itemize}
+
+\subsection{一个被低估的多米诺骨牌}
+
+投资公告之后，还有一张关键的多米诺骨牌倒下，这件事在视频里被称为“关键但被低估”。
+
+Benchmark 的一位合伙人同时是戴尔的董事会成员。通过他，Red Hat 得以与 Michael Dell 会面。双方讨论了 Linux 在服务器上的增长、市场格局会如何演变，以及 Linux 有没有可能赢得桌面。
+
+戴尔最终投资了 Red Hat。更重要的是，他们在 1999 年初宣布将在工作站和服务器上预装 Linux——这是第一家这么做的整机大厂。
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{figures/fig18-dell-redhat.jpg}
+\caption{Red Hat 1999 年 2 月 4 日的新闻稿：戴尔将预装 Red Hat Linux。这是主流系统厂商第一次在整机上预装 Linux。\protect\footnotemark}
+\end{figure}
+\footnotetext{视频画面时间区间：00:27:08--00:27:12。}
+
+预装的意义远大于投资。投资只是财务行为，预装意味着 Linux 被放到了与 Windows、NetWare 同等的采购选项里。客户买服务器时，开机就是 Linux，不再需要自己折腾安装。
+
+\subsection{微软的反应：从暴怒到“Linux Myths”}
+
+Intel 投资 Red Hat 的消息公开后，科技媒体立刻开始猜测这对 Intel 与微软的关系意味着什么。
+
+Red Hat 高管在《Under the Radar》一书中回忆，微软在 Intel 宣布投资后“went ballistic”（暴跳如雷）。那个周末，Intel 高管接到了多个来自微软对应人员的愤怒电话。
+
+但 1998 年的微软已经没有 1997 年那样的自由度了。1998 年 5 月，美国司法部以垄断行为起诉微软，主要针对浏览器大战期间将 Internet Explorer 与 Windows 捆绑的做法。诉讼和随之而来的审查，迫使微软收敛行为。
+
+微软公开的回应很巧妙：他们发表声明，把 Red Hat 说成是“微软并没有垄断操作系统”的证据。更有意思的是，微软后来还援引 Linux，作为操作系统市场仍有足够竞争、政府不该拆分他们的证据。
+
+但内部并不轻松。1998 年 10 月，一组后来被称为“万圣节备忘录”（Halloween Memos）的微软内部文件泄露，其中把 Linux 这类自由软件的兴起称为对 Windows 的“长期可信威胁”。
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/fig19-halloween.jpg}
+\caption{“万圣节备忘录”（The Halloween Documents）公开页面。这些内部文件系统分析了开源开发模式的优势，并把 Linux 视为长期威胁。\protect\footnotemark}
+\end{figure}
+\footnotetext{视频画面时间区间：00:28:29--00:28:33。}
+
+随后微软据称组建了一支“Linux 攻击小组”，试图说服客户 Linux 还没准备好。他们上线了一个叫“Linux Myths”的网页，声称要“从炒作中退后一步，看看现实”，逐条反驳 Linux 信徒们念叨的“神话”，比如“Linux 比 Windows NT 4 性能更好”“Linux 比 Windows NT 4 更可靠”“Linux 是免费的”。
+
+最具争议的一次行动发生在 1999 年 4 月：微软资助第三方实验室 Mindcraft 做基准测试，结果显示 NT 在文件服务器场景下比 Linux 快 2.5 倍，在 Web 服务器场景下快 3.7 倍。
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.84\textwidth]{figures/fig20-mindcraft.jpg}
+\caption{Mindcraft 的对比测试报告（左）与测试结果图表（右）。Linux 支持者随后指出该测试的配置并不公平，这一争议持续了很长时间。\protect\footnotemark}
+\end{figure}
+\footnotetext{视频画面时间区间：00:29:10--00:29:15。}
+
+Linux 支持者随后指出这次测试不公平，尤其是 Linux 一方使用了未经调优的旧版本内核与配置。但无论争议结果如何，这件事本身说明了一点：微软已经把 Linux 当成了需要正面应对的竞争对手。
+
+\subsection{本章小结}
+1998 年的“Linux 之夏”由一连串标志性事件组成：IBM 接纳 Apache、Oracle 三天内反转、圣克拉拉的座谈会、Intel 投资 Red Hat、戴尔宣布预装。Intel 的“OS 中立”表态为它自己留出了回旋空间，而微软则从公开否认转向内部紧张，万圣节备忘录和 Mindcraft 测试都是这种紧张的外化。
+
+\section{Port of Choice：瑞士策略与硬件补齐}
+
+\subsection{OS 中立}
+
+面对盖茨的怒火，Intel 的应对方式是宣布自己“OS 中立”。Linux、Novell 的 NetWare、Sun 的 Solaris、微软的 Windows 2000，Intel 希望它们都能在自己的硬件上跑得好。
+
+Intel 甚至与另外二十家公司一起，试图用一种叫 Uniform Driver Initiative 的机制统一当时三十来种 UNIX 变体的驱动模型，方便厂商为 Intel 硬件写驱动。这件事最终没有成功。
+
+这种策略后来在 2010 年被正式命名为“Port of Choice”，但 Intel CTO Pat Gelsinger 在 2001 年就说这是公司长期坚持的策略。最终操作系统厂商不得不接受这个现实，因为当时的 Intel 芯片没有真正的替代品。
+
+\begin{knowledgebox}{什么叫“Port of Choice”}
+字面意思是“移植的首选目标”：任何操作系统如果想获得最大的硬件覆盖面，就必须优先支持 Intel 架构。这个位置的价值在于，它让 Intel 不再需要依附于某一个操作系统——相反，操作系统需要来适配 Intel。
+\end{knowledgebox}
+
+\subsection{补齐硬件：从 4 路到 8 路}
+
+软件之外，硬件端也在补齐服务器所需的能力。
+
+1998 年中，Intel 推出了 Pentium Pro 的后续产品 Pentium II Xeon，主攻中端工作站与服务器市场，特点是更高的主频和 512 KB 的 L2 缓存。
+
+几个月后的 1999 年 3 月，Intel 发布 Pentium III Xeon。相比前代，它的速度提升不大，但支持通过名为 Profusion 的芯片组构建 8 路系统。这意味着厂商可以在一个机箱里对称地放八颗 CPU——突破了此前 4 路系统的天花板，而那个天花板正是当时数据中心性能问题的来源之一。
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.72\textwidth]{figures/fig21-xeon-8way.jpg}
+\caption{8 路 Xeon 系统的结构示意：八颗处理器通过 Profusion 芯片组共享内存与 I/O 总线。\protect\footnotemark}
+\end{figure}
+\footnotetext{视频画面时间区间：00:30:57--00:31:02。}
+
+这里有一个关键细节：8 路能力需要操作系统配合才能发挥作用。Windows NT/2000 支持它，而 Linux 当时还有问题。这解释了为什么 Intel 同时要在两个操作系统上下注——硬件能力已经就位，软件能不能跟上决定了它能不能卖出去。
+
+\subsection{高端仍有护城河}
+
+高端 UNIX 服务器仍然保留着关键优势。最突出的是内存寻址能力：大型数据库、数据仓库、CAD 系统需要的主内存远超过 32 位 x86 架构所能支持的上限。
+
+但凭借 Pentium II Xeon 和 Pentium III Xeon 这两代产品，中低端 UNIX 服务器的侧翼已经完全暴露在竞争之下。
+
+\subsection{本章小结}
+Intel 用“OS 中立”的瑞士策略避免被任何一家操作系统绑定，同时通过 Xeon 系列和 Profusion 把 x86 服务器的多路扩展能力从 4 路推到 8 路。硬件补齐之后，剩下的瓶颈就落在软件侧：NT 的 SMP 上限和 Linux 的 SMP 缺陷，成了下一阶段竞争的主战场。
+
+\section{Web 让天平倾斜：scale-out 的经济学}
+
+\subsection{Sun 的误判}
+
+Sun 最初是欢迎 Linux 革命的。这与他们“开放”的口号一致：他们把 Java 开发工具包移植到 Linux，还发布了可运行 Linux 的工作站硬件。他们给人的总体印象是：Sun 不在乎一台机器跑 Linux 还是 Solaris，只要它是 SPARC 机器就行。
+
+但事实证明这是一个误判：它不必是 SPARC 机器。
+
+提供网站服务、邮件托管、防火墙这类工作，与运行数据库或分析软件不是一回事。这类负载可以水平切分到很多台小机器上。企业逐渐意识到：用一批 Intel 芯片加 Linux 的节点横向扩展（scale out），在财务上比纵向扩展（scale up）一台大型 UNIX 服务器更划算。
+
+\subsection{泡沫破裂加速了这一趋势}
+
+互联网泡沫破裂后，这个趋势突然加速。风险投资枯竭，创业公司开始倒闭。节俭成了主旋律，企业通过购买倒闭公司清算出来的二手设备，或者直接改用 Linux 来省钱。
+
+亚马逊在 2001 年做了一次大规模的 Linux 迁移，并在季度 SEC 文件中提到，这估计每季度为他们节省了 1700 万美元。当被问及具体做了什么时，亚马逊发言人的回答很有意思：
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.62\textwidth]{figures/fig24-amazon-linux.jpg}
+\caption{2001 年 Yahoo News 转载的路透社报道：“Amazon Says Saving Money with Shift to Linux”。\protect\footnotemark}
+\end{figure}
+\footnotetext{视频画面时间区间：00:32:46--00:32:58。}
+
+\begin{quote}
+“We've always been pretty closed-mouthed about technology on the back-end stuff, partly because it's pretty steep tuition and we don't want other people going to school on our tuition.”
+\end{quote}
+
+翻译过来是：我们对后端技术一向守口如瓶，部分原因是学费很贵，我们不想让别人拿我们的学费去上学。
+
+\subsection{E*Trade 的账本}
+
+在线券商 E*Trade 在 2006 年公布了一份很有说服力的案例研究。它对比了两套方案：
+
+\begin{table}[H]
+\centering
+\caption{E*Trade 案例中的两套方案对比}
+\begin{tabular}{lccc}
+\toprule
+方案 & 硬件成本 & 可服务用户数 & 每用户成本 \\
+\midrule
+Sun Enterprise 4500 & \$250,000 & 300--400 & 约 \$714 \\
+Linux + Intel 单机 & \$4,000 & 180 & 约 \$22 \\
+Linux + Intel 两台 & \$8,000 & 360 & 约 \$22 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+单台 Linux 机器只能服务 180 人，看起来不如 Sun 的 300--400 人。但解决办法很简单：买两台。总价 8000 美元，服务 360 人，仍然只有 Sun 方案的 3.2\%。
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.92\textwidth]{figures/fig-gen-cost-per-user.pdf}
+\caption{按每用户硬件成本计算，scale-out 方案的差距约为 32 倍。}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.74\textwidth]{figures/fig23-etrade.jpg}
+\caption{E*Trade 2006 年的案例研究与 Sun Enterprise 4500 服务器。文中提到这次迁移每年节省约 1300 万美元。\protect\footnotemark}
+\end{figure}
+\footnotetext{视频画面时间区间：00:33:09--00:33:16。}
+
+从 2001 年开始，搭载 Intel 芯片的 Linux 服务器逐渐有能力稳定替换 Sun 的设备，覆盖从机票比价到大宗商品合约交易再到金融计算的各类场景。
+
+\subsection{Sun 的应对与失败}
+
+Sun 也尝试过自己的横向扩展产品线 Netra。2001 年的 Netra X1 售价低至 1000 美元，但通用 x86 硬件仍然提供了更好的每美元性能。
+
+视频的判断相当直接：这家公司始终没有针对“从 SPARC 上的 Solaris 转向 Intel 上的 Linux”这一转变，形成过像样的回应。
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{figures/fig22-serveros-share.jpg}
+\caption{1995--2000 年各类服务器操作系统的全球出货量份额。Linux 从 1996 年几乎为零增长到 2000 年的约四分之一，而 UNIX 的份额持续收缩。\protect\footnotemark}
+\end{figure}
+\footnotetext{视频画面时间区间：00:32:21--00:32:27。}
+
+\subsection{本章小结}
+真正的转折发生在 Web 负载上。这类负载可以水平切分，使得“多台廉价机器”在财务上碾压“一台大型 UNIX 服务器”。互联网泡沫破裂又加速了节俭采购的趋势。E*Trade 与亚马逊的案例说明，这种替换的驱动力来自单位成本的数量级差异，而非单机性能。
+
+\section{向上攀升：Linux 2.4、2.6 与企业级}
+
+低端市场拿下之后，Linux 开始向上进攻。
+
+\subsection{IBM 的十亿美元}
+
+2000 年底，IBM CEO 郭士纳（Lou Gerstner）认为 Linux 会像互联网一样改变世界，宣布了一项大规模的 Linux 计划：投入 10 亿美元，投入 1500 名员工。
+
+\subsection{Linux 2.4：补上 SMP 这一课}
+
+2001 年 1 月，Linux 2.4 发布。Red Hat 很快在后续版本中采用。它比预期晚了一年，但在缩小与高端 UNIX 服务器和 NT 的若干性能差距方面，确实兑现了承诺。
+
+最关键的一项改进是多处理器支持。1999 年 Mindcraft 测试中的一个主要争议点，就是 Linux 对多处理器机器的支持。那次测试（以及后续测试）显示：Linux 2.2 在单系统内超过两颗 CPU 时扩展性很差。而 Windows NT 4.0 和 2000 分别支持 4 路、8 路乃至 32 路。缺少这个能力是一个重大弱点。
+
+Torvalds 和社区因此着手改进。2.4 版处理了自旋锁（spin lock）等问题，使 Linux 能够在某种程度上有效使用 16 甚至 32 颗处理器——不过视频作者也坦率地说，他不确定在那么高的核数下实际跑得怎么样。
+
+这个改进并没有让 Linux 一夜之间挑战高端 UNIX 机器，但至少具备 4 路或 8 路的能力，为“Linux on Intel”（也就是 Lintel）进入中端计算任务扫清了道路。
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.68\textwidth]{figures/fig25-linux24.jpg}
+\caption{2001 年 1 月 Linus Torvalds 在 Linux 内核邮件列表上发布 2.4.0 的邮件。通篇是自嘲式的幽默，最后一句是“别在这几天报 bug，反正我也不在乎”。\protect\footnotemark}
+\end{figure}
+\footnotetext{视频画面时间区间：00:34:26--00:34:32。}
+
+\subsection{经济学变得极具说服力}
+
+Lintel 的经济账忽然变得非常吸引人。一台戴尔服务器，四颗 Xeon，跑 Red Hat Linux，售价 24000 美元；价格是同等 Sun Fire UNIX 机器的一半，性能却一样好。
+
+\begin{knowledgebox}{为什么“一半价格、同等性能”是毁灭性的}
+服务器采购不是一次性的。企业还要付电费、机架空间、运维人力、软件许可。价格减半意味着同样的预算能部署两倍节点，或者同样的负载能省下一半资本开支。当这个差距持续存在时，采购决策几乎不需要讨论——这也是为什么 Sun 的应对空间越来越小。
+\end{knowledgebox}
+
+Red Hat 和 IBM 立即开始瞄准 Sun 的 Solaris 客户群。惠普和 SGI 则开始给使用其专有硬件的客户提供迁移到 Linux 的选项——理由很务实：与其让客户流失，不如保住客户关系。
+
+\subsection{2002 年的市场数据}
+
+2002 年对服务器市场来说是艰难的一年，但 Linux 机器仍然在增长，而且是以 RISC 系统为代价。
+
+Gartner 的数据显示：2002 年 Linux 服务器硬件收入增长 63\%，而 UNIX 硬件收入下降 11\%。
+
+从绝对金额看，UNIX 硬件仍然更大——2002 年为 170 亿美元，Linux 为 20 亿美元——但这只是因为 UNIX 是高端机器，单价更高。压力已经非常明显：到 2004 年，Sun 服务器的平均售价从 22920 美元跌到了 15860 美元，跌幅 31\%。
+
+\subsection{Linux 2.6：第一个“企业就绪”的内核}
+
+2003 年底，Linux 2.6 发布。视频称它为一个非常标志性的内核：速度、网络、对最多 64 颗处理器的支持等各方面都有改进，可以视为第一个“企业就绪”的 Linux 内核。
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{figures/fig27-linux26.jpg}
+\caption{The Register 对 Linux 2.6 发布的报道，“Penguins are go”。\protect\footnotemark}
+\end{figure}
+\footnotetext{视频画面时间区间：00:38:53--00:38:58。}
+
+更需要强调的是时机：它恰好赶上了一批 Windows NT 4.0 用户开始升级周期。这些用户正处在“单身待嫁”的状态，而 IBM、惠普、戴尔等厂商在拼命把客户往 Linux 上引。
+
+IBM 尤其积极：培训了数千人，帮助开发者把应用重写到 Linux 上，还向潜在迁移者提供大笔营销预算和折扣机器。
+
+\subsection{本章小结}
+Linux 2.4 补上了 SMP 这一课，让 Lintel 得以进入中端市场；价格优势加上性能追平，使得“一半价格、同等性能”成为常态；Gartner 的 2002 年数据表明 Linux 的增长直接来自 UNIX 的份额流失。Linux 2.6 则把 Linux 从“能用”推向“企业就绪”，并且恰好卡在 NT 4.0 的升级窗口上。
+
+\section{64 位：最后一堵墙倒下}
+
+\subsection{Trillian 与 Itanium}
+
+Intel 很早就希望 Linux 支持 64 位，也就是 IA-64 或 Itanium。1999 年 4 月，Intel 启动了 Project Trillian——一个由多家公司组成的联盟，成员可以保密地获得 Itanium 原型，以便开发 Linux 移植版本。2000 年 2 月，该项目提前向社区发布了 IA-64 Linux 源代码。
+
+视频称 Trillian 是开源软件开发史上的一个里程碑。但 Itanium 最终并没有取代 32 位 x86，尽管惠普确实采用了它来替换其专有 UNIX 变体所使用的处理器。
+
+\subsection{AMD 完成了这次跃迁}
+
+真正开启 64 位过渡的是 AMD，而不是 Intel。2003 年中，AMD 推出了开创性的 Opteron 系列芯片。2004 年，Intel 发布了 Nocona Xeon，采用了 AMD 的向后兼容 64 位扩展。
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.82\textwidth]{figures/fig26-opteron.jpg}
+\caption{AMD Opteron 处理器。它用向后兼容的方式把 64 位引入 x86 生态，成为压垮 UNIX 最后一道架构壁垒的产品。\protect\footnotemark}
+\end{figure}
+\footnotetext{视频画面时间区间：00:37:38--00:37:43。}
+
+\subsection{为什么这是“最后一堵墙”}
+
+64 位一直是高端 UNIX 系统相对 x86 的最后优势之一。原因很具体：
+
+\begin{itemize}
+\item 32 位 x86 计算机最多寻址约 4 GB 内存；
+\item 而数据库、科学模拟这类高端应用需要一次性驻留在内存里的数据量，远超这个上限；
+\item 转向 64 位后，x86 系统可以寻址数十甚至数百 GB 内存。
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[font=\small]
+\draw[fill=blue!6, draw=blue!60!black] (0,0) rectangle (6.4,1.1);
+\node at (3.2,0.55) {32 位地址空间：$2^{32}$ B = 4 GB};
+\draw[fill=green!8, draw=green!50!black] (0,1.6) rectangle (6.4,2.7);
+\node at (3.2,2.15) {64 位地址空间：$2^{64}$ B（实际受硬件限制，可达数十 TB）};
+\node[anchor=east] at (-0.15,0.55) {x86};
+\node[anchor=east] at (-0.15,2.15) {x86-64};
+\end{tikzpicture}
+\caption{地址空间是高端应用的一道硬性门槛。把 4 GB 的墙拆掉之后，UNIX 在架构层面最后的结构性优势也随之消失。}
+\end{figure}
+
+有人最初认为 Intel 采纳 64 位的方式是一种权宜之计，只是通向 Itanium 的过渡。但结果无可否认：x86-64 砸碎了围绕 UNIX 的最后几堵墙。视频用了一个很好懂的说法：Lintel 的“蛮族”已经进入城堡。
+
+\subsection{本章小结}
+64 位寻址能力是高端 UNIX 系统最后的结构性优势。Intel 主导的 IA-64 路线（Itanium）未能成为主流，反而是 AMD 用向后兼容的方式把 64 位带进 x86。当 x86-64 与 Linux 结合之后，UNIX 在架构层面已经没有不可替代的能力。
+
+\section{Windows 的反击：Active Directory 的锁定}
+
+\subsection{微软的营销手段}
+
+面对 Linux 的攻势，微软的第一反应是打营销战。它的核心论点是：大家已经在用 Office，与其折腾迁移，不如直接买 Windows Server 许可证。
+
+2004 年，微软发起了一场叫“Get the facts”的营销活动，发布声称 Windows 优于 Linux 的研究。这些研究很快引来争议，被指不够“中立”，甚至可能误导。
+
+\subsection{真正有效的武器}
+
+视频作者认为，真正有效的做法不是营销，而是一款叫 Active Directory（AD）的产品带来的深度锁定。Stratechery 的 Ben Thompson 后来把它称为“有史以来最有价值的免费产品之一”。
+
+AD 随 Windows 2000 一起发布。它的作用是认证和授权一个 Windows 网络里的所有用户和资产：可以推送更新、按照组织架构给用户组分配安全权限、验证身份。
+
+具体到日常运维，AD 带来的变化是：
+
+\begin{itemize}
+\item 管理员可以为一个新上任的经理开通账户、验证凭据、授予对应工具权限；
+\item 用户用一套凭据就能登录各种系统；
+\item 一堆零散的 Windows 机器被整合成一个可统一管理的组织。
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\textwidth]{figures/fig28-activedirectory.jpg}
+\caption{Windows 2000 中的 Active Directory 用户和计算机管理界面。\protect\footnotemark}
+\end{figure}
+\footnotetext{视频画面时间区间：00:40:04--00:40:08。}
+
+关键点在于：AD 让微软掌握了“身份”这一层。身份深深嵌入组织内部，因此把切换成本抬高到了“换个操作系统”之外——你要换的不只是服务器系统，还有整个组织的账号体系、权限模型和运维流程。
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.82\textwidth]{figures/fig29-gartner-decline.jpg}
+\caption{2011--2017 年 UNIX 服务器安装量与占比的持续下滑。即便在被 Linux 击败十年之后，UNIX 也没有完全消失，但下降趋势从未逆转。\protect\footnotemark}
+\end{figure}
+\footnotetext{视频画面时间区间：00:41:41--00:41:46。}
+
+\subsection{结果：谁也没有吃掉谁}
+
+所以在那些预测 Linux 会推翻微软的人面前，Windows Server 的销售继续增长。2005 年，Windows 的服务器收入首次追平 UNIX，次年超过。
+
+Linux 也在继续增长，但它的增长主要不是来自吃 Windows，而是来自吃 UNIX，以及在 Windows 从未立足的新市场里扩张：超级计算、高性能计算、Web，以及 2010 年代的云计算。
+
+\subsection{本章小结}
+微软真正有效的防御不是营销战，而是 Active Directory 建立的深度锁定。它把竞争层次从“操作系统替换”抬高到“组织身份体系重建”，从而保住了 Windows 在企业市场的地位。最终格局是：Linux 吃掉了 UNIX 的大部分市场，Windows 保住了自己的地盘，而 UNIX 在缓慢衰退中退守少数领域。
+
+\section{总结与延伸}
+
+\subsection{作者的结论}
+
+UNIX 服务器的销售在随后几年缓慢下滑，但并没有完全消亡。即便在今天，仍有客户在使用 Solaris、HP-UX 或 AIX。这些滞后应用大多集中在银行和医疗行业，原因各异——对它们来说，迁移到 Linux 要么太难，要么风险太高。
+
+那么 UNIX 为什么会输？视频作者给出的答案很明确：
+
+\begin{quote}
+“I might propose that it had less to do with technology than business model. These vertically integrated kingdoms worked fine years ago until Intel arrived with its high volume economics.”\\
+（我认为这与技术关系不大，更多是商业模式的问题。这些垂直整合的王国在多年前运转良好，直到 Intel 带着它的高销量经济学到来。）
+\end{quote}
+
+作者给出的顺序是：先是 Windows NT 重创了 UNIX，然后 Linux 打得更狠——因为它能给客户 UNIX 拥有的一切，却没有锁定。一旦 Linux 变得足够好，UNIX 厂商自己也不得不转向 Linux。
+
+\subsection{把机制压缩成三层}
+
+把整条线索压缩，这场替代实际上同时发生在三个层面上：
+
+\begin{importantbox}{三层替代机制}
+\textbf{成本层。} Intel 把 PC 的高销量飞轮带进服务器，使得同样性能的硬件价格下降一个数量级。SHV 参考设计进一步把整机成本压到 OEM 可以直接组装的水平。\\
+\textbf{生态层。} GPL 让 Linux 成为一个可以被所有公司共同投资、却不能被任何一家公司私有化的平台。这让 IBM、Intel、Red Hat 等利益并不一致的公司，能够在一个方向上共同投入。\\
+\textbf{锁定层。} UNIX 的锁定来自专有软硬件的捆绑；Lintel 的锁定则几乎为零——操作系统可以换、硬件可以换、厂商可以换。低锁定本身就是一种产品特性，它让采购决策变成纯粹的成本性能计算。\\
+\end{importantbox}
+
+这三层是互相加强的：成本下降带来更多装机量，装机量吸引更多软件支持，软件支持又进一步降低成本。而 UNIX 厂商的垂直整合结构，恰恰无法参与这个循环——它们的收入模型建立在“高单价、高锁定”之上，任何降价都会直接侵蚀利润。
+
+\subsection{一个反直觉的结果}
+
+值得注意的是，Linux 的胜利并不等于 UNIX 客户的“解放”以另一种锁定告终。视频在结尾指出，Linux 的增长后来主要发生在 Windows 从未立足的新市场——超级计算、HPC、Web 和云计算。
+
+而在企业市场内部，微软用 Active Directory 建立了新的锁定层，把身份体系变成了切换成本的主要来源。于是最终格局是三分天下：Linux 拿下 Web 与新兴负载，Windows 守住企业身份与桌面协同，UNIX 退守少数监管严格或迁移风险极高的行业。
+
+\subsection{可以带走的判断}
+
+\begin{enumerate}
+\item \textbf{技术指标的领先是必要条件，不是充分条件。} Pentium Pro 在浮点上始终落后于最好的 RISC，Linux 2.2 的 SMP 也很糟糕。它们赢，是因为“够用 + 便宜 + 不被锁定”的组合。
+\item \textbf{治理结构是产品竞争力的一部分。} GPL 不是法律细节，它决定了 Linux 能否吸收大公司的贡献而不被碎片化。
+\item \textbf{锁定层的迁移比技术替代更慢，也更关键。} UNIX 的技术劣势在 1998 年就很明显，但它真正退出主流用了十多年；同样，Linux 在服务器上占了上风，也没能撼动 Active Directory 建立的锁定。
+\item \textbf{伙伴的动机需要单独分析。} Intel 支持 Linux，根源在于它对微软的结构性依赖；理解这一点，比记住任何一次发布会都更有解释力。
+\end{enumerate}
+
+\subsection{开放的问题}
+
+视频没有展开、但值得继续追问的几个方向：
+
+\begin{itemize}
+\item 如果没有 AMD 的 Opteron，x86 的 64 位迁移会晚多久？Intel 的 Itanium 路线是否可能成功？
+\item 如果 GPL 换成一个更宽松的许可证（如 BSD），Linux 是否会重演 UNIX 的碎片化命运？
+\item 云计算时代的“锁定层”是否已经从操作系统转移到了 API 与数据格式上？这与 Active Directory 的故事是否同构？
+\end{itemize}
+
+\subsection{参考}
+
+\begin{enumerate}
+\item Asianometry. \emph{The Lintel Conquest of UNIX}. YouTube, 2026. \url{https://www.youtube.com/watch?v=ksx5g5WvAIw}
+\item Young, Robert, and Wendy Goldman Rohm. \emph{Under the Radar: How Red Hat Changed the Software Business---and Took Microsoft by Surprise}. Coriolis Group, 1999.
+\item Colwell, Bob. \emph{The Pentium Chronicles: The People, Passion, and Politics Behind Intel's Landmark Chips}. Wiley-IEEE Computer Society Press, 2006.
+\item Raymond, Eric S., ed. \emph{The Halloween Documents}. \url{https://www.catb.org/~esr/halloween/}
+\item United States District Court for the District of Columbia. \emph{Plaintiffs' Joint Proposed Findings of Fact, United States v. Microsoft Corp.}, 1999.
+\item Thompson, Ben. ``Microsoft and Software Survival.'' \emph{Stratechery}. \url{https://stratechery.com/2020/microsoft-and-software-survival/}
+\item Slater, Michael. ``Intel Boosts Pentium Pro to 200 MHz: Integer Performance Beats the Best RISCs.'' \emph{Microprocessor Report}, vol. 9, no. 15, 13 Nov. 1995.
+\item Schlender, Brent. ``Intel's \$10 Billion Gamble.'' \emph{Fortune}, vol. 146, no. 9, 11 Nov. 2002.
+\item Takahashi, Nobuo, and Tomofumi Takamatsu. ``UNIX License Makes Linux the Last Major Piece of the Puzzle.'' \emph{Annals of Business Administrative Science}, vol. 12, 2013, pp. 123--137.
+\end{enumerate}
+
+%% --- 正文内容结束 --- %%
+
+\end{document}
