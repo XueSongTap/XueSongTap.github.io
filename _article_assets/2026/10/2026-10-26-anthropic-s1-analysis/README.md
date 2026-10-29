@@ -13,7 +13,7 @@
 - source/source-excerpts.txt：原文相关文本节选和下载 HTML 的 SHA-256。
 - source/requirements.txt：复现依赖版本。
 - render.py：按自身位置执行绘图源，不依赖调用时的工作目录。
-- exports/：十一张图的 SVG，字形按路径导出。
+- exports/：十三张图的 SVG，字形按路径导出。
 - build/：联系表、文章预览和检查结果，由本目录的 .gitignore 排除。
 - 正文 PNG：写入 ../../../../img/2026/10/26/，文件名前缀为 anthropic-s1-。
 
@@ -22,16 +22,18 @@
 | 正文图号 | 图片文件名主体 | 内容 |
 | --- | --- | --- |
 | 1 | 01-quarterly-revenue-operating-profit | 季度收入、经营费用与营业利润 |
-| 2 | 02-net-loss-waterfall | 营业亏损到净亏损 |
-| 3 | 03-operating-expense-waterfall | 经营费用中的研发与训练相关投入 |
-| 4 | 04-revenue-mix-customer-adoption | 按量收入、订阅收入与客户增长 |
-| 5 | 09-customer-tiers-revenue | 大额客户数量与收入贡献 |
-| 6 | 07-customer-concentration | 匿名客户份额与前五大集中度 |
-| 7 | 08-cloud-channel-dependence | 云销售和结算渠道依赖 |
-| 8 | 10-geographic-revenue-growth | 美国与海外收入 |
-| 9 | 05-cash-flow-quality | 经营现金流和证券投资 |
-| 10 | 06-selected-compute-commitments | 代表性多年算力合同 |
-| 11 | 11-lockup-release-schedule | 四类股东分批解禁事件 |
+| 2 | 12-valuation-revenue-bases | 实际及年化收入基数与假设市销率 |
+| 3 | 02-net-loss-waterfall | 营业亏损到净亏损 |
+| 4 | 03-operating-expense-waterfall | 经营费用中的研发与训练相关投入 |
+| 5 | 04-revenue-mix-customer-adoption | 按量收入、订阅收入与客户增长 |
+| 6 | 09-customer-tiers-revenue | 大额客户数量与收入贡献 |
+| 7 | 07-customer-concentration | 匿名客户份额与前五大集中度 |
+| 8 | 08-cloud-channel-dependence | 云销售和结算渠道依赖 |
+| 9 | 10-geographic-revenue-growth | 美国与海外收入 |
+| 10 | 05-cash-flow-quality | 经营现金流和证券投资 |
+| 11 | 06-selected-compute-commitments | 代表性多年算力合同 |
+| 12 | 13-footnote-purchase-lease-commitments | 六月末采购承诺和尚未开始的租赁义务 |
+| 13 | 11-lockup-release-schedule | 四类股东分批解禁事件 |
 
 图号按文章阅读顺序排列，文件名保留原图身份。正文不提供制作源文件下载链接。
 
@@ -55,6 +57,8 @@
 
 客户集中度的 null 表示低于 10% 披露阈值，不能当成零；发行金额字段的 null 表示本版留空。云渠道是代销和结算渠道，不能视为平台自身采购；估算渠道金额保留约数。RPO 包含递延收入，二者不能相加。
 
-合同金额为不同期限的部分安排，不年化、不汇总成全部算力承诺。解禁比例针对各组基准持股，不是公司总股本。事件分栏不按真实日历比例排列，不虚构财报日期、发行股数或整体流通比例。
+合同金额为不同期限的部分安排，不年化、不汇总成全部算力承诺。附注采购承诺与未起租义务分别保留各自口径、时点和折现状态，不将两类总额相加，也不与个别供应商合同叠加；六月末数字不作为十月最新合计。解禁比例针对各组基准持股，不是公司总股本。事件分栏不按真实日历比例排列，不虚构财报日期、发行股数或整体流通比例。
+
+估值图中的 2 万亿和 3 万亿美元是股权市值假设，不是 IPO 定价。TTM 为四季度历史实际收入，半年乘二、单季乘四为简单外推，均不同于公司最近 28 天消费费用乘 13 加计量日月度订阅乘 12 的 Run-Rate。20% 净利率、30 倍市盈率、五年期限，以及 3% 合同递增率均为文中敏感性算例的假设，不能视为公司预测或实际条款。流程指引依据 SEC 公司融资部 2026 年 9 月更新的《Voluntary Submission of Draft Registration Statements — FAQs》问题 5，见文章参考 [16]。
 
 白底图由本目录源码重新生成。检查包括原文数据勾稽、图号及图片路径、前置文章链接、SVG 同步导出、PNG 尺寸和视觉排版。

@@ -217,7 +217,9 @@
     "cloud_channel": "Note 1, F-17; revenue recognition F-21–F-22; Risk Factors page 57",
     "geographic_revenue_and_rpo": "Note 2, F-27",
     "additional_customer_metrics": "MD&A pages 137, 142–143; Business pages 195–196",
-    "offering_and_lockup": "Cover; Offering pages 18–20; Shares Eligible for Future Sale pages 307–310; Underwriting pages 322–323"
+    "offering_and_lockup": "Cover; Offering pages 18–20; Shares Eligible for Future Sale pages 307–310; Underwriting pages 322–323",
+    "run_rate_and_valuation": "Metric definition page 3; limitations page 68; quarterly figures page 158",
+    "purchase_and_uncommenced_leases": "Note 7 F-36; Note 13 F-59–F-60; Risk Factors pages 75–77"
   },
   "notes": [
     "2026 interim figures are unaudited. Do not plot annual and half-year totals as consecutive equal-length periods.",
@@ -459,5 +461,81 @@
       "Non-trading days are adjusted according to the contract; final prospectus and earnings dates are not yet known.",
       "Percentages describe release eligibility limits, not actual sell orders."
     ]
+  },
+  "valuation_analysis": {
+    "revenue_base_label": [
+      "2025 全年实际",
+      "截至 Q2 的 TTM 实际",
+      "2026 H1 ×2",
+      "2026 Q2 ×4"
+    ],
+    "revenue_base_usd_million": [
+      4585,
+      19708,
+      32572,
+      46220
+    ],
+    "base_type": [
+      "actual",
+      "actual",
+      "annualization",
+      "annualization"
+    ],
+    "hypothetical_equity_value_usd_million": [
+      2000000,
+      3000000
+    ],
+    "definition": "P/S uses equity value divided by revenue, not enterprise value. Hypothetical market values are not official IPO pricing.",
+    "five_year_scenario": {
+      "net_margin_assumed": 0.2,
+      "pe_assumed": 30,
+      "years": 5,
+      "starting_annualized_revenue_usd_million": 46220,
+      "notes": "Illustrative revenue needed to support unchanged hypothetical equity value at an assumed future P/E and net margin; not a return forecast and excludes dilution, discounting and share-price changes."
+    },
+    "official_run_rate": {
+      "consumption_trailing_days": 28,
+      "consumption_multiplier": 13,
+      "monthly_subscription_multiplier": 12,
+      "official_latest_value": null
+    },
+    "source": "S-1 page 3, page 68 and quarterly results page 158",
+    "source_pages": [
+      "5",
+      "68",
+      "158"
+    ]
+  },
+  "commitment_footnotes": {
+    "measurement_dates": [
+      "2025-12-31",
+      "2026-06-30"
+    ],
+    "purchase_fixed_minimum_usd_billion": [
+      54.559,
+      265.6
+    ],
+    "leases_not_yet_commenced_undiscounted_usd_billion": [
+      50.2,
+      321.4
+    ],
+    "june_2026_recognized_operating_lease_liability_usd_million": 1079,
+    "june_2026_recognized_finance_lease_liability_usd_million": 443,
+    "june_2026_max_guaranty_payments_usd_billion": 0.8,
+    "june_2026_lease_commencement_year_range": [
+      2026,
+      2028
+    ],
+    "long_term_power_data_center_initial_term_years": 20,
+    "annual_escalation_rate_disclosed": null,
+    "uncapped_fuel_pass_through": true,
+    "notes": "Two commitment categories are disclosed separately and not aggregated here. June figures are not the latest total of all October contracts. Leases not yet commenced have contractual conditions; amounts are undiscounted. Recognized lease liabilities have a different scope and are discounted.",
+    "source": "S-1 Note 7 F-36; Note 13 F-59–F-60; Risk Factors pages 75–77",
+    "illustrative_escalation": {
+      "annual_growth_assumption": 0.03,
+      "years": 20,
+      "first_payment_at_t": 0,
+      "notes": "Sensitivity example only; not a contract escalation rate disclosed by Anthropic."
+    }
   }
 }

@@ -286,6 +286,45 @@ def geographic_growth():
     fig.text(.55,.105,"海外收入从 3.43 亿增至 45.23 亿美元；\n达到约 13.2 倍，美国收入同期约 14.3 倍。",fontsize=10,color=INK)
     save(fig,"10-geographic-revenue-growth","来源：财务附注 2 F-27。海外占比约下降 1.7 个百分点；占比下降并不意味着海外收入下降。")
 
+def valuation_denominators():
+    v=D['valuation_analysis']
+    fig,(a,b)=plt.subplots(1,2,figsize=(14.5,7.7),gridspec_kw={'width_ratios':[1.05,1.2]})
+    fig.subplots_adjust(top=.78,bottom=.23,left=.21,right=.96,wspace=.37)
+    header(fig,'同一股权市值，不同收入分母','假设股权市值为 2 万亿或 3 万亿美元，均非已公布的 IPO 定价；金额图单位为十亿美元')
+    bases=np.array(v['revenue_base_usd_million'])/1000
+    y=np.arange(4)[::-1]
+    a.barh(y,bases,color=[BLUE,BLUE,TEAL,TEAL],height=.48)
+    for yi,value in zip(y,bases):a.text(value+.7,yi,f'{value:.3f}',va='center',fontsize=11,weight='bold')
+    a.set_yticks(y,v['revenue_base_label']);a.set_xlim(0,56);a.set_xlabel('收入基数／十亿美元');style(a,'x')
+    a.text(0,-.26,'蓝色为历史实际收入；绿色为简单年化。\n季度年化也不是公司的 28 天 Run-Rate 指标。',transform=a.transAxes,color=MUTED,fontsize=10)
+    matrix=np.array(v['hypothetical_equity_value_usd_million'])[:,None]/np.array(v['revenue_base_usd_million'])[None,:]
+    # Keep the three more recent bases in the comparison; prior-year actual stays in the article table.
+    shown=matrix[:,1:]
+    cmap=colors.LinearSegmentedColormap.from_list('ps',['#E2EEEB',TEAL])
+    b.imshow(shown,cmap=cmap,vmin=35,vmax=160,aspect='auto')
+    for i in range(2):
+        for j in range(3):
+            value=shown[i,j]
+            b.text(j,i,f'{value:.1f}×',ha='center',va='center',weight='bold',fontsize=16,color='white' if value>95 else INK)
+    b.set_yticks([0,1],['2 万亿美元','3 万亿美元']);b.set_xticks([0,1,2],['TTM 实际','H1 ×2','Q2 ×4']);b.tick_params(length=0,pad=12)
+    b.set_title('对应市销率 P/S',loc='left',pad=18)
+    save(fig,'12-valuation-revenue-bases','来源：S-1 第 158 页及文中计算。年化是假设近期速度持续，不是全年实际收入、合同保障或公司盈利预测。')
+
+def footnote_commitments():
+    d=D['commitment_footnotes'];fig,ax=plt.subplots(figsize=(12.5,7.3))
+    fig.subplots_adjust(top=.77,bottom=.23,left=.10,right=.96)
+    header(fig,'采购承诺与未起租义务在半年内迅速增加','分别采用附注 13 和附注 7 的两类披露，不相加；金额为十亿美元，2026 年 6 月数据未经审计')
+    x=np.arange(2);w=.30
+    series=[d['purchase_fixed_minimum_usd_billion'],d['leases_not_yet_commenced_undiscounted_usd_billion']]
+    for i,(label,values,color) in enumerate(zip(['未来固定／最低保证采购承诺','尚未开始的租赁义务（未折现）'],series,[TEAL,BLUE])):
+        pos=x+(i-.5)*w
+        ax.bar(pos,values,width=w,color=color,label=label)
+        for px,value in zip(pos,values):ax.text(px,value+6,f'{value:.3f}' if value==54.559 else f'{value:.1f}',ha='center',fontsize=12,weight='bold')
+    ax.set_xticks(x,['2025 年末','2026 年 6 月末']);ax.set_ylabel('十亿美元');ax.set_ylim(0,390);style(ax)
+    ax.legend(loc='upper left',frameon=False,fontsize=10)
+    fig.text(.075,.115,'未起租义务预计于 2026—2028 年开始，部分安排存在合同条件；这不是已入账租赁负债，也不是当年费用。',fontsize=10,color=INK)
+    save(fig,'13-footnote-purchase-lease-commitments','来源：S-1 财务附注 7 F-36、附注 13 F-59。六月末数字不代表十月最新全部义务，不能再与个别供应商合同简单叠加。')
+
 def lockup_schedule():
     d=D["offering_and_lockup"]
     fig,ax=plt.subplots(figsize=(18,10.7))
@@ -338,6 +377,7 @@ if __name__=="__main__":
     quarterly();income_bridge();expenses();adoption();cash();commitments()
     customer_concentration();cloud_channels();customer_tiers();geographic_growth()
     lockup_schedule()
+    valuation_denominators();footnote_commitments()
     files=sorted(IMAGE_ROOT.glob("anthropic-s1-[0-9][0-9]-*.png"))
     thumbs=[]
     for path in files:

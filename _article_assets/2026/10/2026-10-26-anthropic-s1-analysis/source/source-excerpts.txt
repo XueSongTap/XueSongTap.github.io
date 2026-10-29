@@ -2527,3 +2527,1058 @@ part at any time. In certain circumstances, the release of lock-up securities fr
 described above will trigger a pro rata release of lock-up securities held by certain other holders.
 See the section titled “Shares Eligible for Future Sale” for additional information regarding when shares of our
 Class A common stock will be available for sale in the public market as a result of the lock-up and market
+
+=== 2026-10-27 expansion: Run-Rate, infrastructure risk, future obligations ===
+
+--- Run-Rate definition; extracted text lines 519–531 ---
+“reinforcement learning” refers to a machine learning approach in which a model learns to perform a task
+by taking actions, receiving feedback signals called rewards, and adjusting its behavior to maximize the rewards
+it accrues over time. In contemporary AI development, reinforcement learning is widely used to refine model
+behavior after pre-training, including to improve helpfulness, accuracy, and adherence to safety guidelines.
+“RLHF” refers to reinforcement learning from human feedback, a specific form of reinforcement learning in
+which human evaluators rate the model’s responses, and those ratings are used as the reward signal to guide
+training.
+“Run-Rate Revenue” is an operating metric that refers to the estimated annualized value of our revenue-
+generating activity as of a measurement date, calculated as the sum of (i) our consumption-based fees during
+the trailing 28-day period ended on the measurement date, multiplied by 13, and (ii) our aggregate monthly
+subscription fees as of the measurement date, multiplied by 12. For purposes of calculating Run-Rate Revenue,
+consumption-based fees and subscription-based fees are derived from customer usage and active subscriptions.
+“SIs” refer to systems integrators, or third-party technology and professional services firms that design, build,
+
+--- Operating metric limitations; extracted text lines 4168–4207 ---
+Claude’s success rate, are based on numerous assumptions and limitations, are calculated using data from
+internal systems and tools, have not been independently verified by third parties, are subject to inherent
+limitations in measurement, and may not accurately reflect actual results or provide an accurate indication of
+future or expected results.
+Run-Rate Revenue is not a substitute for revenue prepared in accordance with GAAP or a forecast of revenue.
+Because Run-Rate Revenue annualizes our consumption-based fees for a trailing 28-day period and our
+subscription-based fees for a single month, it assumes that activity during those measurement periods has
+continued at the same rate for a full year. Because it annualizes a short measurement period, Run-Rate Revenue
+measured during a period of seasonally higher or lower usage, such as the reduced usage we have typically
+experienced around holiday and vacation periods in the summer and winter, may differ significantly from Run-
+Rate Revenue measured at other times, and in each case may not correspond to the revenue we ultimately
+recognize over any quarter or fiscal year. Our actual historical revenue and future revenue may differ materially
+from this measure. Both our consumption-based and subscription-based revenue may fluctuate from period to
+period, and in particular, our consumption-based revenue may fluctuate significantly or decline if customers
+reduce, limit, or do not expand their usage or spend, or shift usage to lower-priced models, including in
+response to competitive offerings, pricing changes, changes in customer budgets or strategic priorities
+regarding AI investment, seasonality, or general economic conditions. In addition, sustaining and growing this
+revenue depends on our ability to continue to offer models at the frontier of AI capability, which we may not be
+able to do. Our ability or decision to remain at the frontier may also be affected by the safety and risk mitigation
+measures we implement in developing and releasing our models. Our recent Run-Rate Revenue growth has also
+been driven in part by rapid initial customer adoption and expansion often characteristic of an early-adoption
+period and the nascency of the AI market that may not be sustainable, and we expect our Run-Rate Revenue
+growth rate to decline over time, and it may decline significantly and more rapidly than we anticipate, as our
+revenue base increases, as the market matures, and as a result of other factors. In addition, our Run-Rate
+Revenue has included, and we expect will continue to include, amounts from customers that we subsequently
+determine are using our models, platform, and applications in violation of our usage policy or commercial
+terms. When we identify such usage, we seek to restrict or terminate the customer’s access; however, because
+our detection, investigation, and enforcement take time, our Run-Rate Revenue as of any measurement date
+includes amounts from customers that have not yet been restricted or terminated and whose revenue would not
+be expected to recur following restriction or termination of their access. Our continued enforcement efforts may
+reduce our revenue, Run-Rate Revenue, and growth rates in future periods. See “—Our results of operations
+may fluctuate significantly on a period-to-period basis, including as a result of strategic investment decisions
+and substantial compute-related expenditures, which could cause the market price of our Class A common
+stock to decline.” Accordingly, our Run-Rate Revenue as of any measurement date is not indicative of historical
+revenue and may not be indicative of our revenue for any future period.
+The determination of the number of customers with $100,000 or more of revenue on a TTM basis is based on
+our internal records and involves judgment, including in determining which accounts should be aggregated and
+treated as belonging to the same organization. We apply our most current customer records in calculating this
+metric, and our determination of which accounts belong to a single organization may change over time,
+including as a result of acquisitions and account consolidations. We do not separately define or internally track
+
+--- Infrastructure execution and long-term pricing risk; extracted text lines 4575–4655 ---
+75
+Table of Contents
+infrastructure initiatives requires us to recruit personnel with relevant experience and manage complex multi-
+year deployment timelines and relationships with developers, contractors, and service providers.
+As we continue to build out our own compute and infrastructure and further vertically integrate across the
+compute supply chain, these multi-party structures will become more prevalent and will expose us to a
+structural timing and liquidity risk in our payment obligations that differs from our historical compute
+arrangements. Historically, we have generally obtained compute from a limited number of CSPs under
+arrangements in which our compute and infrastructure expenses are paid as compute becomes available to us.
+In the future, we expect we will increasingly enter into separate arrangements with a greater number of
+different counterparties, each responsible for discrete services or inputs across the compute supply chain.
+Under many of these arrangements, we may be obligated to pay a counterparty once it performs its discrete
+obligation, even if delays or failures by others prevent us from assembling those discrete services or inputs into
+usable compute we can deploy to generate revenue. In addition, counterparties may deliver their services or
+inputs later than scheduled, or may fail to deliver them at all, and any such delay or non-delivery by a single
+counterparty could postpone or prevent our deployment of the associated compute. As a result, we could incur
+significant cash outflows without obtaining usable compute on a timely basis, which could adversely affect our
+liquidity, financial condition, and results of operations.
+Certain of our data center infrastructure arrangements involve complex multi-party structures in which chips
+are procured from or through our CSPs, leased to us by third-party financing entities, installed in data center
+facilities procured by or through other third-party partners, and operated by yet another set of third-party
+service providers. The complexity of these arrangements increases execution risk, as delays or failures by any
+participant in the chain could affect the availability or performance of the resulting compute.
+In addition, to meet the substantial energy demands of large-scale AI workloads, we have entered into, and may
+in the future enter into, arrangements involving dedicated power generation assets and/or the development,
+operation, or control of power stations or other energy infrastructure. Such arrangements expose us to new
+operational, regulatory, and environmental liabilities, and require expertise and capabilities that differ from our
+core competencies. Successfully executing on these power infrastructure projects requires us to recruit
+personnel with relevant experience and manage complex multi-year deployment timelines and relationships
+with developers, contractors, service providers, and regulators, including aligning project completion schedules
+with the data centers such projects are expected to serve in order to avoid timing delays that constrain our
+ability to utilize this compute and to generate revenue and recoup costs from such investments.
+Deployment of our data center and power infrastructure projects involves execution risks, including delays due
+to permitting issues, change in law, force majeure, lack of network connectivity between facilities, supply chain
+disruptions, labor shortages, or contractor performance; cost overruns due to equipment pricing changes,
+design modifications, or unanticipated requirements; and technical risks that facilities may not perform as
+specified or achieve expected reliability or efficiency levels. Certain of our arrangements are also subject to
+conditions precedent that must be satisfied before construction can commence, and completion guarantees that
+may terminate upon a lender foreclosure before construction is complete, leaving us without contractual
+recourse to compel completion. Certain of these arrangements also depend on the continued performance of
+credit support provided by a third party that is also a competitor, the loss or impairment of which could
+jeopardize the underlying arrangements. Such credit support provided to third-party data center developers or
+hardware providers, from which we derive no direct contractual rights or obligations, may also affect the
+availability and cost of data center capacity and hardware generally. Additionally, new tariffs or import fees
+enacted after the effective date of certain arrangements may be passed through to us as additional costs. Any
+delay in or limitation on the amount of compute delivered to us could adversely affect our business.
+The capital-intensive and long-term nature of leasing and equipping data center capacity creates financial risk,
+as large upfront investments and long-term payment commitments must be made months before facilities
+become fully operational. If our compute requirements or technology needs change, we may find ourselves with
+leased or dedicated infrastructure that is poorly suited to our actual needs, and technological changes in AI
+hardware or training methodologies could render such infrastructure less efficient than newer alternatives.
+Unlike CSP arrangements where compute can be adjusted relatively dynamically, long-term leases, reserved
+compute, and dedicated infrastructure investments are much less flexible and create long-term financial
+obligations regardless of whether the capacity continues to meet our needs. For example, certain of our
+dedicated power and data center infrastructure arrangements have initial terms of 20 years with annual
+76
+Table of Contents
+escalators and include take-or-pay compute payment obligations and uncapped fuel cost pass-throughs that
+apply for the duration of the term regardless of actual utilization.
+Our increasing efforts to build out our compute and infrastructure require substantial capital expenditures and
+are changing the cash flow profile of our business. Whereas the compute purchased through our CSP
+arrangements is generally paid as the compute becomes available to us, we expect an increasing portion of our
+compute and infrastructure investment to take the form of capital expenditures and other commitments,
+including lease obligations, that require significant upfront payments well in advance of the related compute
+becoming operational. Our existing commitments are substantial, and we expect our capital expenditures to
+increase significantly as we continue to expand our compute and infrastructure build-out. See the section titled
+“Management’s Discussion and Analysis of Financial Condition and Results of Operations—Liquidity and
+Capital Resources” for more information. As a result, we expect these investments to result in significant net
+cash used in operating and investing activities for the foreseeable future, and our net cash used in these
+activities may increase regardless of whether our financial performance improves. The magnitude and timing of
+these investments are inherently uncertain and may change materially over short periods, including as a result
+of decisions to accelerate or expand our build-out, and such changes could rapidly and significantly alter our
+expected results of operations and cash flows for a given period. If our cash flows from operations and available
+capital are insufficient to fund these investments, we may be required to raise additional capital on unfavorable
+terms or to reduce, defer, or forgo planned investments, any of which could adversely affect our business,
+financial condition, and results of operations.
+If we are unable to successfully execute on our data center infrastructure initiatives, experience significant
+delays or cost overruns, or find that the infrastructure we lease, deploy, or build does not meet our evolving
+needs, we may not realize the expected benefits of these investments, which could adversely affect our business,
+financial condition, and results of operations.
+We may not successfully build, expand, and deploy our sales and marketing organization in a
+
+--- Leases not yet commenced and recognized lease balances; extracted text lines 24950–25010 ---
+Thereafter
+| |
+39
+| |
+911
+| |
+37
+|
+Total undiscounted lease payments
+| |
+149
+| |
+1,601
+| |
+523
+|
+Less: imputed interest
+| |
+(32)
+| |
+(522)
+| |
+(80)
+|
+Present value of lease liabilities
+| |
+$117
+| |
+$1,079
+| |
+$443
+______________
+(1)The Company did not have finance leases as of December 31, 2025.
+Leases Not Yet Commenced
+As of December 31, 2025 and June 30, 2026 (unaudited), the Company had entered into lease agreements
+primarily related to compute and infrastructure capacity that had not yet commenced, with total estimated
+future undiscounted lease obligations of approximately $50.2 billion and $321.4 billion, respectively, with some
+arrangements subject to certain contractual conditions being met. These lease obligations will commence
+between 2026 and 2028, with lease terms ranging from less than one year to 20 years. The Company may elect
+to satisfy a portion of its obligations by issuing convertible promissory notes. Refer to Note 9 for further
+information.
+Leases Held Through a Consolidated Variable Interest Entity
+The Company consolidates certain VIEs formed to finance and deploy compute and infrastructure capacity. As
+of June 30, 2026 (unaudited), assets that are not, except as may be expressly provided in any contract or
+instrument entered into by these VIEs, generally available to satisfy the obligations of any person other than
+these VIEs were $296 million, primarily included in operating lease right-of-use assets.
+The Company guarantees certain VIE obligations; as a result, certain VIEs’ creditors have recourse to the
+general credit of the Company. As of June 30, 2026 (unaudited), liabilities related to these VIEs were $328
+million, which primarily included $310 million of lease liabilities, of which $257 million were included in
+operating lease liabilities, noncurrent. The Company may satisfy certain VIE rent obligations through the
+F-36
+Table of Contents
+Anthropic, PBC
+Notes to Consolidated Financial Statements
+(Continued)
+issuance of convertible promissory notes in lieu of cash. These VIEs guarantee the Company’s obligations under
+the convertible promissory note and grant the lessor a security interest in the leased assets to secure them, up to
+the amount of notes outstanding to the lessor. As of June 30, 2026 (unaudited), no convertible promissory
+notes had been issued. Refer to Note 9 for further information. As of December 31, 2025, the assets and
+liabilities of these consolidated VIEs were not material.
+8. Supplemental Financial Information
+
+--- Purchase commitments and guarantees; extracted text lines 28080–28145 ---
+Company to purchase services. These contractual commitments primarily relate to CSP hosting and other third-
+party infrastructure services agreements.
+Future minimum payments under the Company’s non-cancelable purchase commitments with a remaining
+term in excess of one year as of December 31, 2025 were as follows (in millions):
+| | |
+|
+Year Ended December 31,
+| |
+Amount
+|
+2026
+| |
+$7,059
+|
+2027
+| |
+11,128
+|
+2028
+| |
+10,832
+|
+2029
+| |
+8,304
+|
+2030
+| |
+5,428
+|
+Thereafter
+| |
+11,808
+|
+Total non-cancelable contractual commitments
+| |
+$54,559
+As of June 30, 2026 (unaudited), expected future fixed or minimum guaranteed commitments under these
+agreements were approximately $265.6 billion with terms ranging from one to 20 years.
+The Company has also entered into compute and infrastructure agreements that do not specify a fixed or
+minimum dollar commitment. Payments under these agreements will depend on the capacity made available
+and deployed, delivery timing, and pricing, and are not yet determinable. The Company does not include any
+estimated obligation for these agreements in the amount above; however, such payments are expected to be
+significant.
+F-59
+Table of Contents
+Anthropic, PBC
+Notes to Consolidated Financial Statements
+(Continued)
+Guaranty (unaudited)
+In 2026, the Company entered into guaranty and cost reimbursement arrangements with developers to support
+data center capacity development, including procuring long-lead time equipment and materials. The Company
+may be required to make payments to or on behalf of the counterparties if specified trigger events occur. As of
+June 30, 2026, maximum potential payments under these arrangements were up to $0.8 billion, and amounts
+accrued under these arrangements were not material.
+Legal Matters
+The Company is involved from time to time in claims, proceedings, and litigation, including the following:
+In August 2024, various authors filed suit against the Company alleging infringement of copyrighted books in
+the case of Bartz, et al. v. Anthropic in the U.S. District Court for the Northern District of California (“Bartz”).
+The complaint alleged, among other things, copyright infringement related to the use of literary works used in
+the training of the Company’s large language models. The complaint sought certification as a class action,
+unspecified amounts of damages, injunctive relief, attorneys’ fees, costs, and interest. The Company reached a
+settlement in the amount of $1.5 billion and the interest earned thereon, which was approved by the district
+court in July 2026. The Company paid $300 million during the year ended December 31, 2025 and recorded
+liabilities of $750 million in accounts payable, accrued expenses, and other current liabilities and $450 million
+in other noncurrent liabilities on the consolidated balance sheets as of December 31, 2025, and $1.2 billion in
+
+=== 2026-10-27 expansion: convertible notes and other income detail ===
+
+--- Extracted text lines 8053–8071 ---
+we may establish or support in the future, and other efforts aligned with our mission.
+Interest Income
+Interest income consists of interest earned on our cash and cash equivalents and short-term investments which
+primarily consist of debt securities, including U.S. Treasury and agency securities, corporate debt, and
+commercial paper.
+Change in Fair Value of Convertible Notes, Derivative Liabilities, and SAFEs
+Change in fair value of convertible notes, derivative liabilities, and SAFEs consists of gains and losses as a result
+of recording our convertible promissory notes, derivative liabilities, and SAFE liabilities at fair value at the end
+of each reporting period. Because these instruments are marked to market, increases in our enterprise
+valuation drive increases in this expense. We will continue to recognize changes in the fair value of our
+147
+Table of Contents
+convertible notes until they are converted into equity, repaid, or otherwise settled. For more information, see
+Note 4 to our consolidated financial statements included elsewhere in this prospectus.
+Other Income (Expense), Net
+Other income (expense), net consists primarily of the change in fair value of strategic investments and financial
+instruments, the change in fair value of certain derivative instruments in connection with an acquisition of a
+privately-held company in December 2025, interest expense from finance leases, and foreign currency exchange
+gains and losses. For more information on the acquisition, see Note 15 to our consolidated financial statements
+
+--- Extracted text lines 10732–10835 ---
+Convertible Notes
+Overview
+We have entered into NPAs with each of Google (through Google LLC), Amazon (through Amazon Web
+Services, Inc.), and Broadcom that provide for the issuance of convertible promissory notes and, in certain
+cases, shares of our non-voting capital stock. Our NPAs with Google consist of agreements entered into in
+September 2023 and August 2024, pursuant to which all convertible promissory notes previously issued
+thereunder have been fully converted into non-voting redeemable convertible preferred stock and under which
+no additional notes may be issued, and an agreement entered into in March 2026 (“Google 2026 NPA”), which
+provides for potential future financing capacity, subject to certain conditions described below. Our NPAs with
+Amazon consist of the Amazon 2023 NPA and the Amazon 2024 NPA, pursuant to which we previously issued
+convertible promissory notes, approximately $6.2 billion aggregate principal amount of which remains
+outstanding as described below under “—Outstanding Notes,” and under which no additional notes may be
+issued, and the 2026 Stock Purchase and Convertible Note Facility Agreement, dated as of April 20, 2026, by
+and between us and Amazon (“Amazon 2026 NPA”), which provides for potential future financing capacity,
+subject to certain conditions described below. The Infrastructure Partner 2026 NPA provides for potential
+164
+Table of Contents
+future financing capacity, if needed, subject to certain conditions described below. The principal economic
+terms of the NPAs that relate to our outstanding notes and potential future financing capacity are summarized
+in the tables below. To the extent an NPA creates an obligation to issue notes in the future, that obligation is
+accounted for as a derivative liability on our consolidated balance sheets until the related note is issued. For
+additional information, including the historical issuance and conversion of notes under these agreements, see
+Notes 9 and 16 to our consolidated financial statements included elsewhere in this prospectus.
+Outstanding Notes
+The following table summarizes the notes outstanding under our NPAs as of June 30, 2026, which consist
+entirely of non-interest-bearing rollover notes issued to Amazon under the Amazon 2023 NPA and the Amazon
+2024 NPA, neither of which provides for the issuance of additional notes. Under the terms of the applicable
+notes, and unless Amazon elects in its sole discretion to waive the limitation, no portion of a note converts to
+the extent that, immediately following the conversion, Amazon would hold more than 12% of our capitalization,
+calculated for this purpose to include all of our outstanding capital stock on an as-converted basis together with
+shares underlying our outstanding equity awards and other outstanding convertible securities. The portion of
+each note that could not convert without exceeding this ownership cap was reissued as a rollover note in lieu of
+the shares of our non-voting redeemable convertible preferred stock that would otherwise have been issued to
+Amazon.
+| | | | | | | | |
+|
+Counterparty
+| |
+Agreement
+| |
+Principal
+Amount
+Outstanding
+(in millions)
+| |
+Conversion
+Price Per
+Share(1)
+| |
+Class N
+Shares
+Issuable on
+Conversion(2)
+|
+Amazon
+| |
+Amazon 2023
+NPA(3)
+| |
+$2,186
+| |
+$2.0928
+| |
+1,044,716,970
+|
+Amazon
+| |
+Amazon 2024
+NPA(4)
+| |
+4,017
+| |
+$5.0478
+| |
+795,727,992
+|
+Total
+| | | |
+$6,203
+| | | |
+1,840,444,962
+______________
+(1)In connection with this offering, the notes will convert, subject to Amazon’s ownership cap, which may be waived at Amazon’s
+election, into shares of Class N common stock at the lower of the fixed conversion price per share reflected in the table and the
+initial price per share of Class A common stock set forth on the cover of this prospectus (“IPO Price”). Following this offering,
+any notes that could not convert in connection with this offering due to the holder’s ownership cap will convert at the end of
+each fiscal quarter at the lowest of such fixed price, the IPO Price, and the 10-day trailing volume-weighted average price of our
+Class A common stock, subject to such continued ownership cap.
+(2)Assumes conversion at the applicable price in the column titled “Conversion Price Per Share” and represents the aggregate
+number of shares of Class N common stock issuable upon conversion of the notes, without giving effect to the holder’s
+ownership cap. The principal amount of any notes that cannot convert without exceeding the applicable ownership cap will be
+re-issued as a non-interest-bearing “rollover note” with substantially identical terms (other than any reduction in principal as a
+result of any partial conversion up to Amazon’s ownership cap). The remaining rollover notes would remain outstanding
+following this offering and would automatically convert at the end of each subsequent fiscal quarter as described above, to the
+extent such conversion would not exceed Amazon’s ownership cap, which may be waived at Amazon’s election. The number of
+shares of Class N common stock issued upon conversion at the completion of this offering, and the aggregate principal amount
+of notes remaining outstanding as rollover notes following this offering, will be determined based on the final offering size and
+Amazon’s election with respect to the ownership cap.
+(3)Matures March 2034, subject to earlier repayment or conversion.
+(4)Reflects the aggregate principal amount of notes outstanding under the Amazon 2024 NPA, which were issued across three
+tranches, and will mature in January 2035, May 2035, and November 2035, as applicable, in each case subject to earlier
+repayment or conversion.
+165
+Table of Contents
+
+--- Extracted text lines 24072–24428 ---
+During the year ended December 31, 2025, the Company entered into a contract to receive warrant rights to
+acquire common shares of a privately-held company as consideration under an agreement entered into but not
+yet commenced. The warrant rights are freestanding financial instruments that meet the definition of a
+derivative as they contain a net settlement feature. The warrants have not been designated as hedging
+instruments and will be granted and recognized as lease incentives upon commencement of the related
+arrangements and recognized as a reduction of the related ROU assets. The Company estimated the fair value of
+the warrant rights using a probability-weighted expected return method. In applying this method, the Company
+utilized Level 3 valuation inputs based on information available, including terms and features of the warrant
+rights and other outstanding classes of the issuer’s equity securities, observable transactions in the issuer’s
+securities such as its most recent financing round, estimates of equity volatility, and expected time to a liquidity
+event. The initial fair value of the warrant rights was recognized as a derivative asset classified within other
+assets on the consolidated balance sheets, with a corresponding deferred liability classified within other
+noncurrent liabilities.
+F-31
+Table of Contents
+Anthropic, PBC
+Notes to Consolidated Financial Statements
+(Continued)
+In March 2026 (unaudited), the Company entered into a note purchase agreement (the “Google 2026 NPA”)
+with Google LLC (“Google”), which included a commitment to sell 38.6 million shares of the Company’s Series
+G-2 redeemable convertible preferred stock at $259.1364 per share. In April 2026 (unaudited), the Company
+entered into a note purchase agreement (the “Amazon 2026 NPA”) with Amazon Web Services, Inc.
+(“Amazon”), which included a commitment to sell 19.3 million shares of the Company’s Series G-2 redeemable
+convertible preferred stock at $259.1364 per share. Refer to Note 9 and Note 16 for further information. These
+agreements are marked-to-market each period. Changes in fair value are recognized in other income (expense),
+net on the consolidated statements of operations. Assets under these note purchase agreements are recorded at
+fair value within other assets, noncurrent on the consolidated balance sheet.
+The estimated fair value of the note purchase agreements was determined by using a probability-weighted
+expected return method. The fair value of the Series G-2 redeemable convertible preferred stock was
+determined by using a hybrid approach comprising a contingent claims analysis (“CCA”) and a common stock
+equivalent (“CSE”) method. Assumptions included assumed future liquidity and financing events, the terms and
+features of the agreement, weights applied to each scenario, discount rates, applicable risk free rates, the fair
+value of the Series G-2 redeemable convertible preferred stock, and a discount for lack of marketability.
+Level 3 liabilities consist of the SAFE liabilities (Note 9), convertible notes (Note 9), derivative liabilities (Note
+9), donation matching program liability (Note 10), and a holdback liability for a portion of shares issuable in the
+acquisition of Codeblog Corp. (“Bun”) (Note 15). There is no current market for these liabilities such that
+determination of fair value requires significant judgment or estimation. Changes in fair value measurements
+categorized within Level 3 of the fair value hierarchy are analyzed each period based on changes in estimates or
+assumptions and recorded as appropriate. The Company recorded a $3 million change in fair value of the
+holdback liability during the year ended December 31, 2025 in other income (expense), net in the consolidated
+statements of operations.
+The SAFE liabilities are recorded at fair value, which is determined based on a third-party valuation utilizing a
+scenario-based analysis and a CCA, that considers specific scenarios that factor in timing, probability, and
+financing size. This model takes into account the contract terms as well as multiple inputs, such as the
+Company’s redeemable convertible preferred stock price, risk free interest rates, and expected volatility, some
+of which the Company could not corroborate with observable market data. The assumptions used in valuing the
+SAFE liability upon conversion on December 31, 2023 and on January 30, 2024, include volatility, risk free
+interest rate, and term to liquidity. Changes in the fair value measurement of the SAFE liabilities relate to the
+conversion scenarios and are recorded as change in fair value of convertible notes, derivative liabilities, and
+SAFEs in the consolidated statements of operations. All SAFEs have been converted as of December 31, 2024.
+The estimated fair value of the convertible notes is determined by using a hybrid approach comprising a CCA
+and a CSE method. The analysis estimates the fair value of the convertible notes based on the probability-
+weighted expected future investment returns, considering possible outcomes available to the note holder,
+including conversions to redeemable convertible preferred stock, Class N common stock, and maturity.
+Assumptions include weight applied to the CCA and CSE methods, assumed volatility, time to a liquidity event,
+need for and terms of financings or expected financings, and the risk free interest rate. Changes in fair value of
+the convertible notes are recorded as change in fair value of convertible notes, derivative liabilities, and SAFEs
+in the consolidated statements of operations.
+F-32
+Table of Contents
+Anthropic, PBC
+Notes to Consolidated Financial Statements
+(Continued)
+The following table presents a summary of the changes in the fair value of the Company’s Level 3 financial
+instruments (in millions):
+| | | | | | | | | | | | | |
+| |
+Warrant
+Rights
+| |
+Note
+Purchase
+Agreements
+| |
+Donation
+Matching
+Program
+Liability
+| |
+Holdback
+Liability
+| |
+SAFEs
+| |
+Convertible
+Notes
+Payable
+| |
+Derivative
+Liability
+|
+Balance as of
+December 31, 2023
+|
+$—
+| |
+$—
+| |
+$—
+| |
+$—
+| |
+$128
+| |
+$1,678
+| |
+$1,110
+|
+Additions
+|
+—
+| |
+—
+| |
+—
+| |
+—
+| |
+—
+| |
+5,900
+| |
+150
+|
+Conversion
+|
+—
+| |
+—
+| |
+—
+| |
+—
+| |
+(134)
+| |
+—
+| |
+—
+|
+Change in fair value
+and settlement of
+derivative liability
+|
+—
+| |
+—
+| |
+—
+| |
+—
+| |
+6
+| |
+6,538
+| |
+(1,110)
+|
+Balance as of
+December 31, 2024
+|
+—
+| |
+—
+| |
+—
+| |
+—
+| |
+—
+| |
+14,116
+| |
+150
+|
+Additions
+|
+345
+| |
+—
+| |
+541
+| |
+25
+| |
+—
+| |
+3,450
+| |
+—
+|
+Conversion
+|
+—
+| |
+—
+| |
+—
+| |
+—
+| |
+—
+| |
+(10,347)
+| |
+—
+|
+Change in fair value
+and settlement of
+derivative liability
+|
+—
+| |
+—
+| |
+—
+| |
+3
+| |
+—
+| |
+34,458
+| |
+(150)
+|
+Balance as of
+December 31, 2025
+|
+345
+| |
+—
+| |
+541
+| |
+28
+| |
+—
+| |
+41,677
+| |
+—
+|
+Additions
+(unaudited)
+|
+—
+| |
+2,348
+| |
+—
+| |
+—
+| |
+—
+| |
+—
+| |
+—
+|
+Conversion
+(unaudited)
+|
+—
+| |
+—
+| |
+—
+| |
+—
+| |
+—
+| |
+(5,499)
+| |
+—
+|
+Change in fair value
+(unaudited)
+|
+724
+| |
+(11,753)
+| |
+126
+| |
+30
+| |
+—
+| |
+72,388
+| |
+—
+|
+Settlement
+(unaudited)
+|
+—
+| |
+11,810
+| |
+(667)
+| |
+—
+| |
+—
+| |
+—
+| |
+—
+|
+Balance as of June 30,
+2026 (unaudited)
+|
+$1,069
+| |
+$2,405
+| |
+$—
+| |
+$58
+| |
+$—
+| |
+$108,566
+| |
+$—
+Fair value measurements categorized within Level 3 are sensitive to changes in the assumptions or
+methodology used to determine fair value and such changes could result in a significant increase or decrease in
+the fair value.
+5. Goodwill and Intangible Assets
+Goodwill
+The following table presents goodwill activity (in millions):
+| |
+| |
+Total
+|
+Balance, as of December 31, 2024
+|
+$—
+|
+Acquisition
+|
+154
+|
+Balance, as of December 31, 2025
+|
+154
+|
+Acquisitions and other (unaudited)
+|
+422
+|
+Balance, as of June 30, 2026 (unaudited)
+|
+$576
+F-33
+Table of Contents
+
+--- Extracted text lines 25196–25286 ---
+Other Income (Expense), Net
+Other income (expense), net consisted of the following (in millions):
+| | | | | | | | | |
+| |
+Year Ended December 31,
+| |
+Six Months Ended June 30,
+| |
+2023
+| |
+2024
+| |
+2025
+| |
+2025
+| |
+2026
+| | | | | | | |
+(unaudited)
+|
+Recognition and change in
+fair value of note purchase
+agreements(1)
+|
+$—
+| |
+$—
+| |
+$—
+| |
+$—
+| |
+$(9,405)
+|
+Change in fair value of
+holdback liability
+|
+—
+| |
+—
+| |
+(3)
+| |
+—
+| |
+(39)
+|
+Change in fair value of
+warrant rights
+|
+—
+| |
+—
+| |
+—
+| |
+—
+| |
+724
+|
+Other
+|
+(2)
+| |
+—
+| |
+(5)
+| |
+—
+| |
+(37)
+|
+Total
+|
+$(2)
+| |
+$—
+| |
+$(8)
+| |
+$—
+| |
+$(8,757)
+______________
+(1)Refer to Note 4 for further information.
+F-38
+Table of Contents
+Anthropic, PBC
+Notes to Consolidated Financial Statements
+(Continued)
+Supplemental Cash Flow Information
+
+--- Extracted text lines 25575–25631 ---
+9. Convertible Notes, Revolving Credit Agreement and SAFEs
+Convertible Notes
+The Company has entered into note purchase agreements which provide for the issuance of one or more
+convertible notes. To the extent that the note purchase agreements create an obligation to issue notes in the
+future, these obligations are accounted for as derivative liabilities on the consolidated balance sheets until the
+related note is issued.
+Google
+Google 2023 Note Purchase Agreement
+In September 2023, the Company entered into a note purchase agreement (“Google 2023 NPA”) with Google
+LLC (“Google”), for the issuance of convertible promissory notes in an aggregate principal amount of up to $2.0
+billion, issuable in three tranches. The Company issued the first tranche of notes in an aggregate principal
+amount of $500 million in September 2023, the second tranche of notes in an aggregate principal amount of
+$750 million in September 2024, and the third tranche of notes in an aggregate principal amount of $750
+million in September 2025.
+The notes issued under Google 2023 NPA bore interest at a rate of 10.0% per annum, compounded annually,
+and payable upon maturity, 48 months after the respective issuance date. The Company also has a commercial
+agreement with Google for the provision of intelligence service.
+In connection with the Company’s Series E-1 redeemable convertible preferred stock financing in 2025, the first
+and second tranches of notes issued under Google 2023 NPA converted in full into an aggregate of 12.7 million
+shares of the Company’s Series E-3 non-voting redeemable convertible preferred stock at a conversion price of
+$44.8692 per share and an aggregate of 15.3 million shares of Series E-4 non-voting redeemable convertible
+preferred stock at a conversion price of $50.4779 per share, respectively. The conversion prices reflect the
+contractual discounts to the Series E-1 original issuance price of $56.0865 per share. As of December 31, 2025,
+$750 million aggregate principal amount remained outstanding under the third tranche of notes issued under
+Google 2023 NPA.
+F-40
+Table of Contents
+Anthropic, PBC
+Notes to Consolidated Financial Statements
+(Continued)
+In January 2026, in connection with the initial closing of the Series G-1 financing, the third tranche of notes
+issued under Google 2023 NPA converted in full into 3.3 million shares of Series G-4 non-voting redeemable
+convertible preferred stock at a conversion price of $233.2228 per share. The conversion price reflects the
+contractual discounts to the Series G-1 price of $259.1364 per share. As of June 30, 2026 (unaudited), no
+amounts remain outstanding under Google 2023 NPA.
+Google 2024 Note Purchase Agreement
+In August 2024, the Company entered into an additional note purchase agreement (“Google 2024 NPA”) with
+Google for the issuance of a convertible promissory note in an aggregate principal amount of approximately
+$1.3 billion. Such note bore interest at a rate of 8.5% per annum compounded annually, and, unless earlier
+converted or repaid, was payable upon maturity in August 2030.
+In connection with the Series E-1 redeemable convertible preferred stock financing in 2025, the note issued
+under Google 2024 NPA was converted in full into an aggregate of 24.2 million shares of Series E-5 non-voting
+redeemable convertible preferred stock at a conversion price of $53.2822 per share, reflecting a contractual
+discount to the Series E-1 original issuance price of $56.0865 per share. As of December 31, 2025 and June 30,
+2026 (unaudited), no amounts remain outstanding under Google 2024 NPA.
+Google 2026 Note Purchase Agreement (Unaudited)
+In March 2026 (unaudited), the Company entered into a note purchase agreement (“Google 2026 NPA”) under
+which, subject to certain conditions, up to $30.0 billion of convertible promissory notes or non-voting common
+stock through December 31, 2030 may be issued. Non-voting common stock would be issued at the 30-day
+trailing volume-weighted average price and, to the extent issued, the notes will bear interest at 9.0% per annum
+compounded annually, payable at maturity, and mature six years after issuance, unless earlier repaid or
+converted pursuant to the terms of the agreement.
+In May 2026 (unaudited), Google invested $10.0 billion in the Company’s Series H redeemable convertible
+preferred stock financing, which reduced the amount available for issuance under the Google 2026 NPA to
+$20.0 billion. As of June 30, 2026, no non-voting common stock or notes had been issued under the Google
+2026 NPA.
+Amazon
+
+--- Extracted text lines 25686–25801 ---
+In connection with the Series E-1 redeemable convertible preferred stock financing in 2025, the first and second
+tranches of notes issued under Amazon 2023 NPA were converted into an aggregate of 95.3 million shares of
+Series E-2 non-voting redeemable convertible preferred stock at a conversion price of $20.9280 per share. A
+portion of the notes issued under Amazon 2023 NPA did not convert pursuant to Amazon’s ownership cap, and
+were re-issued as a non-interest bearing rollover note with an aggregate principal amount of $3.1 billion,
+maturing in March 2034. The rollover note has substantially identical conversion and repayment terms as set
+forth above, in each case, subject to Amazon’s ownership cap. In connection with the Series E-1 redeemable
+convertible preferred stock financing, the conversion provisions of the notes issued under Amazon 2024 NPA
+were triggered. However, due to Amazon’s ownership cap, none of the notes issued under Amazon 2024 NPA
+converted. As a result, the first tranche was re-issued as a non-interest bearing rollover note with an aggregate
+principal amount of $1.3 billion maturing in January 2035 and the second and third tranches remained
+outstanding. Such rollover note has substantially identical conversion and repayment terms as set forth above,
+in each case, and converts subject to Amazon’s ownership cap.
+Subsequently, in connection with the Company’s Series F-1 redeemable convertible preferred stock financing in
+2025, a portion of the rollover note issued under Amazon 2023 NPA converted into an aggregate of 20.7 million
+shares of Series F-2 non-voting redeemable convertible preferred stock at a conversion price of $20.9280 per
+share. The remaining balance of such rollover note was re-issued as a non-interest bearing amended and
+restated rollover note with a principal amount of approximately $2.6 billion, maturing in March 2034. The
+notes issued under Amazon 2024 NPA did not convert in connection with the Series F-1 redeemable convertible
+preferred stock financing due to Amazon’s ownership cap.
+As of December 31, 2025, $2.6 billion aggregate principal amount of the amended and restated rollover note
+issued under Amazon 2023 NPA remains outstanding and all three tranches of notes issued under Amazon
+2024 NPA, with the first tranche re-issued as a non-interest bearing rollover note, remain outstanding with an
+aggregate principal balance of $4.0 billion.
+F-42
+Table of Contents
+Anthropic, PBC
+Notes to Consolidated Financial Statements
+(Continued)
+In January and February 2026, in connection with the Company’s Series G-1 financing, a portion of the second
+amended and restated non-interest bearing rollover note issued under Amazon 2023 NPA was converted into
+an aggregate of 20.6 million shares of the Company’s Series G-3 non-voting redeemable convertible preferred
+stock at a price of $20.9280 per share. The remaining balance of such non-interest bearing rollover note was
+re-issued as a non-interest bearing amended and restated rollover note with a principal amount of
+approximately $2.2 billion, maturing in March 2034. The notes issued under Amazon 2024 NPA did not
+convert in connection with the Series G-1 redeemable convertible preferred stock financing due to Amazon’s
+ownership cap.
+As of June 30, 2026 (unaudited), the amended and restated rollover note issued under Amazon 2023 NPA
+remained outstanding with an aggregate principal amount of approximately $2.2 billion, and all notes issued
+under Amazon 2024 NPA remained outstanding with an aggregate principal balance of $4.0 billion.
+Amazon 2026 Note Purchase Agreement (Unaudited)
+In April 2026 (unaudited), the Company entered into a note purchase agreement (“Amazon 2026 NPA”) under
+which the Company may issue, subject to certain conditions, up to $20.0 billion of non-voting common stock or
+convertible promissory notes. Non-voting common stock would be issued at the 30-day trailing volume-
+weighted average price and, to the extent issued, the notes will bear interest at 8.0% per annum compounded
+annually and payable at maturity, and mature ten years after issuance, unless earlier repaid or converted
+pursuant to the terms of the agreement.
+In May 2026 (unaudited), Amazon invested $5.0 billion in the Company’s Series H redeemable convertible
+preferred stock financing, which reduced the amount available for issuance under the Amazon 2026 NPA to
+$15.0 billion. As of June 30, 2026, no non-voting common stock or notes had been issued under the Amazon
+2026 NPA.
+Other Note Purchase Agreements
+2025
+In August 2025, the Company entered into a note purchase agreement under which the Company may issue,
+subject to certain conditions, up to $10.0 billion of convertible promissory notes solely to finance rent
+obligations under a compute and infrastructure equipment lease agreement. Refer to Note 7 for further
+information. The Company’s ability to issue notes will end upon an initial public offering of its common stock.
+As of December 31, 2025 and June 30, 2026 (unaudited), no amounts were outstanding under the note
+purchase agreement.
+2026 (Unaudited)
+In March 2026, the Company entered into a second note purchase agreement under which the Company may
+issue, subject to certain conditions, up to $42.0 billion of convertible promissory notes solely to finance rent
+obligations under a compute and infrastructure agreement. Refer to Note 7 for further information. The notes
+will bear interest at 9.0% per annum, payable in kind. The Company’s ability to issue notes will end upon the
+fifth anniversary of the commencement of the draw period (which has not yet commenced and which begins
+once the first infrastructure equipment is ready for service pursuant to the compute and infrastructure
+agreement), subject to earlier termination. As of June 30, 2026, no amounts were outstanding under the note
+purchase agreement.
+Issuance costs associated with convertible notes are expensed as incurred.
+SAFEs
+During the year ended December 31, 2023, the Company issued SAFEs with an aggregate purchase amount of
+$122 million that entitled investors to participate in future equity financings through share-settled redemption
+of the amount invested. Of this amount, $1 million converted into shares of Series C-1 convertible preferred
+stock during the year ended December 31, 2023, and $121 million converted into shares of Series D-1 and D-2
+convertible preferred stock during the year ended December 31, 2024. Conversion prices were determined
+F-43
+Table of Contents
+Anthropic, PBC
+Notes to Consolidated Financial Statements
+(Continued)
+based on the purchase amount divided by the per-share price of the applicable series of preferred stock,
+multiplied by a stipulated discount rate, if applicable.
+The Company determined that the SAFEs are not legal form debt (i.e., no creditors’ rights). The monetary
+settlement amount of the SAFEs is based upon a fixed or determinable amount known at inception, and the
+number of equity shares received upon conversion is variable. In such circumstances, equity classification is not
+appropriate because such contracts that are settled based upon a fixed amount do not expose the holder to risks
+and rewards similar to those of an equity-holder, therefore, the SAFEs would have been classified as marked-to-
+market liabilities pursuant to ASC 480.
+As of December 31, 2024 and 2025, as well as June 30, 2026 (unaudited), the Company had no outstanding
+SAFEs.
+Fair Value Option
+The Company elected to account for the SAFEs and the convertible notes using the fair value option pursuant to
+ASC 825 and changes in fair value related to the SAFEs and convertible notes are recorded in change in fair
+value of convertible notes, derivative liabilities, and SAFEs in the Company’s consolidated statements of
+operations (Note 4). The Company elected to account for the convertible notes using the fair value option
+pursuant to ASC 825 to eliminate the accounting complexity that would otherwise result from separately
+accounting for the liability and equity components of the convertible notes under the traditional bifurcation
+model.
+The estimated fair value of the convertible notes, derivative liabilities, and SAFEs is determined by using a
+scenario-based analysis that estimated the fair value of the convertible notes, derivative liabilities, and SAFEs
+based on the probability-weighted present value of expected future investment returns, considering possible
+outcomes available to the SAFE and convertible note holder, including conversions to redeemable convertible
+preferred stock, Class N common stock and maturity. Issuance costs were expensed as incurred and are
+reflected in other income (expense), net in the consolidated statements of operations. Changes in fair value of
+the SAFEs and convertible notes and accrued interest are recorded as change in fair value of convertible notes,
+derivative liabilities, and SAFEs in the consolidated statements of operations.
+There were no changes in fair value attributable to credit risk recognized as of December 31, 2023, 2024, and
+2025, as well as June 30, 2026 (unaudited).
+Derivative Liability
+As of December 31, 2024, the Company had a derivative liability representing the subsequent note tranche
+rights on Amazon 2024 NPA. The Company applied the terms of the subsequent note tranche rights for a
+written call option and purchased put option scenarios and calculated a derivative liability. The changes in the
+fair value of the derivative liability were recorded as change in fair value of convertible notes, derivative
+liabilities, and SAFEs in the consolidated statements of operations. Upon the second closing and third closing of
+the Amazon 2024 NPA during 2025, the related tranche rights were exercised and thus the derivative liability
+was settled and derecognized in full through the issuance of the convertible notes, with no remaining tranche
+
+--- Extracted text lines 28292–28313 ---
+$171 million consisted of: $136 million in equity issued, including replacement of equity awards attributable to
+pre-combination services; a $25 million holdback liability to be settled in shares of the Company’s Class A
+common stock; and $10 million in cash.
+The fair value of equity issued was determined based on the estimated fair value of the Company’s Class A
+common stock immediately prior to the acquisition and includes 8.6 million shares of Class A common stock
+issued to Bun stockholders and a number of replacement options to purchase shares of the Company’s Class A
+common stock issued to continuing employees that are subject to service-based vesting conditions over a three-
+year period, of which a portion was attributable to pre-combination services and therefore included within the
+total consideration noted above.
+Equity issued excludes 1.6 million shares of Class A common stock held back and not legally issued, which serve
+as partial security for the sellers’ general representation and warranty obligations. The holdback shares are
+subject to an 18-month holdback period, after which any remaining shares will be released to the former Bun
+stockholders, net of any shares necessary to satisfy breaches of the sellers’ general representations and
+warranties or other post-closing adjustments.
+The holdback shares were recorded at their acquisition date fair value and classified as a liability within Other
+noncurrent liabilities on the consolidated balance sheets. The holdback liability will be settled in shares of Class
+A common stock and is recorded at fair value through its settlement date, with changes in fair value recorded to
+other income (expense), net on the consolidated statements of operations. The estimate of fair value of the
+holdback liability used both observable and unobservable inputs, specifically considering the price of the
+Company’s Class A common stock and the probability of payout at the end of the holdback period.
+The purchase price was allocated on a preliminary basis to goodwill of $154 million and cash and cash
+equivalents of $17 million. Goodwill primarily relates to expected synergies and assembled workforce and is not
