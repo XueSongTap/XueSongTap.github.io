@@ -1,0 +1,23 @@
+{
+  "accessed": "2026-10-27",
+  "ampere": {
+    "gpu": "RTX 3090 Ti",
+    "benchmark": "8192^3 dense GEMM, FP32 accumulation, five-sample medians, 450 W",
+    "labels": ["FP16 / FP32", "BF16 / FP32", "TF32 / FP32"],
+    "locked": [87.46, 87.50, 42.58],
+    "unlocked": [118.39, 157.41, 82.61],
+    "unit": "TFLOPS",
+    "source": "https://github.com/Zagitta/gpu-unlock"
+  },
+  "blackwell": {
+    "labels": ["FP16 / FP16", "FP16、BF16 / FP32", "FP8 / FP32", "TF32"],
+    "rtx5090": [419, 209.5, 419, 104.8],
+    "pro6000_maxq": [438.9, 438.9, 877.9, 219.5],
+    "pro6000_workstation": [503.8, 503.8, 1007.6, 251.9],
+    "unit": "Dense theoretical TFLOPS at advertised boost clock",
+    "sources": [
+      "https://images.nvidia.com/aem-dam/Solutions/geforce/blackwell/nvidia-rtx-blackwell-gpu-architecture.pdf",
+      "https://www.nvidia.com/content/dam/en-zz/Solutions/design-visualization/quadro-product-literature/pdf/NVIDIA-RTX-Blackwell-PRO-GPU-Architecture-v1_1.pdf"
+    ]
+  }
+}
