@@ -1,0 +1,27 @@
+\usepackage[UTF8,fontset=fandol]{ctex}
+\usepackage{amsmath,amssymb,tikz}
+\usetikzlibrary{arrows.meta,calc,backgrounds}
+\definecolor{teal}{HTML}{4F8FA5}
+\definecolor{orange}{HTML}{EE995B}
+\definecolor{coral}{HTML}{C95B5B}
+\definecolor{violet}{HTML}{8A74B5}
+\definecolor{muted}{HTML}{656970}
+\tikzset{arr/.style={-{Stealth[length=2mm]},draw=black!55,line width=.65pt},
+  stage/.style={font=\small\bfseries,text=muted},
+  desc/.style={font=\small,text=muted},
+  op/.style={font=\Large},
+  obj/.style={font=\small},
+  dimlabel/.style={font=\scriptsize,text=muted}}
+% Matrix face: width = column axis; height = row axis.
+% Entries are schematic dense texture, not literal tensor dimensions.
+\newcommand{\mat}[8]{%
+  \begin{scope}[shift={(#1,#2)}]
+  \foreach \r in {1,...,#5}{\foreach \c in {1,...,#6}{
+    \pgfmathsetmacro{\tone}{30+mod(floor(abs(sin(13*\r+7*\c))*100),3)*25}
+    \fill[#7!\tone,rounded corners=.5pt]
+      ({(\c-1)*#3/#6+.015},{-(\r-1)*#4/#5-.015}) rectangle
+      ({\c*#3/#6-.015},{-\r*#4/#5+.015});}}
+  \draw[black!55,line width=.5pt] (0,0) rectangle (#3,-#4);
+  \node[obj,anchor=north] at (#3/2,{-#4-.14}) {#8};
+  \end{scope}}
+\newcommand{\sh}[3]{\node[dimlabel] at (#1,{#2-.18}) {#3};}

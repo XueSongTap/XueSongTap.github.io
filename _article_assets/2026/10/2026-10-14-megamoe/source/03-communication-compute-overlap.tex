@@ -1,0 +1,43 @@
+\documentclass[border=10pt]{standalone}
+\input{common.tex}
+\newcommand{\task}[5]{%
+\fill[#4!55,rounded corners=1pt] ({3+(#1)*1.5},#2) rectangle ({3+((#1)+1)*1.5-.04},{#2-.55});
+\node[font=\small] at ({3+((#1)+.5)*1.5-.02},{#2-.275}) {#5};}
+\begin{document}
+\begin{tikzpicture}[x=1cm,y=1cm]
+\node[font=\large] at (9.3,1.2) {$T_{\mathrm{serial}}=9\tau,\qquad T_{\mathrm{pipeline}}=5\tau\quad\text{（三块、三阶段的理想例子）}$};
+\node[desc] at (9.3,.5) {每块依赖保持为 $D_i\rightarrow C_i\rightarrow R_i$；跨块重叠，不改变单块的先后关系。};
+\node[stage,anchor=west] at (0,-.3) {1. 分阶段执行：整批 Dispatch 完成后计算，整批计算完成后回传};
+\foreach \row/\lab in {-1.6/Dispatch：接收,-2.55/Compute：专家,-3.5/Return：回传}{
+\node[obj,anchor=east] at (2.55,\row-.275) {\lab};
+\draw[black!12] (3,\row-.6)--(16.5,\row-.6);}
+\foreach \i in {0,1,2}{
+\pgfmathtruncatemacro{\j}{\i+1}
+\task{\i}{-1.6}{1}{teal}{$D_{\j}$}
+\task{\i+3}{-2.55}{1}{orange}{$C_{\j}$}
+\task{\i+6}{-3.5}{1}{violet}{$R_{\j}$}}
+\draw[arr] (3,-.95)--(16.8,-.95);
+\foreach \i in {0,...,9}{\node[dimlabel] at ({3+\i*1.5},-.65) {$\i$};}
+\node[dimlabel,anchor=west] at (17.2,-.95) {$t/\tau$};
+
+\node[stage,anchor=west] at (0,-4.65) {2. MegaMoE 的流水线思想：一块到齐就计算，一块算好就回传};
+\foreach \row/\lab in {-6.0/Dispatch：接收,-6.95/Compute：专家,-7.9/Return：回传}{
+\node[obj,anchor=east] at (2.55,\row-.275) {\lab};
+\draw[black!12] (3,\row-.6)--(16.5,\row-.6);}
+\foreach \i in {0,1,2}{
+\pgfmathtruncatemacro{\j}{\i+1}
+\task{\i}{-6.0}{1}{teal}{$D_{\j}$}
+\task{\i+1}{-6.95}{1}{orange}{$C_{\j}$}
+\task{\i+2}{-7.9}{1}{violet}{$R_{\j}$}}
+\draw[arr] (3,-5.35)--(16.8,-5.35);
+\foreach \i in {0,...,9}{\node[dimlabel] at ({3+\i*1.5},-5.05) {$\i$};}
+\node[dimlabel,anchor=west] at (17.2,-5.35) {$t/\tau$};
+\draw[black!45,dashed] (10.5,-5.7)--(10.5,-8.8);
+\node[desc,anchor=west,text width=6.2cm] at (11.1,-7.2) {在区间 $[2\tau,3\tau]$：\par 接收第 3 块、计算第 2 块、回传第 1 块。};
+
+\node[anchor=north west,fill=black!4,inner sep=9pt,text width=17.9cm,font=\small,align=left] at (0,-9.4) {
+\textbf{维度}\quad 横轴是时间；$i=1,2,3$ 是 token 数据块编号。三个阶段各假设每块耗时 $\tau$。\\[4pt]
+\textbf{对象}\quad $D_i$ 接收输入；$C_i$ 包含两次 GEMM 与 SwiGLU；$R_i$ 回传贡献。颜色表示工作类型。\\[4pt]
+\textbf{机制}\quad 这是理想教学时间线，不是 profiler 记录。实际存在启动、同步、归并和资源竞争，阶段耗时也不同。};
+\end{tikzpicture}
+\end{document}

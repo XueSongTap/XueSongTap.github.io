@@ -1,0 +1,50 @@
+\documentclass[border=10pt]{standalone}
+\input{common.tex}
+\begin{document}
+\begin{tikzpicture}[x=1cm,y=1cm]
+\node[font=\large] at (9,1.3) {$[G_e\mid U_e]=X_eW_{1,e},\qquad O_e=(\operatorname{SiLU}(G_e)\odot U_e)W_{2,e}$};
+\node[stage,anchor=west] at (0,.25) {1. Linear 1：收缩 $D$，一次得到 gate 与 up 两组通道};
+\mat{0}{-1.0}{2.4}{1.2}{3}{4}{teal}{$X_e$}
+\sh{1.2}{-2.85}{$[M_e,D]$}
+\node[op] at (3.2,-1.6) {$\times$};
+\mat{4.0}{-.4}{3.6}{2.4}{4}{6}{violet}{$W_{1,e}$}
+\sh{5.8}{-3.45}{$[D,2H]$}
+\node[op] at (8.5,-1.6) {$=$};
+\mat{9.4}{-1.0}{3.6}{1.2}{3}{6}{orange}{$Z_e=[G_e\mid U_e]$}
+\sh{11.2}{-2.85}{$[M_e,2H]$}
+\node[desc,anchor=west,text width=3.75cm] at (14.1,-1.6) {权重保持在专家所在 GPU。\par $M_e$ 随路由变化。};
+
+\node[stage,anchor=west] at (0,-4.45) {2. Split + SwiGLU：沿通道拆成两半，同位置逐元素运算};
+\mat{0}{-5.3}{3.6}{1.2}{3}{6}{orange}{$Z_e$}
+\sh{1.8}{-7.15}{$[M_e,2H]$}
+\draw[arr] (3.95,-5.9)--(4.65,-5.9);
+\node[obj] at (4.3,-5.05) {Split};
+% Explicit partition: 2H = H + H; the shards exactly tile the parent face.
+\mat{5.0}{-5.3}{1.8}{1.2}{3}{3}{orange}{$G_e$}
+\mat{6.8}{-5.3}{1.8}{1.2}{3}{3}{orange}{$U_e$}
+\sh{5.9}{-7.15}{$[M_e,H]$}
+\sh{7.7}{-7.15}{$[M_e,H]$}
+\draw[arr] (8.95,-5.9)--(9.65,-5.9);
+\node[obj,align=center,draw=black!55,minimum width=3.6cm,minimum height=.8cm] at (11.8,-5.9) {$\operatorname{SiLU}(G_e)\odot U_e$};
+\draw[arr] (13.95,-5.9)--(14.65,-5.9);
+\mat{15.0}{-5.3}{1.8}{1.2}{3}{3}{orange}{$A_e$}
+\sh{15.9}{-7.15}{$[M_e,H]$}
+
+\node[stage,anchor=west] at (0,-8.15) {3. Linear 2：收缩 $H$，还原完整 hidden 维度，再回传源 token 的输出};
+\mat{0}{-9.3}{1.8}{1.2}{3}{3}{orange}{$A_e$}
+\sh{.9}{-11.15}{$[M_e,H]$}
+\node[op] at (2.6,-9.9) {$\times$};
+\mat{3.4}{-9.0}{2.4}{1.8}{3}{4}{violet}{$W_{2,e}$}
+\sh{4.6}{-11.45}{$[H,D]$}
+\node[op] at (6.7,-9.9) {$=$};
+\mat{7.6}{-9.3}{2.4}{1.2}{3}{4}{teal}{$O_e$}
+\sh{8.8}{-11.15}{$[M_e,D]$}
+\draw[arr] (10.35,-9.9)--(11.15,-9.9);
+\node[obj,draw=black!55,minimum width=4.3cm,minimum height=.8cm] at (13.65,-9.9) {按源 rank、token、槽位回传};
+
+\node[anchor=north west,fill=black!4,inner sep=9pt,text width=17.5cm,font=\small,align=left] at (0,-12.25) {
+\textbf{维度}\quad $M_e$ 为专家 $e$ 收到的 token 行数；$D$ 为 hidden 宽度；$H$ 为专家中间宽度。格子只示意轴结构。\\[4pt]
+\textbf{对象}\quad $X_e,Z_e,A_e,O_e$ 是浮点张量；$W_{1,e},W_{2,e}$ 是同一个本地专家的完整权重。\\[4pt]
+\textbf{机制}\quad $[M_e,D][D,2H]\to[M_e,2H]$；$[M_e,H][H,D]\to[M_e,D]$。同形状矩阵保持同尺寸。};
+\end{tikzpicture}
+\end{document}

@@ -1,0 +1,57 @@
+\documentclass[border=10pt]{standalone}
+\input{common.tex}
+\begin{document}
+\begin{tikzpicture}[x=1cm,y=1cm]
+\node[font=\large] at (10,1.3) {$y_0=0.6\,f_2(x_0)+0.4\,f_1(x_0)$};
+\node[desc] at (10,.55) {EP=2：GPU 0 持有专家 0、1；GPU 1 持有专家 2、3。只跟踪源 GPU 0 的一个 token。};
+
+\node[stage,anchor=west] at (0,-.25) {1. 路由先给出专家 ID 与权重：两个槽位对应两次专家计算};
+\mat{0}{-1.0}{3.2}{.8}{1}{4}{orange}{$s_0=(0.1,0.4,0.6,0.2)$}
+\foreach \i/\tone in {0/25,1/55,2/80,3/35}{\fill[orange!\tone,rounded corners=.5pt] ({\i*.8+.015},-1.015) rectangle ({(\i+1)*.8-.015},-1.785);}
+\sh{1.6}{-2.45}{$[1,E],\ E=4$：连续路由分数}
+\draw[arr] (3.55,-1.4)--(4.45,-1.4);
+\node[obj,draw=black!55,rounded corners=2pt,minimum width=1.65cm,minimum height=.8cm] at (5.5,-1.4) {TopK，$k=2$};
+\draw[arr] (6.7,-1.4)--(7.45,-1.4);
+% Discrete ID slots: intentionally not a magnitude heatmap.
+\draw[black!55] (7.8,-1.0) rectangle (9.4,-1.8);
+\draw[black!40] (8.6,-1.0)--(8.6,-1.8);
+\node[obj] at (8.2,-1.4) {2}; \node[obj] at (9.0,-1.4) {1};
+\node[obj] at (8.6,-2.10) {$S_0=(2,1)$};
+\sh{8.6}{-2.45}{$[1,k]$：整数专家 ID}
+\node[obj] at (10.45,-1.4) {与};
+\mat{11.5}{-1.0}{1.6}{.8}{1}{2}{coral}{$a_0=(0.6,0.4)$}
+\foreach \i/\tone in {0/80,1/55}{\fill[coral!\tone,rounded corners=.5pt] ({11.5+\i*.8+.015},-1.015) rectangle ({11.5+(\i+1)*.8-.015},-1.785);}
+\sh{12.3}{-2.45}{$[1,k]$：浮点权重}
+\node[desc,anchor=west,text width=5.6cm] at (14.4,-1.6) {槽位 0：专家 2，位于 GPU 1\par 槽位 1：专家 1，位于 GPU 0};
+
+\node[stage,anchor=west] at (0,-3.4) {2. Dispatch 复制完整 token 行；专家输出回到源 GPU，沿所选专家槽位求和};
+\mat{0}{-4.55}{3.2}{.8}{1}{4}{teal}{$x_0$：源 GPU 0}
+\sh{1.6}{-6.0}{$[1,D]$}
+
+\node[obj,draw=black!55,minimum width=3.2cm,minimum height=.8cm] (f2) at (7.4,-4.15) {GPU 1：$f_2(x_0)$};
+\node[obj,draw=black!55,minimum width=3.2cm,minimum height=.8cm] (f1) at (7.4,-6.25) {GPU 0：$f_1(x_0)$};
+\draw[arr] (3.55,-4.95)--(4.2,-4.95)--(4.2,-4.15)--(5.45,-4.15);
+\draw[arr] (3.55,-4.95)--(4.2,-4.95)--(4.2,-6.25)--(5.45,-6.25);
+\node[dimlabel] at (7.4,-4.95) {跨 NVLink 的远端路径};
+\node[dimlabel] at (5.05,-6.95) {本地路径};
+
+\mat{10.3}{-3.75}{3.2}{.8}{1}{4}{teal}{$o_{0,0}=f_2(x_0)$}
+\sh{11.9}{-5.2}{$[1,D]$}
+\mat{10.3}{-5.85}{3.2}{.8}{1}{4}{teal}{$o_{0,1}=f_1(x_0)$}
+\sh{11.9}{-7.3}{$[1,D]$}
+\draw[arr] (9.35,-4.15)--(9.95,-4.15);
+\draw[arr] (9.35,-6.25)--(9.95,-6.25);
+\node[obj,draw=black!55,align=center,minimum width=2.0cm,minimum height=1.05cm] (sum) at (15.5,-5.2) {按 $a_0$ 加权\\沿槽位 $j$ 求和};
+\draw[arr] (13.85,-4.15)--(14.2,-4.15)--(14.2,-4.95)--(14.45,-4.95);
+\draw[arr] (13.85,-6.25)--(14.2,-6.25)--(14.2,-5.45)--(14.45,-5.45);
+\node[dimlabel] at (15.5,-7.2) {Combine，在源 GPU 0};
+\draw[arr] (16.9,-5.2)--(17.5,-5.2);
+\mat{17.85}{-4.8}{3.2}{.8}{1}{4}{teal}{$y_0$：源 GPU 0}
+\sh{19.45}{-6.25}{$[1,D]$}
+
+\node[anchor=north west,fill=black!4,inner sep=9pt,text width=20.55cm,font=\small,align=left] at (0,-8.15) {
+\textbf{维度}\quad $D$ 是完整 hidden 维度；$E$ 是总专家数；$k$ 是每 token 所选专家数。图中每个 token 向量等宽。\\[4pt]
+\textbf{对象}\quad $S_0$ 是整数 ID 列表，$a_0$ 是浮点权重；槽位 $j=0,1$ 表示选中的第几个专家。\\[4pt]
+\textbf{机制}\quad 输入复制给选中专家，权重留在专家所在 GPU；输出按源 token 地址回传并合并。图展示逻辑语义。};
+\end{tikzpicture}
+\end{document}
