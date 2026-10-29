@@ -1,0 +1,49 @@
+\documentclass[tikz,border=12pt]{standalone}
+\usepackage[UTF8,fontset=fandol]{ctex}
+\usepackage{amsmath,amssymb}
+\usetikzlibrary{arrows.meta,positioning,calc,backgrounds}
+\definecolor{teal}{HTML}{4F8FA5}
+\definecolor{violet}{HTML}{8A74B5}
+\definecolor{orange}{HTML}{EE995B}
+\definecolor{ink}{HTML}{39424A}
+\newcommand{\mat}[6]{%
+  \foreach \r in {1,...,#4}{\foreach \c in {1,...,#3}{%
+    \pgfmathtruncatemacro{\tone}{35+mod(\r*7+\c*11+\r*\c,3)*20}
+    \fill[#5!\tone,rounded corners=.6pt] (#1+\c*.28-.27,#2+\r*.28-.27) rectangle ++(.25,.25);
+  }}
+  \draw[black!55,line width=.45pt] (#1-.02,#2-.02) rectangle ++(#3*.28+.04,#4*.28+.04);
+  \node[font=\small,anchor=north] at (#1+#3*.14,#2-.18) {#6};
+}
+\begin{document}
+\begin{tikzpicture}[font=\small,text=ink,>=Stealth,
+  flow/.style={->,line width=.8pt,draw=black!60},
+  box/.style={draw=black!55,rounded corners=2pt,fill=white,align=center,minimum height=.75cm},
+  note/.style={font=\scriptsize,text=black!65,align=center}]
+  \node[font=\large] at (6.5,8.6) {$H_{\mathrm{enc}}W^{\mathrm{KV}}=C$};
+  \node[font=\small\bfseries,text=black!60] at (6.5,7.9) {长提示词经过 causal encoder，输出直接建立 decoder 全局记忆};
+  % Geometry ledger: N=8 cells, d=6 cells, d_kv=4 cells; unit=.28cm.
+  \mat{2.0}{4.8}{6}{8}{teal}{$H_{\mathrm{enc}}$}
+  \node[note] at (2.84,3.93) {$N\times d$};
+  \node[font=\Large] at (4.6,5.92) {$\times$};
+  \mat{5.5}{5.08}{4}{6}{violet}{$W^{\mathrm{KV}}$}
+  \node[note] at (6.06,4.15) {$d\times d_{\mathrm{kv}}$};
+  \node[font=\Large] at (7.7,5.92) {$=$};
+  \mat{8.8}{4.8}{4}{8}{orange}{$C$}
+  \node[note] at (9.36,3.93) {$N\times d_{\mathrm{kv}}$};
+  \node[font=\small\bfseries,text=black!60] at (6.5,3.35) {处理当前 token 时，各 decoder 层仍逐层计算};
+  \node[box,minimum width=1.5cm] (h) at (1.0,2.2) {$h_{l,t}$};
+  \node[box,minimum width=2.35cm,fill=teal!10] (q) at (4.0,2.2) {本层生成主 query\\$q_{l,t}$};
+  \node[box,minimum width=2.5cm,fill=orange!10] (attn) at (8.1,2.2) {读取共享 $C$\\结合本层 SWA};
+  \node[box,minimum width=1.8cm] (out) at (11.8,2.2) {$h_{l+1,t}$\\继续下一层};
+  \draw[flow] (h) -- (q);
+  \draw[flow] (q) -- node[note,above]{本层 query} (attn);
+  \draw[flow] (attn) -- node[note,above]{层内后续计算} (out);
+  \draw[flow] (9.94,5.92) -- (13.25,5.92) -- (13.25,1.2) -- (8.1,1.2) -- (attn.south);
+  \node[note,fill=white] at (10.65,1.2) {同一份全局 KV};
+  \node[fill=black!4,rounded corners=2pt,text width=12.7cm,inner sep=9pt,align=left,anchor=north west] at (-.1,.45) {
+  \textbf{维度}\quad $N$ 为历史 token 数，$d$ 为隐藏维度，$d_{\mathrm{kv}}$ 为 KV 维度；格数仅示意轴结构。\\[3pt]
+  \textbf{边界}\quad 图示 decoder 的 $m=1$ 全局路径，省略归一化、RoPE 等步骤。\\[3pt]
+  \textbf{局部}\quad 长输入仍需末尾短窗口重放以建立逐层 SWA；新 token 的 decode 仍经过两半网络。
+  };
+\end{tikzpicture}
+\end{document}

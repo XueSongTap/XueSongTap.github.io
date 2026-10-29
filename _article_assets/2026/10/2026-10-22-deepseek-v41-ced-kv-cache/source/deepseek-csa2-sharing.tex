@@ -1,0 +1,57 @@
+\documentclass[tikz,border=12pt]{standalone}
+\usepackage[UTF8,fontset=fandol]{ctex}
+\usepackage{amsmath,amssymb}
+\usetikzlibrary{arrows.meta,positioning,calc,backgrounds}
+\definecolor{teal}{HTML}{4F8FA5}
+\definecolor{violet}{HTML}{8A74B5}
+\definecolor{orange}{HTML}{EE995B}
+\definecolor{ink}{HTML}{39424A}
+\begin{document}
+\begin{tikzpicture}[font=\small,text=ink,>=Stealth,
+ flow/.style={->,draw=black!60,line width=.8pt},
+ box/.style={draw=black!55,rounded corners=2pt,fill=white,align=center,minimum height=.8cm},
+ note/.style={font=\scriptsize,text=black!65,align=center}]
+ \node[font=\large] at (6.5,11.25) {$S_t=\operatorname{TopKIndices}_{k}(a_t),\qquad G_t[j,:]=C[S_{t,j},:]$};
+ \node[font=\small\bfseries,text=black!60] at (6.5,10.5) {Full 建立数值缓存，后续层沿用同组记忆};
+ \node[box,minimum width=2.2cm] (src) at (1.4,9.5) {全局记忆来源};
+ \node[box,minimum width=2.4cm,fill=orange!15] (C) at (5.7,9.5) {main KV $C$\\$M\times d_{\mathrm{kv}}$};
+ \node[box,minimum width=2.5cm,fill=violet!12] (KI) at (10.4,9.5) {indexer K\\$M\times d_{\mathrm{idx}}$};
+ \draw[flow] (src) -- node[note,above]{Full 生成} (C);
+ \draw[flow] (C) -- node[note,above]{投影} (KI);
+ \node[font=\small\bfseries,text=black!60] at (6.5,8.55) {Full 和 Reindex 重新评分；Reuse 直接沿用最新的整数索引};
+ \node[box,minimum width=2.1cm,fill=teal!10] (qi) at (1.4,6.9) {本层 indexer query};
+ \node[box,minimum width=1.4cm] (score) at (4.5,6.9) {评分 $a_t$\\$M$ 个数值};
+ \node[box,minimum width=2.05cm] (topk) at (7.35,6.9) {TopKIndices};
+ % Ordered integer slots, not a magnitude heatmap.
+ \foreach \x/\v in {9.7/1,10.25/4,10.8/6}{
+  \draw[fill=white,draw=black!55,rounded corners=.5pt] (\x,6.64) rectangle ++(.5,.52);
+  \node at (\x+.25,6.9) {$\v$};
+ }
+ \node[note] at (10.5,6.25) {$S_t$：$k$ 个条目地址};
+ \draw[flow] (qi) -- (score);
+ \draw[flow] (score) -- (topk);
+ \draw[flow] (topk) -- (9.7,6.9);
+ \draw[flow] (KI.east) -- (13.7,9.5) -- (13.7,8.0) -- (4.5,8.0) -- (score.north);
+ \node[note,fill=white] at (7.35,8.0) {同组 indexer K};
+ \node[box,minimum width=2.55cm,fill=black!4] (reuse) at (7.2,5.2) {Reuse 从前层接入 $S_t$};
+ \draw[flow] (10.5,6.6) -- (10.5,5.2);
+ \draw[flow] (reuse.east) -- (10.5,5.2);
+ \node[font=\small\bfseries,text=black!60] at (6.0,4.5) {三种模式都继续完成本层注意力};
+ \node[box,minimum width=1.65cm] (gather) at (2.3,3.25) {Gather\\按地址读 $C$};
+ \node[box,minimum width=2.0cm,fill=orange!15] (G) at (5.6,3.25) {选中的 KV $G_t$\\$k\times d_{\mathrm{kv}}$};
+ \node[box,minimum width=2.4cm,fill=teal!10] (attn) at (9.2,3.25) {本层注意力\\主 query + 本层 SWA};
+ \node[box,minimum width=1.35cm] (out) at (12.35,3.25) {新输出};
+ \draw[flow] (gather) -- (G);
+ \draw[flow] (G) -- (attn);
+ \draw[flow] (attn) -- (out);
+ \draw[flow] (C.north) -- (5.7,10.13) -- (-.15,10.13) -- (-.15,3.25) -- (gather.west);
+ \node[note,fill=white,rotate=90] at (-.15,6.4) {同组 main KV 数值};
+ \draw[flow] (10.5,5.2) -- (10.5,4.0) -- (2.3,4.0) -- (gather.north);
+ \node[note,fill=white] at (6.7,4.0) {当前层使用的 $S_t$：新选出或复用};
+ \node[fill=black!4,rounded corners=2pt,text width=13.0cm,inner sep=9pt,align=left,anchor=north west] at (-.3,2.1) {
+ \textbf{对象}\quad $C$、indexer K、$a_t$ 是数值；$S_t$ 是整数地址。槽位中的 1、4、6 仅作示意。\\[3pt]
+ \textbf{共享}\quad Full 新建缓存并检索；Reindex 复用缓存但重选 $S_t$；Reuse 复用缓存和最新 $S_t$。\\[3pt]
+ \textbf{范围}\quad Decoder 的后续 Reindex 只在首个 Full 构建的候选池中评分；各层仍生成新表示。
+ };
+\end{tikzpicture}
+\end{document}
