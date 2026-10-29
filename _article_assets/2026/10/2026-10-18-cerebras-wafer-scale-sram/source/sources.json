@@ -1,0 +1,117 @@
+{
+  "retrieved_date": "2026-10-01",
+  "timezone": "Asia/Shanghai",
+  "source_pdf_sha256": "bafe1375a6e35920303e2b42daa1a0eb2e7fe7cfdd41fe299d06acf528b46d59",
+  "images": [
+    {
+      "file": "01-core-physical-layout.png",
+      "kind": "cropped PDF page screenshot",
+      "source_url": "https://8968533.fs1.hubspotusercontent-na1.net/hubfs/8968533/IEEE%20Micro%202023-03%20Hot%20Chips%2034%20Cerebras%20Architecture%20Deep%20Dive.pdf",
+      "page_1_based": 3,
+      "figure": 2,
+      "generation": "WSE-2",
+      "renderer": "pdftoppm -scale-to 2400",
+      "crop_pixels_xywh": [
+        870,
+        270,
+        700,
+        530
+      ],
+      "sha256": "07c0c8490a7e56bf0f6afb78a393ed3a16a96ec3378358daeb3a834f69670bc0",
+      "dimensions": [
+        700,
+        530
+      ],
+      "blog_file": "img/2026/10/18/cerebras-core-physical-layout.png"
+    },
+    {
+      "file": "02-local-sram-banks.png",
+      "kind": "cropped PDF page screenshot",
+      "source_url": "https://8968533.fs1.hubspotusercontent-na1.net/hubfs/8968533/IEEE%20Micro%202023-03%20Hot%20Chips%2034%20Cerebras%20Architecture%20Deep%20Dive.pdf",
+      "page_1_based": 4,
+      "figure": 3,
+      "generation": "WSE-2",
+      "renderer": "pdftoppm -scale-to 2400",
+      "crop_pixels_xywh": [
+        925,
+        280,
+        685,
+        650
+      ],
+      "sha256": "d1f5172df3b44125527dd77681abd0e0261c035d48b6449726dcb842084c931f",
+      "dimensions": [
+        685,
+        650
+      ],
+      "blog_file": "img/2026/10/18/cerebras-local-sram-banks.png"
+    },
+    {
+      "file": "03-core-to-wafer.png",
+      "kind": "cropped PDF page screenshot",
+      "source_url": "https://8968533.fs1.hubspotusercontent-na1.net/hubfs/8968533/IEEE%20Micro%202023-03%20Hot%20Chips%2034%20Cerebras%20Architecture%20Deep%20Dive.pdf",
+      "page_1_based": 7,
+      "figure": 7,
+      "generation": "WSE-2",
+      "renderer": "pdftoppm -scale-to 2400",
+      "crop_pixels_xywh": [
+        145,
+        260,
+        1420,
+        575
+      ],
+      "sha256": "7a6ec106ae27f120a0704e3c96308adbf48193b46af36080d0e96f92df4c4930",
+      "dimensions": [
+        1420,
+        575
+      ],
+      "blog_file": "img/2026/10/18/cerebras-core-to-wafer.png"
+    },
+    {
+      "file": "04-mesh-fabric.png",
+      "kind": "cropped PDF page screenshot",
+      "source_url": "https://8968533.fs1.hubspotusercontent-na1.net/hubfs/8968533/IEEE%20Micro%202023-03%20Hot%20Chips%2034%20Cerebras%20Architecture%20Deep%20Dive.pdf",
+      "page_1_based": 7,
+      "figure": 8,
+      "generation": "WSE-2",
+      "renderer": "pdftoppm -scale-to 2400",
+      "crop_pixels_xywh": [
+        315,
+        1420,
+        1200,
+        710
+      ],
+      "sha256": "90f27f2c1face480c1e052fa32745e9ec3ccae84238151b622acf5b8b0be534f",
+      "dimensions": [
+        1200,
+        710
+      ],
+      "blog_file": "img/2026/10/18/cerebras-mesh-fabric.png"
+    },
+    {
+      "file": "05-gpu-vs-wse-memory.png",
+      "kind": "official website diagram asset",
+      "source_url": "https://www.cerebras.ai/blog/introducing-cerebras-inference-ai-at-instant-speed",
+      "asset_url": "https://cdn.sanity.io/images/e4qjo92p/production/a4a53ef6eba691e10372cdfb57fe19d358b12366-2968x1680.png?w=1800",
+      "sha256": "07a9245f76cc01242cedf6b3612036c65ae3921d3a3255cfce9de88ad9c29c19",
+      "dimensions": [
+        1800,
+        1019
+      ],
+      "blog_file": "img/2026/10/18/cerebras-gpu-vs-wse-memory.png"
+    },
+    {
+      "file": "06-prefill-decode.png",
+      "kind": "official website diagram asset",
+      "source_url": "https://www.cerebras.ai/blog/introducing-cerebras-cs-4",
+      "asset_url": "https://cdn.sanity.io/images/e4qjo92p/production/e5f5f8b59ba7386bbf9a7a79e5cede832d0a8a09-1920x1080.png?w=1600",
+      "sha256": "659f3a7ed75bc57733080588610da4be10e86e5f2a64e41785d648cea292d23a",
+      "dimensions": [
+        1600,
+        900
+      ],
+      "blog_file": "img/2026/10/18/cerebras-prefill-decode.png"
+    }
+  ],
+  "blog_migration_date": "2026-10-18",
+  "article": "_posts/2026/10/2026-10-18-cerebras-wafer-scale-sram.md"
+}
