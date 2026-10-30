@@ -4,7 +4,6 @@ title: 从 CMP 170HX 到 GeForce：GPU 算力解锁是怎样发生的
 tags: LLM GPU CUDA
 ---
 
-> 前置阅读：[顺着 FlashAttention 看 SM120 的实现]({% post_url 2026/09/2026-09-19-flash-attention-sm120-sm80 %}) · [MXFP8 与 SM120：硬件支持之后，软件还缺什么]({% post_url 2026/09/2026-09-22-mxfp8-sm120-software-support %})
 >
 > 项目状态核对于 2026-10-27。性能数据来自论文和项目报告，本文未在硬件上复测。
 
@@ -16,7 +15,7 @@ NVIDIA CMP 170HX 是一张矿卡，用的是和 A100 同款的 GA100 芯片，�
 
 <!--more-->
 
-## CMP 170HX：熔丝已经烧了，限制靠什么生效
+## CMP 170HX：efuse的破解
 
 CMP 是 Cryptocurrency Mining Processor 的缩写，即 NVIDIA 的挖矿专用卡。矿卡退役后，社区开始琢磨拿它跑通用计算。早期有人通过改 CUDA 程序绕开 CMP 170HX 被限速的 FMA（Fused Multiply-Add，融合乘加）指令，找回了一部分应用性能。[2]
 
