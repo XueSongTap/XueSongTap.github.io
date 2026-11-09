@@ -1,0 +1,263 @@
+\documentclass[tikz,border=7pt]{standalone}
+\usepackage[UTF8,fontset=fandol]{ctex}
+\usepackage{amsmath,amssymb}
+\usetikzlibrary{arrows.meta,calc}
+\pgfdeclarelayer{background}\pgfdeclarelayer{foreground}
+\pgfsetlayers{background,main,foreground}
+\definecolor{teal}{HTML}{4F8FA5}
+\definecolor{orange}{HTML}{EE995B}
+\definecolor{coral}{HTML}{C95B5B}
+\definecolor{violet}{HTML}{8A74B5}
+\definecolor{neutral}{HTML}{85898F}
+\begin{document}
+\begin{tikzpicture}[line cap=round,line join=round]
+\node[anchor=north,font=\large] at (9.700,0) {$\displaystyle G_t[r,:]=C\big[S_t[r],:\big],\qquad O_t=\mathrm{Softmax}\!\left(Q_tG_t^{\top}\right)G_t$};
+\node[font=\small\bfseries,text=black!62,anchor=north] at (9.700,-1.250) {1. 用整数地址把选中的 $k$ 行 KV 读成连续张量};
+\draw[fill=white,draw=black!55,line width=.4pt,rounded corners=.7pt] (4.412,-3.482) rectangle (4.788,-3.858);
+\begin{pgfonlayer}{foreground}\node[text=black!85,font=\scriptsize,inner sep=0] at (4.600,-3.670) {1};\end{pgfonlayer}
+\draw[fill=white,draw=black!55,line width=.4pt,rounded corners=.7pt] (4.412,-3.902) rectangle (4.788,-4.278);
+\begin{pgfonlayer}{foreground}\node[text=black!85,font=\scriptsize,inner sep=0] at (4.600,-4.090) {3};\end{pgfonlayer}
+\draw[fill=white,draw=black!55,line width=.4pt,rounded corners=.7pt] (4.412,-4.322) rectangle (4.788,-4.698);
+\begin{pgfonlayer}{foreground}\node[text=black!85,font=\scriptsize,inner sep=0] at (4.600,-4.510) {7};\end{pgfonlayer}
+\draw[fill=white,draw=black!55,line width=.4pt,rounded corners=.7pt] (4.412,-4.742) rectangle (4.788,-5.118);
+\begin{pgfonlayer}{foreground}\node[text=black!85,font=\scriptsize,inner sep=0] at (4.600,-4.930) {8};\end{pgfonlayer}
+\draw[black!60,line width=.55pt] (4.390,-3.380)--(4.310,-3.380)--(4.310,-5.220)--(4.390,-5.220);
+\draw[black!60,line width=.55pt] (4.810,-3.380)--(4.890,-3.380)--(4.890,-5.220)--(4.810,-5.220);
+\node[font=\small,anchor=north,inner sep=0] at (4.600,-6.600) {$S_t$};
+\node[font=\scriptsize,text=black!58,anchor=north,inner sep=0] at (4.600,-7.060) {$k\times 1$};
+\node[font=\footnotesize,text=black!68,anchor=south,inner sep=0] at (6.210,-2.100) {地址指向行};
+\draw[fill=teal!11,draw=none,rounded corners=.7pt] (7.632,-2.222) rectangle (8.008,-2.598);
+\draw[fill=teal!11,draw=none,rounded corners=.7pt] (8.052,-2.222) rectangle (8.428,-2.598);
+\draw[fill=teal!11,draw=none,rounded corners=.7pt] (8.472,-2.222) rectangle (8.848,-2.598);
+\draw[fill=teal!11,draw=none,rounded corners=.7pt] (8.892,-2.222) rectangle (9.268,-2.598);
+\draw[fill=teal!11,draw=none,rounded corners=.7pt] (9.312,-2.222) rectangle (9.688,-2.598);
+\draw[fill=teal!58,draw=none,rounded corners=.7pt] (7.632,-2.642) rectangle (8.008,-3.018);
+\draw[fill=teal!85,draw=none,rounded corners=.7pt] (8.052,-2.642) rectangle (8.428,-3.018);
+\draw[fill=teal!32,draw=none,rounded corners=.7pt] (8.472,-2.642) rectangle (8.848,-3.018);
+\draw[fill=teal!32,draw=none,rounded corners=.7pt] (8.892,-2.642) rectangle (9.268,-3.018);
+\draw[fill=teal!85,draw=none,rounded corners=.7pt] (9.312,-2.642) rectangle (9.688,-3.018);
+\draw[fill=teal!11,draw=none,rounded corners=.7pt] (7.632,-3.062) rectangle (8.008,-3.438);
+\draw[fill=teal!11,draw=none,rounded corners=.7pt] (8.052,-3.062) rectangle (8.428,-3.438);
+\draw[fill=teal!11,draw=none,rounded corners=.7pt] (8.472,-3.062) rectangle (8.848,-3.438);
+\draw[fill=teal!11,draw=none,rounded corners=.7pt] (8.892,-3.062) rectangle (9.268,-3.438);
+\draw[fill=teal!11,draw=none,rounded corners=.7pt] (9.312,-3.062) rectangle (9.688,-3.438);
+\draw[fill=teal!85,draw=none,rounded corners=.7pt] (7.632,-3.482) rectangle (8.008,-3.858);
+\draw[fill=teal!58,draw=none,rounded corners=.7pt] (8.052,-3.482) rectangle (8.428,-3.858);
+\draw[fill=teal!58,draw=none,rounded corners=.7pt] (8.472,-3.482) rectangle (8.848,-3.858);
+\draw[fill=teal!58,draw=none,rounded corners=.7pt] (8.892,-3.482) rectangle (9.268,-3.858);
+\draw[fill=teal!32,draw=none,rounded corners=.7pt] (9.312,-3.482) rectangle (9.688,-3.858);
+\draw[fill=teal!11,draw=none,rounded corners=.7pt] (7.632,-3.902) rectangle (8.008,-4.278);
+\draw[fill=teal!11,draw=none,rounded corners=.7pt] (8.052,-3.902) rectangle (8.428,-4.278);
+\draw[fill=teal!11,draw=none,rounded corners=.7pt] (8.472,-3.902) rectangle (8.848,-4.278);
+\draw[fill=teal!11,draw=none,rounded corners=.7pt] (8.892,-3.902) rectangle (9.268,-4.278);
+\draw[fill=teal!11,draw=none,rounded corners=.7pt] (9.312,-3.902) rectangle (9.688,-4.278);
+\draw[fill=teal!11,draw=none,rounded corners=.7pt] (7.632,-4.322) rectangle (8.008,-4.698);
+\draw[fill=teal!11,draw=none,rounded corners=.7pt] (8.052,-4.322) rectangle (8.428,-4.698);
+\draw[fill=teal!11,draw=none,rounded corners=.7pt] (8.472,-4.322) rectangle (8.848,-4.698);
+\draw[fill=teal!11,draw=none,rounded corners=.7pt] (8.892,-4.322) rectangle (9.268,-4.698);
+\draw[fill=teal!11,draw=none,rounded corners=.7pt] (9.312,-4.322) rectangle (9.688,-4.698);
+\draw[fill=teal!11,draw=none,rounded corners=.7pt] (7.632,-4.742) rectangle (8.008,-5.118);
+\draw[fill=teal!11,draw=none,rounded corners=.7pt] (8.052,-4.742) rectangle (8.428,-5.118);
+\draw[fill=teal!11,draw=none,rounded corners=.7pt] (8.472,-4.742) rectangle (8.848,-5.118);
+\draw[fill=teal!11,draw=none,rounded corners=.7pt] (8.892,-4.742) rectangle (9.268,-5.118);
+\draw[fill=teal!11,draw=none,rounded corners=.7pt] (9.312,-4.742) rectangle (9.688,-5.118);
+\draw[fill=teal!32,draw=none,rounded corners=.7pt] (7.632,-5.162) rectangle (8.008,-5.538);
+\draw[fill=teal!32,draw=none,rounded corners=.7pt] (8.052,-5.162) rectangle (8.428,-5.538);
+\draw[fill=teal!58,draw=none,rounded corners=.7pt] (8.472,-5.162) rectangle (8.848,-5.538);
+\draw[fill=teal!32,draw=none,rounded corners=.7pt] (8.892,-5.162) rectangle (9.268,-5.538);
+\draw[fill=teal!32,draw=none,rounded corners=.7pt] (9.312,-5.162) rectangle (9.688,-5.538);
+\draw[fill=teal!85,draw=none,rounded corners=.7pt] (7.632,-5.582) rectangle (8.008,-5.958);
+\draw[fill=teal!85,draw=none,rounded corners=.7pt] (8.052,-5.582) rectangle (8.428,-5.958);
+\draw[fill=teal!85,draw=none,rounded corners=.7pt] (8.472,-5.582) rectangle (8.848,-5.958);
+\draw[fill=teal!32,draw=none,rounded corners=.7pt] (8.892,-5.582) rectangle (9.268,-5.958);
+\draw[fill=teal!32,draw=none,rounded corners=.7pt] (9.312,-5.582) rectangle (9.688,-5.958);
+\draw[fill=teal!11,draw=none,rounded corners=.7pt] (7.632,-6.002) rectangle (8.008,-6.378);
+\draw[fill=teal!11,draw=none,rounded corners=.7pt] (8.052,-6.002) rectangle (8.428,-6.378);
+\draw[fill=teal!11,draw=none,rounded corners=.7pt] (8.472,-6.002) rectangle (8.848,-6.378);
+\draw[fill=teal!11,draw=none,rounded corners=.7pt] (8.892,-6.002) rectangle (9.268,-6.378);
+\draw[fill=teal!11,draw=none,rounded corners=.7pt] (9.312,-6.002) rectangle (9.688,-6.378);
+\draw[black!60,line width=.55pt] (7.610,-2.120)--(7.530,-2.120)--(7.530,-6.480)--(7.610,-6.480);
+\draw[black!60,line width=.55pt] (9.710,-2.120)--(9.790,-2.120)--(9.790,-6.480)--(9.710,-6.480);
+\node[font=\small,anchor=north,inner sep=0] at (8.660,-6.600) {$C$};
+\node[font=\scriptsize,text=black!58,anchor=north,inner sep=0] at (8.660,-7.060) {$N\times d_c$};
+\node[font=\footnotesize,text=black!68,anchor=south,inner sep=0] at (11.310,-2.100) {Gather};
+\draw[fill=teal!58,draw=none,rounded corners=.7pt] (12.932,-3.482) rectangle (13.308,-3.858);
+\draw[fill=teal!85,draw=none,rounded corners=.7pt] (13.352,-3.482) rectangle (13.728,-3.858);
+\draw[fill=teal!32,draw=none,rounded corners=.7pt] (13.772,-3.482) rectangle (14.148,-3.858);
+\draw[fill=teal!32,draw=none,rounded corners=.7pt] (14.192,-3.482) rectangle (14.568,-3.858);
+\draw[fill=teal!85,draw=none,rounded corners=.7pt] (14.612,-3.482) rectangle (14.988,-3.858);
+\draw[fill=teal!85,draw=none,rounded corners=.7pt] (12.932,-3.902) rectangle (13.308,-4.278);
+\draw[fill=teal!58,draw=none,rounded corners=.7pt] (13.352,-3.902) rectangle (13.728,-4.278);
+\draw[fill=teal!58,draw=none,rounded corners=.7pt] (13.772,-3.902) rectangle (14.148,-4.278);
+\draw[fill=teal!58,draw=none,rounded corners=.7pt] (14.192,-3.902) rectangle (14.568,-4.278);
+\draw[fill=teal!32,draw=none,rounded corners=.7pt] (14.612,-3.902) rectangle (14.988,-4.278);
+\draw[fill=teal!32,draw=none,rounded corners=.7pt] (12.932,-4.322) rectangle (13.308,-4.698);
+\draw[fill=teal!32,draw=none,rounded corners=.7pt] (13.352,-4.322) rectangle (13.728,-4.698);
+\draw[fill=teal!58,draw=none,rounded corners=.7pt] (13.772,-4.322) rectangle (14.148,-4.698);
+\draw[fill=teal!32,draw=none,rounded corners=.7pt] (14.192,-4.322) rectangle (14.568,-4.698);
+\draw[fill=teal!32,draw=none,rounded corners=.7pt] (14.612,-4.322) rectangle (14.988,-4.698);
+\draw[fill=teal!85,draw=none,rounded corners=.7pt] (12.932,-4.742) rectangle (13.308,-5.118);
+\draw[fill=teal!85,draw=none,rounded corners=.7pt] (13.352,-4.742) rectangle (13.728,-5.118);
+\draw[fill=teal!85,draw=none,rounded corners=.7pt] (13.772,-4.742) rectangle (14.148,-5.118);
+\draw[fill=teal!32,draw=none,rounded corners=.7pt] (14.192,-4.742) rectangle (14.568,-5.118);
+\draw[fill=teal!32,draw=none,rounded corners=.7pt] (14.612,-4.742) rectangle (14.988,-5.118);
+\draw[black!60,line width=.55pt] (12.910,-3.380)--(12.830,-3.380)--(12.830,-5.220)--(12.910,-5.220);
+\draw[black!60,line width=.55pt] (15.010,-3.380)--(15.090,-3.380)--(15.090,-5.220)--(15.010,-5.220);
+\node[font=\small,anchor=north,inner sep=0] at (13.960,-6.600) {$G_t$};
+\node[font=\scriptsize,text=black!58,anchor=north,inner sep=0] at (13.960,-7.060) {$k\times d_c$};
+\begin{pgfonlayer}{background}\draw[black!42,line width=.55pt] (5.010,-3.670) .. controls (6.210,-3.670) and (6.210,-2.830) .. (7.410,-2.830);\end{pgfonlayer}
+\begin{pgfonlayer}{background}\draw[black!42,line width=.55pt] (9.910,-2.830) .. controls (11.310,-2.830) and (11.310,-3.670) .. (12.710,-3.670);\end{pgfonlayer}
+\begin{pgfonlayer}{background}\draw[black!42,line width=.55pt] (5.010,-4.090) .. controls (6.210,-4.090) and (6.210,-3.670) .. (7.410,-3.670);\end{pgfonlayer}
+\begin{pgfonlayer}{background}\draw[black!42,line width=.55pt] (9.910,-3.670) .. controls (11.310,-3.670) and (11.310,-4.090) .. (12.710,-4.090);\end{pgfonlayer}
+\begin{pgfonlayer}{background}\draw[black!42,line width=.55pt] (5.010,-4.510) .. controls (6.210,-4.510) and (6.210,-5.350) .. (7.410,-5.350);\end{pgfonlayer}
+\begin{pgfonlayer}{background}\draw[black!42,line width=.55pt] (9.910,-5.350) .. controls (11.310,-5.350) and (11.310,-4.510) .. (12.710,-4.510);\end{pgfonlayer}
+\begin{pgfonlayer}{background}\draw[black!42,line width=.55pt] (5.010,-4.930) .. controls (6.210,-4.930) and (6.210,-5.770) .. (7.410,-5.770);\end{pgfonlayer}
+\begin{pgfonlayer}{background}\draw[black!42,line width=.55pt] (9.910,-5.770) .. controls (11.310,-5.770) and (11.310,-4.930) .. (12.710,-4.930);\end{pgfonlayer}
+\node[font=\small\bfseries,text=black!62,anchor=north] at (9.700,-8.200) {2. QK 只和选中的 $k$ 个 token 打分，PV 再用同一份 $G_t$};
+\draw[fill=orange!58,draw=none,rounded corners=.7pt] (0.962,-9.382) rectangle (1.338,-9.758);
+\draw[fill=orange!85,draw=none,rounded corners=.7pt] (1.382,-9.382) rectangle (1.758,-9.758);
+\draw[fill=orange!32,draw=none,rounded corners=.7pt] (1.802,-9.382) rectangle (2.178,-9.758);
+\draw[fill=orange!32,draw=none,rounded corners=.7pt] (2.222,-9.382) rectangle (2.598,-9.758);
+\draw[fill=orange!85,draw=none,rounded corners=.7pt] (2.642,-9.382) rectangle (3.018,-9.758);
+\draw[fill=orange!85,draw=none,rounded corners=.7pt] (0.962,-9.802) rectangle (1.338,-10.178);
+\draw[fill=orange!85,draw=none,rounded corners=.7pt] (1.382,-9.802) rectangle (1.758,-10.178);
+\draw[fill=orange!58,draw=none,rounded corners=.7pt] (1.802,-9.802) rectangle (2.178,-10.178);
+\draw[fill=orange!32,draw=none,rounded corners=.7pt] (2.222,-9.802) rectangle (2.598,-10.178);
+\draw[fill=orange!32,draw=none,rounded corners=.7pt] (2.642,-9.802) rectangle (3.018,-10.178);
+\draw[fill=orange!32,draw=none,rounded corners=.7pt] (0.962,-10.222) rectangle (1.338,-10.598);
+\draw[fill=orange!32,draw=none,rounded corners=.7pt] (1.382,-10.222) rectangle (1.758,-10.598);
+\draw[fill=orange!85,draw=none,rounded corners=.7pt] (1.802,-10.222) rectangle (2.178,-10.598);
+\draw[fill=orange!58,draw=none,rounded corners=.7pt] (2.222,-10.222) rectangle (2.598,-10.598);
+\draw[fill=orange!85,draw=none,rounded corners=.7pt] (2.642,-10.222) rectangle (3.018,-10.598);
+\draw[fill=orange!58,draw=none,rounded corners=.7pt] (0.962,-10.642) rectangle (1.338,-11.018);
+\draw[fill=orange!58,draw=none,rounded corners=.7pt] (1.382,-10.642) rectangle (1.758,-11.018);
+\draw[fill=orange!58,draw=none,rounded corners=.7pt] (1.802,-10.642) rectangle (2.178,-11.018);
+\draw[fill=orange!58,draw=none,rounded corners=.7pt] (2.222,-10.642) rectangle (2.598,-11.018);
+\draw[fill=orange!85,draw=none,rounded corners=.7pt] (2.642,-10.642) rectangle (3.018,-11.018);
+\draw[black!60,line width=.55pt] (0.940,-9.280)--(0.860,-9.280)--(0.860,-11.120)--(0.940,-11.120);
+\draw[black!60,line width=.55pt] (3.040,-9.280)--(3.120,-9.280)--(3.120,-11.120)--(3.040,-11.120);
+\node[font=\small,anchor=north,inner sep=0] at (1.990,-11.450) {$Q_t$};
+\node[font=\scriptsize,text=black!58,anchor=north,inner sep=0] at (1.990,-11.910) {$H\times d_c$};
+\node[font=\Large] at (3.550,-10.200) {$\cdot$};
+\draw[fill=teal!58,draw=none,rounded corners=.7pt] (4.082,-9.172) rectangle (4.458,-9.548);
+\draw[fill=teal!85,draw=none,rounded corners=.7pt] (4.502,-9.172) rectangle (4.878,-9.548);
+\draw[fill=teal!32,draw=none,rounded corners=.7pt] (4.922,-9.172) rectangle (5.298,-9.548);
+\draw[fill=teal!85,draw=none,rounded corners=.7pt] (5.342,-9.172) rectangle (5.718,-9.548);
+\draw[fill=teal!85,draw=none,rounded corners=.7pt] (4.082,-9.592) rectangle (4.458,-9.968);
+\draw[fill=teal!58,draw=none,rounded corners=.7pt] (4.502,-9.592) rectangle (4.878,-9.968);
+\draw[fill=teal!32,draw=none,rounded corners=.7pt] (4.922,-9.592) rectangle (5.298,-9.968);
+\draw[fill=teal!85,draw=none,rounded corners=.7pt] (5.342,-9.592) rectangle (5.718,-9.968);
+\draw[fill=teal!32,draw=none,rounded corners=.7pt] (4.082,-10.012) rectangle (4.458,-10.388);
+\draw[fill=teal!58,draw=none,rounded corners=.7pt] (4.502,-10.012) rectangle (4.878,-10.388);
+\draw[fill=teal!58,draw=none,rounded corners=.7pt] (4.922,-10.012) rectangle (5.298,-10.388);
+\draw[fill=teal!85,draw=none,rounded corners=.7pt] (5.342,-10.012) rectangle (5.718,-10.388);
+\draw[fill=teal!32,draw=none,rounded corners=.7pt] (4.082,-10.432) rectangle (4.458,-10.808);
+\draw[fill=teal!58,draw=none,rounded corners=.7pt] (4.502,-10.432) rectangle (4.878,-10.808);
+\draw[fill=teal!32,draw=none,rounded corners=.7pt] (4.922,-10.432) rectangle (5.298,-10.808);
+\draw[fill=teal!32,draw=none,rounded corners=.7pt] (5.342,-10.432) rectangle (5.718,-10.808);
+\draw[fill=teal!85,draw=none,rounded corners=.7pt] (4.082,-10.852) rectangle (4.458,-11.228);
+\draw[fill=teal!32,draw=none,rounded corners=.7pt] (4.502,-10.852) rectangle (4.878,-11.228);
+\draw[fill=teal!32,draw=none,rounded corners=.7pt] (4.922,-10.852) rectangle (5.298,-11.228);
+\draw[fill=teal!32,draw=none,rounded corners=.7pt] (5.342,-10.852) rectangle (5.718,-11.228);
+\draw[black!60,line width=.55pt] (4.060,-9.070)--(3.980,-9.070)--(3.980,-11.330)--(4.060,-11.330);
+\draw[black!60,line width=.55pt] (5.740,-9.070)--(5.820,-9.070)--(5.820,-11.330)--(5.740,-11.330);
+\node[font=\small,anchor=north,inner sep=0] at (4.900,-11.450) {$G_t^{\top}$};
+\node[font=\scriptsize,text=black!58,anchor=north,inner sep=0] at (4.900,-11.910) {$d_c\times k$};
+\node[font=\Large] at (6.250,-10.200) {$=$};
+\draw[fill=violet!85,draw=none,rounded corners=.7pt] (6.782,-9.382) rectangle (7.158,-9.758);
+\draw[fill=violet!58,draw=none,rounded corners=.7pt] (7.202,-9.382) rectangle (7.578,-9.758);
+\draw[fill=violet!32,draw=none,rounded corners=.7pt] (7.622,-9.382) rectangle (7.998,-9.758);
+\draw[fill=violet!85,draw=none,rounded corners=.7pt] (8.042,-9.382) rectangle (8.418,-9.758);
+\draw[fill=violet!85,draw=none,rounded corners=.7pt] (6.782,-9.802) rectangle (7.158,-10.178);
+\draw[fill=violet!85,draw=none,rounded corners=.7pt] (7.202,-9.802) rectangle (7.578,-10.178);
+\draw[fill=violet!58,draw=none,rounded corners=.7pt] (7.622,-9.802) rectangle (7.998,-10.178);
+\draw[fill=violet!85,draw=none,rounded corners=.7pt] (8.042,-9.802) rectangle (8.418,-10.178);
+\draw[fill=violet!58,draw=none,rounded corners=.7pt] (6.782,-10.222) rectangle (7.158,-10.598);
+\draw[fill=violet!32,draw=none,rounded corners=.7pt] (7.202,-10.222) rectangle (7.578,-10.598);
+\draw[fill=violet!58,draw=none,rounded corners=.7pt] (7.622,-10.222) rectangle (7.998,-10.598);
+\draw[fill=violet!32,draw=none,rounded corners=.7pt] (8.042,-10.222) rectangle (8.418,-10.598);
+\draw[fill=violet!85,draw=none,rounded corners=.7pt] (6.782,-10.642) rectangle (7.158,-11.018);
+\draw[fill=violet!58,draw=none,rounded corners=.7pt] (7.202,-10.642) rectangle (7.578,-11.018);
+\draw[fill=violet!32,draw=none,rounded corners=.7pt] (7.622,-10.642) rectangle (7.998,-11.018);
+\draw[fill=violet!32,draw=none,rounded corners=.7pt] (8.042,-10.642) rectangle (8.418,-11.018);
+\draw[black!60,line width=.55pt] (6.760,-9.280)--(6.680,-9.280)--(6.680,-11.120)--(6.760,-11.120);
+\draw[black!60,line width=.55pt] (8.440,-9.280)--(8.520,-9.280)--(8.520,-11.120)--(8.440,-11.120);
+\node[font=\small,anchor=north,inner sep=0] at (7.600,-11.450) {$L_t$};
+\node[font=\scriptsize,text=black!58,anchor=north,inner sep=0] at (7.600,-11.910) {$H\times k$};
+\draw[-{Stealth[length=5pt]},black!62,line width=.6pt] (8.760,-10.200)--(10.220,-10.200);
+\node[font=\footnotesize,text=black!68,anchor=south,inner sep=0] at (9.490,-10.090) {Softmax};
+\draw[fill=violet!85,draw=none,rounded corners=.7pt] (10.562,-9.382) rectangle (10.938,-9.758);
+\draw[fill=violet!32,draw=none,rounded corners=.7pt] (10.982,-9.382) rectangle (11.358,-9.758);
+\draw[fill=violet!32,draw=none,rounded corners=.7pt] (11.402,-9.382) rectangle (11.778,-9.758);
+\draw[fill=violet!58,draw=none,rounded corners=.7pt] (11.822,-9.382) rectangle (12.198,-9.758);
+\draw[fill=violet!32,draw=none,rounded corners=.7pt] (10.562,-9.802) rectangle (10.938,-10.178);
+\draw[fill=violet!58,draw=none,rounded corners=.7pt] (10.982,-9.802) rectangle (11.358,-10.178);
+\draw[fill=violet!32,draw=none,rounded corners=.7pt] (11.402,-9.802) rectangle (11.778,-10.178);
+\draw[fill=violet!85,draw=none,rounded corners=.7pt] (11.822,-9.802) rectangle (12.198,-10.178);
+\draw[fill=violet!85,draw=none,rounded corners=.7pt] (10.562,-10.222) rectangle (10.938,-10.598);
+\draw[fill=violet!58,draw=none,rounded corners=.7pt] (10.982,-10.222) rectangle (11.358,-10.598);
+\draw[fill=violet!85,draw=none,rounded corners=.7pt] (11.402,-10.222) rectangle (11.778,-10.598);
+\draw[fill=violet!58,draw=none,rounded corners=.7pt] (11.822,-10.222) rectangle (12.198,-10.598);
+\draw[fill=violet!85,draw=none,rounded corners=.7pt] (10.562,-10.642) rectangle (10.938,-11.018);
+\draw[fill=violet!85,draw=none,rounded corners=.7pt] (10.982,-10.642) rectangle (11.358,-11.018);
+\draw[fill=violet!32,draw=none,rounded corners=.7pt] (11.402,-10.642) rectangle (11.778,-11.018);
+\draw[fill=violet!58,draw=none,rounded corners=.7pt] (11.822,-10.642) rectangle (12.198,-11.018);
+\draw[black!60,line width=.55pt] (10.540,-9.280)--(10.460,-9.280)--(10.460,-11.120)--(10.540,-11.120);
+\draw[black!60,line width=.55pt] (12.220,-9.280)--(12.300,-9.280)--(12.300,-11.120)--(12.220,-11.120);
+\node[font=\small,anchor=north,inner sep=0] at (11.380,-11.450) {$\Pi_t$};
+\node[font=\scriptsize,text=black!58,anchor=north,inner sep=0] at (11.380,-11.910) {$H\times k$};
+\node[font=\Large] at (12.730,-10.200) {$\cdot$};
+\draw[fill=teal!58,draw=none,rounded corners=.7pt] (13.262,-9.382) rectangle (13.638,-9.758);
+\draw[fill=teal!85,draw=none,rounded corners=.7pt] (13.682,-9.382) rectangle (14.058,-9.758);
+\draw[fill=teal!32,draw=none,rounded corners=.7pt] (14.102,-9.382) rectangle (14.478,-9.758);
+\draw[fill=teal!32,draw=none,rounded corners=.7pt] (14.522,-9.382) rectangle (14.898,-9.758);
+\draw[fill=teal!85,draw=none,rounded corners=.7pt] (14.942,-9.382) rectangle (15.318,-9.758);
+\draw[fill=teal!85,draw=none,rounded corners=.7pt] (13.262,-9.802) rectangle (13.638,-10.178);
+\draw[fill=teal!58,draw=none,rounded corners=.7pt] (13.682,-9.802) rectangle (14.058,-10.178);
+\draw[fill=teal!58,draw=none,rounded corners=.7pt] (14.102,-9.802) rectangle (14.478,-10.178);
+\draw[fill=teal!58,draw=none,rounded corners=.7pt] (14.522,-9.802) rectangle (14.898,-10.178);
+\draw[fill=teal!32,draw=none,rounded corners=.7pt] (14.942,-9.802) rectangle (15.318,-10.178);
+\draw[fill=teal!32,draw=none,rounded corners=.7pt] (13.262,-10.222) rectangle (13.638,-10.598);
+\draw[fill=teal!32,draw=none,rounded corners=.7pt] (13.682,-10.222) rectangle (14.058,-10.598);
+\draw[fill=teal!58,draw=none,rounded corners=.7pt] (14.102,-10.222) rectangle (14.478,-10.598);
+\draw[fill=teal!32,draw=none,rounded corners=.7pt] (14.522,-10.222) rectangle (14.898,-10.598);
+\draw[fill=teal!32,draw=none,rounded corners=.7pt] (14.942,-10.222) rectangle (15.318,-10.598);
+\draw[fill=teal!85,draw=none,rounded corners=.7pt] (13.262,-10.642) rectangle (13.638,-11.018);
+\draw[fill=teal!85,draw=none,rounded corners=.7pt] (13.682,-10.642) rectangle (14.058,-11.018);
+\draw[fill=teal!85,draw=none,rounded corners=.7pt] (14.102,-10.642) rectangle (14.478,-11.018);
+\draw[fill=teal!32,draw=none,rounded corners=.7pt] (14.522,-10.642) rectangle (14.898,-11.018);
+\draw[fill=teal!32,draw=none,rounded corners=.7pt] (14.942,-10.642) rectangle (15.318,-11.018);
+\draw[black!60,line width=.55pt] (13.240,-9.280)--(13.160,-9.280)--(13.160,-11.120)--(13.240,-11.120);
+\draw[black!60,line width=.55pt] (15.340,-9.280)--(15.420,-9.280)--(15.420,-11.120)--(15.340,-11.120);
+\node[font=\small,anchor=north,inner sep=0] at (14.290,-11.450) {$G_t$};
+\node[font=\scriptsize,text=black!58,anchor=north,inner sep=0] at (14.290,-11.910) {$k\times d_c$};
+\node[font=\Large] at (15.850,-10.200) {$=$};
+\draw[fill=coral!58,draw=none,rounded corners=.7pt] (16.382,-9.382) rectangle (16.758,-9.758);
+\draw[fill=coral!85,draw=none,rounded corners=.7pt] (16.802,-9.382) rectangle (17.178,-9.758);
+\draw[fill=coral!32,draw=none,rounded corners=.7pt] (17.222,-9.382) rectangle (17.598,-9.758);
+\draw[fill=coral!32,draw=none,rounded corners=.7pt] (17.642,-9.382) rectangle (18.018,-9.758);
+\draw[fill=coral!85,draw=none,rounded corners=.7pt] (18.062,-9.382) rectangle (18.438,-9.758);
+\draw[fill=coral!85,draw=none,rounded corners=.7pt] (16.382,-9.802) rectangle (16.758,-10.178);
+\draw[fill=coral!85,draw=none,rounded corners=.7pt] (16.802,-9.802) rectangle (17.178,-10.178);
+\draw[fill=coral!58,draw=none,rounded corners=.7pt] (17.222,-9.802) rectangle (17.598,-10.178);
+\draw[fill=coral!32,draw=none,rounded corners=.7pt] (17.642,-9.802) rectangle (18.018,-10.178);
+\draw[fill=coral!32,draw=none,rounded corners=.7pt] (18.062,-9.802) rectangle (18.438,-10.178);
+\draw[fill=coral!58,draw=none,rounded corners=.7pt] (16.382,-10.222) rectangle (16.758,-10.598);
+\draw[fill=coral!85,draw=none,rounded corners=.7pt] (16.802,-10.222) rectangle (17.178,-10.598);
+\draw[fill=coral!58,draw=none,rounded corners=.7pt] (17.222,-10.222) rectangle (17.598,-10.598);
+\draw[fill=coral!32,draw=none,rounded corners=.7pt] (17.642,-10.222) rectangle (18.018,-10.598);
+\draw[fill=coral!58,draw=none,rounded corners=.7pt] (18.062,-10.222) rectangle (18.438,-10.598);
+\draw[fill=coral!58,draw=none,rounded corners=.7pt] (16.382,-10.642) rectangle (16.758,-11.018);
+\draw[fill=coral!85,draw=none,rounded corners=.7pt] (16.802,-10.642) rectangle (17.178,-11.018);
+\draw[fill=coral!58,draw=none,rounded corners=.7pt] (17.222,-10.642) rectangle (17.598,-11.018);
+\draw[fill=coral!32,draw=none,rounded corners=.7pt] (17.642,-10.642) rectangle (18.018,-11.018);
+\draw[fill=coral!85,draw=none,rounded corners=.7pt] (18.062,-10.642) rectangle (18.438,-11.018);
+\draw[black!60,line width=.55pt] (16.360,-9.280)--(16.280,-9.280)--(16.280,-11.120)--(16.360,-11.120);
+\draw[black!60,line width=.55pt] (18.460,-9.280)--(18.540,-9.280)--(18.540,-11.120)--(18.460,-11.120);
+\node[font=\small,anchor=north,inner sep=0] at (17.410,-11.450) {$O_t$};
+\node[font=\scriptsize,text=black!58,anchor=north,inner sep=0] at (17.410,-11.910) {$H\times d_c$};
+\begin{pgfonlayer}{background}\draw[black!55,line width=.65pt] (14.760,-5.250)--(14.760,-7.650);\draw[black!55,line width=.65pt] (4.900,-7.650)--(14.760,-7.650);\draw[-{Stealth[length=5pt]},black!55,line width=.65pt] (4.900,-7.650)--(4.900,-9.030);\draw[-{Stealth[length=5pt]},black!55,line width=.65pt] (14.290,-7.650)--(14.290,-9.240);\end{pgfonlayer}
+\begin{pgfonlayer}{foreground}\node[fill=white,font=\footnotesize,text=black!68,inner sep=2pt] at (9.830,-7.650) {同一份 $G_t$，QK 取转置，PV 直接用};\end{pgfonlayer}
+\node[anchor=north,fill=black!3,inner xsep=9pt,inner ysep=8pt,rounded corners=1pt,font=\small] at (9.700,-13.050) {\begin{tabular}{@{}p{1.05cm}@{}p{17.30cm}@{}}\textbf{轴} & $N$ 是上下文长度；$r\in\{0,\dots,k-1\}$ 是选中槽位；$H$ 是主注意力的 query head 数；$d_c$ 是 KV 的 latent 维度。 \\[.55em] \textbf{对象} & $C$ 是所有 head 共享的 KV，浅色行本次不读取；$S_t$ 是整数地址；$L_t$ 是 logits；$\Pi_t$ 每行和为 1；$O_t$ 是各 head 的输出。 \\[.55em] \textbf{机制} & Gather 后 $N$ 轴换成 $k$ 轴，这一步不再随 $N$ 增长；所有 head 共用一份 $G_t$。V3.2：$H{=}128,\ k{=}2048$，QK 用 576 维，PV 用其中不含 RoPE 的 512 维。\end{tabular}};
+\end{tikzpicture}
+\end{document}
